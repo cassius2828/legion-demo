@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+import { Button } from "~/components/ui/button";
 import { auth, signIn, signOut } from "~/server/auth";
 
 export async function AppNav() {
@@ -5,30 +8,24 @@ export async function AppNav() {
   const name = session?.user?.name;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#15162c] text-white">
+    <header className="sticky top-0 z-40 border-b bg-card">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <span className="text-sm font-semibold tracking-tight">Legion demo</span>
+        <Link href="/" className="text-sm font-semibold tracking-tight">
+          Legion demo
+        </Link>
         <div className="flex items-center gap-3">
           {session?.user ? (
             <>
-              <p className="text-sm">Welcome, {name}</p>
+              <p className="text-sm text-muted-foreground">Welcome, {name}</p>
               <form action={signOutUser}>
-                <button
-                  type="submit"
-                  className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium transition hover:bg-white/20"
-                >
+                <Button type="submit" variant="outline">
                   Sign out
-                </button>
+                </Button>
               </form>
             </>
           ) : (
             <form action={signInWithGoogle}>
-              <button
-                type="submit"
-                className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-[#15162c] transition hover:bg-white/90"
-              >
-                Sign up with Google
-              </button>
+              <Button type="submit">Sign up with Google</Button>
             </form>
           )}
         </div>

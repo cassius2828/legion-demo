@@ -1,5 +1,13 @@
 import { redirect } from "next/navigation";
 
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
@@ -15,31 +23,34 @@ export default async function OnboardingPage() {
   if (session.user.role) redirect("/");
 
   return (
-    <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] px-4 text-white">
-      <form action={saveRole} className="w-full max-w-md rounded-2xl bg-white/10 p-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Finish sign up</h1>
-        <p className="mt-2 text-sm text-white/70">
-          Choose the role for {session.user.name ?? session.user.email}. You can sign in with this Google account next time.
-        </p>
-        <fieldset className="mt-6 grid gap-2">
-          <legend className="sr-only">Role</legend>
-          {ROLES.map((role) => (
-            <label
-              key={role.id}
-              className="flex cursor-pointer items-center gap-3 rounded-xl bg-white/5 px-4 py-3 ring-1 ring-white/10 has-checked:bg-white/15"
-            >
-              <input type="radio" name="role" value={role.id} required className="size-4" />
-              <span>{role.label}</span>
-            </label>
-          ))}
-        </fieldset>
-        <button
-          type="submit"
-          className="mt-6 w-full rounded-full bg-white px-4 py-2 text-sm font-medium text-[#15162c] hover:bg-white/90"
-        >
-          Continue
-        </button>
-      </form>
+    <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Finish sign up</CardTitle>
+          <CardDescription>
+            Choose the role for {session.user.name ?? session.user.email}. You can sign in with this Google account next time.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={saveRole}>
+            <fieldset className="grid gap-2">
+              <legend className="sr-only">Role</legend>
+              {ROLES.map((role) => (
+                <label
+                  key={role.id}
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 has-checked:border-primary has-checked:bg-accent"
+                >
+                  <input type="radio" name="role" value={role.id} required className="size-4 accent-primary" />
+                  <span>{role.label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <Button type="submit" className="mt-6 w-full">
+              Continue
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }
