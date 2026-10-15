@@ -155,7 +155,10 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  role: 'role'
+  role: 'role',
+  primaryInsurance: 'primaryInsurance',
+  secondaryInsurance: 'secondaryInsurance',
+  organization: 'organization'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -209,6 +212,15 @@ exports.Prisma.EmergencyContactScalarFieldEnum = {
   phone: 'phone'
 };
 
+exports.Prisma.ShareRequestScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  fromProviderId: 'fromProviderId',
+  toProviderId: 'toProviderId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.MedicationScalarFieldEnum = {
   id: 'id',
   patientId: 'patientId',
@@ -228,10 +240,13 @@ exports.Prisma.AppointmentScalarFieldEnum = {
   id: 'id',
   patientId: 'patientId',
   providerId: 'providerId',
+  nurseId: 'nurseId',
   scheduledAt: 'scheduledAt',
   durationMinutes: 'durationMinutes',
   appointmentType: 'appointmentType',
   status: 'status',
+  title: 'title',
+  description: 'description',
   reasonForVisit: 'reasonForVisit',
   createdAt: 'createdAt'
 };
@@ -294,6 +309,7 @@ exports.Prisma.ModelName = {
   PatientAllergy: 'PatientAllergy',
   PatientCondition: 'PatientCondition',
   EmergencyContact: 'EmergencyContact',
+  ShareRequest: 'ShareRequest',
   Medication: 'Medication',
   Appointment: 'Appointment',
   Visit: 'Visit',

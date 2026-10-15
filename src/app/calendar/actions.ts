@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { createCalendarEvent, moveCalendarEvent } from "~/server/calendar";
+import { moveClinicAppointment } from "~/server/clinic-appointments";
 import { auth, signIn } from "~/server/auth";
 
 const createSchema = z.object({
@@ -65,6 +66,17 @@ export async function rescheduleAppointment(input: { id: string; start: string; 
   const end = new Date(parsed.data.end);
   if (!(end.getTime() > start.getTime())) {
     return { ok: false as const, error: "Could not move that appointment." };
+  }
+
+  if (parsed.data.id.startsWith("apt_")) {
+    const session = await auth();
+    const moved = await moveClinicAppointment(userId, session?.user.role ?? "", {
+      id: parsed.data.id,
+      start,
+    });
+    if (!moved.ok) return moved;
+    revalidatePath("/calendar");
+    return { ok: true as const };
   }
 
   const result = await moveCalendarEvent(userId, { id: parsed.data.id, start, end });

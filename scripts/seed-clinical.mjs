@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "../generated/prisma/index.js";
+import { seedClinicHistory } from "./clinic-history.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const providers = JSON.parse(
@@ -13,6 +14,26 @@ const patients = JSON.parse(
 );
 
 const db = new PrismaClient();
+
+async function linkLogin(email, role, name, kind, recordId) {
+  const match = await db.user.findMany({ select: { id: true, email: true } });
+  const login = match.find((item) => item.email?.toLowerCase() === email.toLowerCase());
+  if (!login) return;
+  await db.user.update({ where: { id: login.id }, data: { role, name } });
+  if (kind === "provider") {
+    await db.provider.updateMany({
+      where: { userId: login.id, NOT: { id: recordId } },
+      data: { userId: null },
+    });
+    await db.provider.update({ where: { id: recordId }, data: { userId: login.id } });
+    return;
+  }
+  await db.patient.updateMany({
+    where: { userId: login.id, NOT: { id: recordId } },
+    data: { userId: null },
+  });
+  await db.patient.update({ where: { id: recordId }, data: { userId: login.id } });
+}
 
 for (const provider of providers) {
   const data = {
@@ -78,9 +99,21 @@ for (const patient of patients) {
   });
 }
 
+await linkLogin("cassius2828@gmail.com", "psychiatrist", "Muhammad Ali", "provider", "prv_04");
+await linkLogin(
+  "cassius.reynolds.dev@gmail.com",
+  "patient",
+  "Derrick Rose",
+  "patient",
+  "pat_16",
+);
+
+const history = await seedClinicHistory(db, patients);
 const [providerCount, patientCount] = await Promise.all([
   db.provider.count(),
   db.patient.count(),
 ]);
-console.log(`Seeded ${providerCount} providers and ${patientCount} patients`);
+console.log(
+  `Seeded ${providerCount} providers, ${patientCount} patients, ${history.appointments} appointments, ${history.visits} visits, and ${history.notes} notes`,
+);
 await db.$disconnect();

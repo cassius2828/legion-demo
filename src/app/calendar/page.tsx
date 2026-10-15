@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 import { parseDateParam, parseViewParam, visibleBounds } from "~/lib/calendar-dates";
 import { auth } from "~/server/auth";
 import { listCalendarEvents } from "~/server/calendar";
+import { listClinicEvents } from "~/server/clinic-appointments";
 
 export default async function CalendarPage({
   searchParams,
@@ -19,9 +20,13 @@ export default async function CalendarPage({
   const params = await searchParams;
   const view = parseViewParam(params.view);
   const date = parseDateParam(params.date);
-  const result = await listCalendarEvents(session.user.id, visibleBounds(view, date));
+  const bounds = visibleBounds(view, date);
+  const [clinic, result] = await Promise.all([
+    listClinicEvents(session.user.id, session.user.role ?? "", bounds),
+    listCalendarEvents(session.user.id, bounds),
+  ]);
 
-  if (!result.connected) {
+  if (!result.connected && clinic.length === 0) {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 sm:px-6">
         <h1 className="text-2xl font-semibold tracking-tight">Calendar</h1>
@@ -36,12 +41,18 @@ export default async function CalendarPage({
     );
   }
 
+  const googleEvents = result.connected && !("error" in result) ? result.events : [];
+  const note = result.connected
+    ? "Clinic appointments and Google Calendar. Drag a clinic appointment to change its day or time."
+    : "Clinic appointments saved for this demo. Drag one to change its day or time.";
+
   return (
     <CalendarBoard
       view={view}
       date={date}
-      events={result.events}
-      loadError={"error" in result ? result.error : undefined}
+      events={[...clinic, ...googleEvents]}
+      note={note}
+      loadError={result.connected && "error" in result ? result.error : undefined}
     />
   );
 }

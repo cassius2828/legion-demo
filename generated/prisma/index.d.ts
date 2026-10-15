@@ -64,6 +64,11 @@ export type PatientCondition = $Result.DefaultSelection<Prisma.$PatientCondition
  */
 export type EmergencyContact = $Result.DefaultSelection<Prisma.$EmergencyContactPayload>
 /**
+ * Model ShareRequest
+ * 
+ */
+export type ShareRequest = $Result.DefaultSelection<Prisma.$ShareRequestPayload>
+/**
  * Model Medication
  * 
  */
@@ -306,6 +311,16 @@ export class PrismaClient<
     * ```
     */
   get emergencyContact(): Prisma.EmergencyContactDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.shareRequest`: Exposes CRUD operations for the **ShareRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShareRequests
+    * const shareRequests = await prisma.shareRequest.findMany()
+    * ```
+    */
+  get shareRequest(): Prisma.ShareRequestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.medication`: Exposes CRUD operations for the **Medication** model.
@@ -807,6 +822,7 @@ export namespace Prisma {
     PatientAllergy: 'PatientAllergy',
     PatientCondition: 'PatientCondition',
     EmergencyContact: 'EmergencyContact',
+    ShareRequest: 'ShareRequest',
     Medication: 'Medication',
     Appointment: 'Appointment',
     Visit: 'Visit',
@@ -830,7 +846,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "medication" | "appointment" | "visit" | "clinicalNote" | "task"
+      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "shareRequest" | "medication" | "appointment" | "visit" | "clinicalNote" | "task"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1574,6 +1590,80 @@ export namespace Prisma {
           }
         }
       }
+      ShareRequest: {
+        payload: Prisma.$ShareRequestPayload<ExtArgs>
+        fields: Prisma.ShareRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShareRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShareRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.ShareRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShareRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          findMany: {
+            args: Prisma.ShareRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>[]
+          }
+          create: {
+            args: Prisma.ShareRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          createMany: {
+            args: Prisma.ShareRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShareRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.ShareRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          update: {
+            args: Prisma.ShareRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShareRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShareRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ShareRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.ShareRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShareRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.ShareRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShareRequest>
+          }
+          groupBy: {
+            args: Prisma.ShareRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShareRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShareRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<ShareRequestCountAggregateOutputType> | number
+          }
+        }
+      }
       Medication: {
         payload: Prisma.$MedicationPayload<ExtArgs>
         fields: Prisma.MedicationFieldRefs
@@ -2050,6 +2140,7 @@ export namespace Prisma {
     patientAllergy?: PatientAllergyOmit
     patientCondition?: PatientConditionOmit
     emergencyContact?: EmergencyContactOmit
+    shareRequest?: ShareRequestOmit
     medication?: MedicationOmit
     appointment?: AppointmentOmit
     visit?: VisitOmit
@@ -2185,8 +2276,11 @@ export namespace Prisma {
 
   export type ProviderCountOutputType = {
     patients: number
+    sharesSent: number
+    sharesReceived: number
     medications: number
     appointments: number
+    nurseAppointments: number
     visits: number
     notes: number
     tasks: number
@@ -2194,8 +2288,11 @@ export namespace Prisma {
 
   export type ProviderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patients?: boolean | ProviderCountOutputTypeCountPatientsArgs
+    sharesSent?: boolean | ProviderCountOutputTypeCountSharesSentArgs
+    sharesReceived?: boolean | ProviderCountOutputTypeCountSharesReceivedArgs
     medications?: boolean | ProviderCountOutputTypeCountMedicationsArgs
     appointments?: boolean | ProviderCountOutputTypeCountAppointmentsArgs
+    nurseAppointments?: boolean | ProviderCountOutputTypeCountNurseAppointmentsArgs
     visits?: boolean | ProviderCountOutputTypeCountVisitsArgs
     notes?: boolean | ProviderCountOutputTypeCountNotesArgs
     tasks?: boolean | ProviderCountOutputTypeCountTasksArgs
@@ -2222,6 +2319,20 @@ export namespace Prisma {
   /**
    * ProviderCountOutputType without action
    */
+  export type ProviderCountOutputTypeCountSharesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShareRequestWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountSharesReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShareRequestWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
   export type ProviderCountOutputTypeCountMedicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MedicationWhereInput
   }
@@ -2230,6 +2341,13 @@ export namespace Prisma {
    * ProviderCountOutputType without action
    */
   export type ProviderCountOutputTypeCountAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountNurseAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AppointmentWhereInput
   }
 
@@ -2262,6 +2380,7 @@ export namespace Prisma {
   export type PatientCountOutputType = {
     allergies: number
     conditions: number
+    shareRequests: number
     medications: number
     appointments: number
     visits: number
@@ -2272,6 +2391,7 @@ export namespace Prisma {
   export type PatientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allergies?: boolean | PatientCountOutputTypeCountAllergiesArgs
     conditions?: boolean | PatientCountOutputTypeCountConditionsArgs
+    shareRequests?: boolean | PatientCountOutputTypeCountShareRequestsArgs
     medications?: boolean | PatientCountOutputTypeCountMedicationsArgs
     appointments?: boolean | PatientCountOutputTypeCountAppointmentsArgs
     visits?: boolean | PatientCountOutputTypeCountVisitsArgs
@@ -2302,6 +2422,13 @@ export namespace Prisma {
    */
   export type PatientCountOutputTypeCountConditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PatientConditionWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountShareRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShareRequestWhereInput
   }
 
   /**
@@ -5723,6 +5850,9 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     role: string | null
+    primaryInsurance: string | null
+    secondaryInsurance: string | null
+    organization: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -5732,6 +5862,9 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     role: string | null
+    primaryInsurance: string | null
+    secondaryInsurance: string | null
+    organization: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -5741,6 +5874,9 @@ export namespace Prisma {
     emailVerified: number
     image: number
     role: number
+    primaryInsurance: number
+    secondaryInsurance: number
+    organization: number
     _all: number
   }
 
@@ -5752,6 +5888,9 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     role?: true
+    primaryInsurance?: true
+    secondaryInsurance?: true
+    organization?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -5761,6 +5900,9 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     role?: true
+    primaryInsurance?: true
+    secondaryInsurance?: true
+    organization?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -5770,6 +5912,9 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     role?: true
+    primaryInsurance?: true
+    secondaryInsurance?: true
+    organization?: true
     _all?: true
   }
 
@@ -5852,6 +5997,9 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     role: string | null
+    primaryInsurance: string | null
+    secondaryInsurance: string | null
+    organization: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -5878,6 +6026,9 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     role?: boolean
+    primaryInsurance?: boolean
+    secondaryInsurance?: boolean
+    organization?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
@@ -5893,6 +6044,9 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     role?: boolean
+    primaryInsurance?: boolean
+    secondaryInsurance?: boolean
+    organization?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5902,6 +6056,9 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     role?: boolean
+    primaryInsurance?: boolean
+    secondaryInsurance?: boolean
+    organization?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -5911,9 +6068,12 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     role?: boolean
+    primaryInsurance?: boolean
+    secondaryInsurance?: boolean
+    organization?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "primaryInsurance" | "secondaryInsurance" | "organization", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -5941,6 +6101,9 @@ export namespace Prisma {
       emailVerified: Date | null
       image: string | null
       role: string | null
+      primaryInsurance: string | null
+      secondaryInsurance: string | null
+      organization: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -6375,6 +6538,9 @@ export namespace Prisma {
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'String'>
+    readonly primaryInsurance: FieldRef<"User", 'String'>
+    readonly secondaryInsurance: FieldRef<"User", 'String'>
+    readonly organization: FieldRef<"User", 'String'>
   }
     
 
@@ -8038,8 +8204,11 @@ export namespace Prisma {
     userId?: boolean
     user?: boolean | Provider$userArgs<ExtArgs>
     patients?: boolean | Provider$patientsArgs<ExtArgs>
+    sharesSent?: boolean | Provider$sharesSentArgs<ExtArgs>
+    sharesReceived?: boolean | Provider$sharesReceivedArgs<ExtArgs>
     medications?: boolean | Provider$medicationsArgs<ExtArgs>
     appointments?: boolean | Provider$appointmentsArgs<ExtArgs>
+    nurseAppointments?: boolean | Provider$nurseAppointmentsArgs<ExtArgs>
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
@@ -8082,8 +8251,11 @@ export namespace Prisma {
   export type ProviderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Provider$userArgs<ExtArgs>
     patients?: boolean | Provider$patientsArgs<ExtArgs>
+    sharesSent?: boolean | Provider$sharesSentArgs<ExtArgs>
+    sharesReceived?: boolean | Provider$sharesReceivedArgs<ExtArgs>
     medications?: boolean | Provider$medicationsArgs<ExtArgs>
     appointments?: boolean | Provider$appointmentsArgs<ExtArgs>
+    nurseAppointments?: boolean | Provider$nurseAppointmentsArgs<ExtArgs>
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
@@ -8101,8 +8273,11 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
       patients: Prisma.$PatientPayload<ExtArgs>[]
+      sharesSent: Prisma.$ShareRequestPayload<ExtArgs>[]
+      sharesReceived: Prisma.$ShareRequestPayload<ExtArgs>[]
       medications: Prisma.$MedicationPayload<ExtArgs>[]
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
+      nurseAppointments: Prisma.$AppointmentPayload<ExtArgs>[]
       visits: Prisma.$VisitPayload<ExtArgs>[]
       notes: Prisma.$ClinicalNotePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
@@ -8511,8 +8686,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends Provider$userArgs<ExtArgs> = {}>(args?: Subset<T, Provider$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     patients<T extends Provider$patientsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$patientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sharesSent<T extends Provider$sharesSentArgs<ExtArgs> = {}>(args?: Subset<T, Provider$sharesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sharesReceived<T extends Provider$sharesReceivedArgs<ExtArgs> = {}>(args?: Subset<T, Provider$sharesReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     medications<T extends Provider$medicationsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$medicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MedicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     appointments<T extends Provider$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nurseAppointments<T extends Provider$nurseAppointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$nurseAppointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visits<T extends Provider$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notes<T extends Provider$notesArgs<ExtArgs> = {}>(args?: Subset<T, Provider$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Provider$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Provider$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8989,6 +9167,54 @@ export namespace Prisma {
   }
 
   /**
+   * Provider.sharesSent
+   */
+  export type Provider$sharesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    where?: ShareRequestWhereInput
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    cursor?: ShareRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Provider.sharesReceived
+   */
+  export type Provider$sharesReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    where?: ShareRequestWhereInput
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    cursor?: ShareRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
+  }
+
+  /**
    * Provider.medications
    */
   export type Provider$medicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9016,6 +9242,30 @@ export namespace Prisma {
    * Provider.appointments
    */
   export type Provider$appointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Appointment
+     */
+    omit?: AppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentInclude<ExtArgs> | null
+    where?: AppointmentWhereInput
+    orderBy?: AppointmentOrderByWithRelationInput | AppointmentOrderByWithRelationInput[]
+    cursor?: AppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AppointmentScalarFieldEnum | AppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * Provider.nurseAppointments
+   */
+  export type Provider$nurseAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Appointment
      */
@@ -9352,6 +9602,7 @@ export namespace Prisma {
     allergies?: boolean | Patient$allergiesArgs<ExtArgs>
     conditions?: boolean | Patient$conditionsArgs<ExtArgs>
     emergencyContact?: boolean | Patient$emergencyContactArgs<ExtArgs>
+    shareRequests?: boolean | Patient$shareRequestsArgs<ExtArgs>
     medications?: boolean | Patient$medicationsArgs<ExtArgs>
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     visits?: boolean | Patient$visitsArgs<ExtArgs>
@@ -9416,6 +9667,7 @@ export namespace Prisma {
     allergies?: boolean | Patient$allergiesArgs<ExtArgs>
     conditions?: boolean | Patient$conditionsArgs<ExtArgs>
     emergencyContact?: boolean | Patient$emergencyContactArgs<ExtArgs>
+    shareRequests?: boolean | Patient$shareRequestsArgs<ExtArgs>
     medications?: boolean | Patient$medicationsArgs<ExtArgs>
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     visits?: boolean | Patient$visitsArgs<ExtArgs>
@@ -9440,6 +9692,7 @@ export namespace Prisma {
       allergies: Prisma.$PatientAllergyPayload<ExtArgs>[]
       conditions: Prisma.$PatientConditionPayload<ExtArgs>[]
       emergencyContact: Prisma.$EmergencyContactPayload<ExtArgs> | null
+      shareRequests: Prisma.$ShareRequestPayload<ExtArgs>[]
       medications: Prisma.$MedicationPayload<ExtArgs>[]
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       visits: Prisma.$VisitPayload<ExtArgs>[]
@@ -9858,6 +10111,7 @@ export namespace Prisma {
     allergies<T extends Patient$allergiesArgs<ExtArgs> = {}>(args?: Subset<T, Patient$allergiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientAllergyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conditions<T extends Patient$conditionsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$conditionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConditionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emergencyContact<T extends Patient$emergencyContactArgs<ExtArgs> = {}>(args?: Subset<T, Patient$emergencyContactArgs<ExtArgs>>): Prisma__EmergencyContactClient<$Result.GetResult<Prisma.$EmergencyContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    shareRequests<T extends Patient$shareRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$shareRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     medications<T extends Patient$medicationsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$medicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MedicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     appointments<T extends Patient$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visits<T extends Patient$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10381,6 +10635,30 @@ export namespace Prisma {
      */
     include?: EmergencyContactInclude<ExtArgs> | null
     where?: EmergencyContactWhereInput
+  }
+
+  /**
+   * Patient.shareRequests
+   */
+  export type Patient$shareRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    where?: ShareRequestWhereInput
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    cursor?: ShareRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
   }
 
   /**
@@ -13639,6 +13917,1091 @@ export namespace Prisma {
 
 
   /**
+   * Model ShareRequest
+   */
+
+  export type AggregateShareRequest = {
+    _count: ShareRequestCountAggregateOutputType | null
+    _min: ShareRequestMinAggregateOutputType | null
+    _max: ShareRequestMaxAggregateOutputType | null
+  }
+
+  export type ShareRequestMinAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    fromProviderId: string | null
+    toProviderId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ShareRequestMaxAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    fromProviderId: string | null
+    toProviderId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ShareRequestCountAggregateOutputType = {
+    id: number
+    patientId: number
+    fromProviderId: number
+    toProviderId: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ShareRequestMinAggregateInputType = {
+    id?: true
+    patientId?: true
+    fromProviderId?: true
+    toProviderId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ShareRequestMaxAggregateInputType = {
+    id?: true
+    patientId?: true
+    fromProviderId?: true
+    toProviderId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ShareRequestCountAggregateInputType = {
+    id?: true
+    patientId?: true
+    fromProviderId?: true
+    toProviderId?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ShareRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShareRequest to aggregate.
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShareRequests to fetch.
+     */
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShareRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShareRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShareRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShareRequests
+    **/
+    _count?: true | ShareRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShareRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShareRequestMaxAggregateInputType
+  }
+
+  export type GetShareRequestAggregateType<T extends ShareRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateShareRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShareRequest[P]>
+      : GetScalarType<T[P], AggregateShareRequest[P]>
+  }
+
+
+
+
+  export type ShareRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShareRequestWhereInput
+    orderBy?: ShareRequestOrderByWithAggregationInput | ShareRequestOrderByWithAggregationInput[]
+    by: ShareRequestScalarFieldEnum[] | ShareRequestScalarFieldEnum
+    having?: ShareRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShareRequestCountAggregateInputType | true
+    _min?: ShareRequestMinAggregateInputType
+    _max?: ShareRequestMaxAggregateInputType
+  }
+
+  export type ShareRequestGroupByOutputType = {
+    id: string
+    patientId: string
+    fromProviderId: string
+    toProviderId: string
+    status: string
+    createdAt: Date
+    _count: ShareRequestCountAggregateOutputType | null
+    _min: ShareRequestMinAggregateOutputType | null
+    _max: ShareRequestMaxAggregateOutputType | null
+  }
+
+  type GetShareRequestGroupByPayload<T extends ShareRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShareRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShareRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShareRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], ShareRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShareRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    fromProviderId?: boolean
+    toProviderId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shareRequest"]>
+
+  export type ShareRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    fromProviderId?: boolean
+    toProviderId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shareRequest"]>
+
+  export type ShareRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    fromProviderId?: boolean
+    toProviderId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shareRequest"]>
+
+  export type ShareRequestSelectScalar = {
+    id?: boolean
+    patientId?: boolean
+    fromProviderId?: boolean
+    toProviderId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type ShareRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "fromProviderId" | "toProviderId" | "status" | "createdAt", ExtArgs["result"]["shareRequest"]>
+  export type ShareRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type ShareRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type ShareRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    fromProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+    toProvider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+
+  export type $ShareRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShareRequest"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+      fromProvider: Prisma.$ProviderPayload<ExtArgs>
+      toProvider: Prisma.$ProviderPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      patientId: string
+      fromProviderId: string
+      toProviderId: string
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["shareRequest"]>
+    composites: {}
+  }
+
+  type ShareRequestGetPayload<S extends boolean | null | undefined | ShareRequestDefaultArgs> = $Result.GetResult<Prisma.$ShareRequestPayload, S>
+
+  type ShareRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ShareRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ShareRequestCountAggregateInputType | true
+    }
+
+  export interface ShareRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShareRequest'], meta: { name: 'ShareRequest' } }
+    /**
+     * Find zero or one ShareRequest that matches the filter.
+     * @param {ShareRequestFindUniqueArgs} args - Arguments to find a ShareRequest
+     * @example
+     * // Get one ShareRequest
+     * const shareRequest = await prisma.shareRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShareRequestFindUniqueArgs>(args: SelectSubset<T, ShareRequestFindUniqueArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ShareRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ShareRequestFindUniqueOrThrowArgs} args - Arguments to find a ShareRequest
+     * @example
+     * // Get one ShareRequest
+     * const shareRequest = await prisma.shareRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShareRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, ShareRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShareRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestFindFirstArgs} args - Arguments to find a ShareRequest
+     * @example
+     * // Get one ShareRequest
+     * const shareRequest = await prisma.shareRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShareRequestFindFirstArgs>(args?: SelectSubset<T, ShareRequestFindFirstArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShareRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestFindFirstOrThrowArgs} args - Arguments to find a ShareRequest
+     * @example
+     * // Get one ShareRequest
+     * const shareRequest = await prisma.shareRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShareRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, ShareRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ShareRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShareRequests
+     * const shareRequests = await prisma.shareRequest.findMany()
+     * 
+     * // Get first 10 ShareRequests
+     * const shareRequests = await prisma.shareRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shareRequestWithIdOnly = await prisma.shareRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShareRequestFindManyArgs>(args?: SelectSubset<T, ShareRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ShareRequest.
+     * @param {ShareRequestCreateArgs} args - Arguments to create a ShareRequest.
+     * @example
+     * // Create one ShareRequest
+     * const ShareRequest = await prisma.shareRequest.create({
+     *   data: {
+     *     // ... data to create a ShareRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShareRequestCreateArgs>(args: SelectSubset<T, ShareRequestCreateArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ShareRequests.
+     * @param {ShareRequestCreateManyArgs} args - Arguments to create many ShareRequests.
+     * @example
+     * // Create many ShareRequests
+     * const shareRequest = await prisma.shareRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShareRequestCreateManyArgs>(args?: SelectSubset<T, ShareRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShareRequests and returns the data saved in the database.
+     * @param {ShareRequestCreateManyAndReturnArgs} args - Arguments to create many ShareRequests.
+     * @example
+     * // Create many ShareRequests
+     * const shareRequest = await prisma.shareRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShareRequests and only return the `id`
+     * const shareRequestWithIdOnly = await prisma.shareRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShareRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, ShareRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ShareRequest.
+     * @param {ShareRequestDeleteArgs} args - Arguments to delete one ShareRequest.
+     * @example
+     * // Delete one ShareRequest
+     * const ShareRequest = await prisma.shareRequest.delete({
+     *   where: {
+     *     // ... filter to delete one ShareRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShareRequestDeleteArgs>(args: SelectSubset<T, ShareRequestDeleteArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ShareRequest.
+     * @param {ShareRequestUpdateArgs} args - Arguments to update one ShareRequest.
+     * @example
+     * // Update one ShareRequest
+     * const shareRequest = await prisma.shareRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShareRequestUpdateArgs>(args: SelectSubset<T, ShareRequestUpdateArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ShareRequests.
+     * @param {ShareRequestDeleteManyArgs} args - Arguments to filter ShareRequests to delete.
+     * @example
+     * // Delete a few ShareRequests
+     * const { count } = await prisma.shareRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShareRequestDeleteManyArgs>(args?: SelectSubset<T, ShareRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShareRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShareRequests
+     * const shareRequest = await prisma.shareRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShareRequestUpdateManyArgs>(args: SelectSubset<T, ShareRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShareRequests and returns the data updated in the database.
+     * @param {ShareRequestUpdateManyAndReturnArgs} args - Arguments to update many ShareRequests.
+     * @example
+     * // Update many ShareRequests
+     * const shareRequest = await prisma.shareRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ShareRequests and only return the `id`
+     * const shareRequestWithIdOnly = await prisma.shareRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ShareRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, ShareRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ShareRequest.
+     * @param {ShareRequestUpsertArgs} args - Arguments to update or create a ShareRequest.
+     * @example
+     * // Update or create a ShareRequest
+     * const shareRequest = await prisma.shareRequest.upsert({
+     *   create: {
+     *     // ... data to create a ShareRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShareRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShareRequestUpsertArgs>(args: SelectSubset<T, ShareRequestUpsertArgs<ExtArgs>>): Prisma__ShareRequestClient<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ShareRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestCountArgs} args - Arguments to filter ShareRequests to count.
+     * @example
+     * // Count the number of ShareRequests
+     * const count = await prisma.shareRequest.count({
+     *   where: {
+     *     // ... the filter for the ShareRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShareRequestCountArgs>(
+      args?: Subset<T, ShareRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShareRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShareRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShareRequestAggregateArgs>(args: Subset<T, ShareRequestAggregateArgs>): Prisma.PrismaPromise<GetShareRequestAggregateType<T>>
+
+    /**
+     * Group by ShareRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShareRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShareRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShareRequestGroupByArgs['orderBy'] }
+        : { orderBy?: ShareRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShareRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShareRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShareRequest model
+   */
+  readonly fields: ShareRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShareRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShareRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fromProvider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    toProvider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShareRequest model
+   */
+  interface ShareRequestFieldRefs {
+    readonly id: FieldRef<"ShareRequest", 'String'>
+    readonly patientId: FieldRef<"ShareRequest", 'String'>
+    readonly fromProviderId: FieldRef<"ShareRequest", 'String'>
+    readonly toProviderId: FieldRef<"ShareRequest", 'String'>
+    readonly status: FieldRef<"ShareRequest", 'String'>
+    readonly createdAt: FieldRef<"ShareRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShareRequest findUnique
+   */
+  export type ShareRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ShareRequest to fetch.
+     */
+    where: ShareRequestWhereUniqueInput
+  }
+
+  /**
+   * ShareRequest findUniqueOrThrow
+   */
+  export type ShareRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ShareRequest to fetch.
+     */
+    where: ShareRequestWhereUniqueInput
+  }
+
+  /**
+   * ShareRequest findFirst
+   */
+  export type ShareRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ShareRequest to fetch.
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShareRequests to fetch.
+     */
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShareRequests.
+     */
+    cursor?: ShareRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShareRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShareRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShareRequests.
+     */
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ShareRequest findFirstOrThrow
+   */
+  export type ShareRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ShareRequest to fetch.
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShareRequests to fetch.
+     */
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShareRequests.
+     */
+    cursor?: ShareRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShareRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShareRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShareRequests.
+     */
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ShareRequest findMany
+   */
+  export type ShareRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ShareRequests to fetch.
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShareRequests to fetch.
+     */
+    orderBy?: ShareRequestOrderByWithRelationInput | ShareRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShareRequests.
+     */
+    cursor?: ShareRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShareRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShareRequests.
+     */
+    skip?: number
+    distinct?: ShareRequestScalarFieldEnum | ShareRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ShareRequest create
+   */
+  export type ShareRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShareRequest.
+     */
+    data: XOR<ShareRequestCreateInput, ShareRequestUncheckedCreateInput>
+  }
+
+  /**
+   * ShareRequest createMany
+   */
+  export type ShareRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShareRequests.
+     */
+    data: ShareRequestCreateManyInput | ShareRequestCreateManyInput[]
+  }
+
+  /**
+   * ShareRequest createManyAndReturn
+   */
+  export type ShareRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many ShareRequests.
+     */
+    data: ShareRequestCreateManyInput | ShareRequestCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShareRequest update
+   */
+  export type ShareRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShareRequest.
+     */
+    data: XOR<ShareRequestUpdateInput, ShareRequestUncheckedUpdateInput>
+    /**
+     * Choose, which ShareRequest to update.
+     */
+    where: ShareRequestWhereUniqueInput
+  }
+
+  /**
+   * ShareRequest updateMany
+   */
+  export type ShareRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShareRequests.
+     */
+    data: XOR<ShareRequestUpdateManyMutationInput, ShareRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ShareRequests to update
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * Limit how many ShareRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShareRequest updateManyAndReturn
+   */
+  export type ShareRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update ShareRequests.
+     */
+    data: XOR<ShareRequestUpdateManyMutationInput, ShareRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ShareRequests to update
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * Limit how many ShareRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShareRequest upsert
+   */
+  export type ShareRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShareRequest to update in case it exists.
+     */
+    where: ShareRequestWhereUniqueInput
+    /**
+     * In case the ShareRequest found by the `where` argument doesn't exist, create a new ShareRequest with this data.
+     */
+    create: XOR<ShareRequestCreateInput, ShareRequestUncheckedCreateInput>
+    /**
+     * In case the ShareRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShareRequestUpdateInput, ShareRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * ShareRequest delete
+   */
+  export type ShareRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+    /**
+     * Filter which ShareRequest to delete.
+     */
+    where: ShareRequestWhereUniqueInput
+  }
+
+  /**
+   * ShareRequest deleteMany
+   */
+  export type ShareRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShareRequests to delete
+     */
+    where?: ShareRequestWhereInput
+    /**
+     * Limit how many ShareRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShareRequest without action
+   */
+  export type ShareRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShareRequest
+     */
+    select?: ShareRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShareRequest
+     */
+    omit?: ShareRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShareRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Medication
    */
 
@@ -14817,10 +16180,13 @@ export namespace Prisma {
     id: string | null
     patientId: string | null
     providerId: string | null
+    nurseId: string | null
     scheduledAt: Date | null
     durationMinutes: number | null
     appointmentType: string | null
     status: string | null
+    title: string | null
+    description: string | null
     reasonForVisit: string | null
     createdAt: Date | null
   }
@@ -14829,10 +16195,13 @@ export namespace Prisma {
     id: string | null
     patientId: string | null
     providerId: string | null
+    nurseId: string | null
     scheduledAt: Date | null
     durationMinutes: number | null
     appointmentType: string | null
     status: string | null
+    title: string | null
+    description: string | null
     reasonForVisit: string | null
     createdAt: Date | null
   }
@@ -14841,10 +16210,13 @@ export namespace Prisma {
     id: number
     patientId: number
     providerId: number
+    nurseId: number
     scheduledAt: number
     durationMinutes: number
     appointmentType: number
     status: number
+    title: number
+    description: number
     reasonForVisit: number
     createdAt: number
     _all: number
@@ -14863,10 +16235,13 @@ export namespace Prisma {
     id?: true
     patientId?: true
     providerId?: true
+    nurseId?: true
     scheduledAt?: true
     durationMinutes?: true
     appointmentType?: true
     status?: true
+    title?: true
+    description?: true
     reasonForVisit?: true
     createdAt?: true
   }
@@ -14875,10 +16250,13 @@ export namespace Prisma {
     id?: true
     patientId?: true
     providerId?: true
+    nurseId?: true
     scheduledAt?: true
     durationMinutes?: true
     appointmentType?: true
     status?: true
+    title?: true
+    description?: true
     reasonForVisit?: true
     createdAt?: true
   }
@@ -14887,10 +16265,13 @@ export namespace Prisma {
     id?: true
     patientId?: true
     providerId?: true
+    nurseId?: true
     scheduledAt?: true
     durationMinutes?: true
     appointmentType?: true
     status?: true
+    title?: true
+    description?: true
     reasonForVisit?: true
     createdAt?: true
     _all?: true
@@ -14986,10 +16367,13 @@ export namespace Prisma {
     id: string
     patientId: string
     providerId: string
+    nurseId: string | null
     scheduledAt: Date
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date
     _count: AppointmentCountAggregateOutputType | null
@@ -15017,14 +16401,18 @@ export namespace Prisma {
     id?: boolean
     patientId?: boolean
     providerId?: boolean
+    nurseId?: boolean
     scheduledAt?: boolean
     durationMinutes?: boolean
     appointmentType?: boolean
     status?: boolean
+    title?: boolean
+    description?: boolean
     reasonForVisit?: boolean
     createdAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
     visit?: boolean | Appointment$visitArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
@@ -15032,55 +16420,69 @@ export namespace Prisma {
     id?: boolean
     patientId?: boolean
     providerId?: boolean
+    nurseId?: boolean
     scheduledAt?: boolean
     durationMinutes?: boolean
     appointmentType?: boolean
     status?: boolean
+    title?: boolean
+    description?: boolean
     reasonForVisit?: boolean
     createdAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
   export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     patientId?: boolean
     providerId?: boolean
+    nurseId?: boolean
     scheduledAt?: boolean
     durationMinutes?: boolean
     appointmentType?: boolean
     status?: boolean
+    title?: boolean
+    description?: boolean
     reasonForVisit?: boolean
     createdAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
   export type AppointmentSelectScalar = {
     id?: boolean
     patientId?: boolean
     providerId?: boolean
+    nurseId?: boolean
     scheduledAt?: boolean
     durationMinutes?: boolean
     appointmentType?: boolean
     status?: boolean
+    title?: boolean
+    description?: boolean
     reasonForVisit?: boolean
     createdAt?: boolean
   }
 
-  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "providerId" | "scheduledAt" | "durationMinutes" | "appointmentType" | "status" | "reasonForVisit" | "createdAt", ExtArgs["result"]["appointment"]>
+  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "providerId" | "nurseId" | "scheduledAt" | "durationMinutes" | "appointmentType" | "status" | "title" | "description" | "reasonForVisit" | "createdAt", ExtArgs["result"]["appointment"]>
   export type AppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
     visit?: boolean | Appointment$visitArgs<ExtArgs>
   }
   export type AppointmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
   }
   export type AppointmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    nurse?: boolean | Appointment$nurseArgs<ExtArgs>
   }
 
   export type $AppointmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15088,16 +16490,20 @@ export namespace Prisma {
     objects: {
       patient: Prisma.$PatientPayload<ExtArgs>
       provider: Prisma.$ProviderPayload<ExtArgs>
+      nurse: Prisma.$ProviderPayload<ExtArgs> | null
       visit: Prisma.$VisitPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       patientId: string
       providerId: string
+      nurseId: string | null
       scheduledAt: Date
       durationMinutes: number
       appointmentType: string
       status: string
+      title: string
+      description: string
       reasonForVisit: string
       createdAt: Date
     }, ExtArgs["result"]["appointment"]>
@@ -15496,6 +16902,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     provider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    nurse<T extends Appointment$nurseArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$nurseArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     visit<T extends Appointment$visitArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$visitArgs<ExtArgs>>): Prisma__VisitClient<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -15529,10 +16936,13 @@ export namespace Prisma {
     readonly id: FieldRef<"Appointment", 'String'>
     readonly patientId: FieldRef<"Appointment", 'String'>
     readonly providerId: FieldRef<"Appointment", 'String'>
+    readonly nurseId: FieldRef<"Appointment", 'String'>
     readonly scheduledAt: FieldRef<"Appointment", 'DateTime'>
     readonly durationMinutes: FieldRef<"Appointment", 'Int'>
     readonly appointmentType: FieldRef<"Appointment", 'String'>
     readonly status: FieldRef<"Appointment", 'String'>
+    readonly title: FieldRef<"Appointment", 'String'>
+    readonly description: FieldRef<"Appointment", 'String'>
     readonly reasonForVisit: FieldRef<"Appointment", 'String'>
     readonly createdAt: FieldRef<"Appointment", 'DateTime'>
   }
@@ -15926,6 +17336,25 @@ export namespace Prisma {
      * Limit how many Appointments to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Appointment.nurse
+   */
+  export type Appointment$nurseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    where?: ProviderWhereInput
   }
 
   /**
@@ -19417,7 +20846,10 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
-    role: 'role'
+    role: 'role',
+    primaryInsurance: 'primaryInsurance',
+    secondaryInsurance: 'secondaryInsurance',
+    organization: 'organization'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -19492,6 +20924,18 @@ export namespace Prisma {
   export type EmergencyContactScalarFieldEnum = (typeof EmergencyContactScalarFieldEnum)[keyof typeof EmergencyContactScalarFieldEnum]
 
 
+  export const ShareRequestScalarFieldEnum: {
+    id: 'id',
+    patientId: 'patientId',
+    fromProviderId: 'fromProviderId',
+    toProviderId: 'toProviderId',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type ShareRequestScalarFieldEnum = (typeof ShareRequestScalarFieldEnum)[keyof typeof ShareRequestScalarFieldEnum]
+
+
   export const MedicationScalarFieldEnum: {
     id: 'id',
     patientId: 'patientId',
@@ -19514,10 +20958,13 @@ export namespace Prisma {
     id: 'id',
     patientId: 'patientId',
     providerId: 'providerId',
+    nurseId: 'nurseId',
     scheduledAt: 'scheduledAt',
     durationMinutes: 'durationMinutes',
     appointmentType: 'appointmentType',
     status: 'status',
+    title: 'title',
+    description: 'description',
     reasonForVisit: 'reasonForVisit',
     createdAt: 'createdAt'
   };
@@ -19837,6 +21284,9 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     role?: StringNullableFilter<"User"> | string | null
+    primaryInsurance?: StringNullableFilter<"User"> | string | null
+    secondaryInsurance?: StringNullableFilter<"User"> | string | null
+    organization?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -19851,6 +21301,9 @@ export namespace Prisma {
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     role?: SortOrderInput | SortOrder
+    primaryInsurance?: SortOrderInput | SortOrder
+    secondaryInsurance?: SortOrderInput | SortOrder
+    organization?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
@@ -19868,6 +21321,9 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     role?: StringNullableFilter<"User"> | string | null
+    primaryInsurance?: StringNullableFilter<"User"> | string | null
+    secondaryInsurance?: StringNullableFilter<"User"> | string | null
+    organization?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -19882,6 +21338,9 @@ export namespace Prisma {
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     role?: SortOrderInput | SortOrder
+    primaryInsurance?: SortOrderInput | SortOrder
+    secondaryInsurance?: SortOrderInput | SortOrder
+    organization?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -19897,6 +21356,9 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: StringNullableWithAggregatesFilter<"User"> | string | null
+    primaryInsurance?: StringNullableWithAggregatesFilter<"User"> | string | null
+    secondaryInsurance?: StringNullableWithAggregatesFilter<"User"> | string | null
+    organization?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type VerificationTokenWhereInput = {
@@ -19955,8 +21417,11 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Provider"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     patients?: PatientListRelationFilter
+    sharesSent?: ShareRequestListRelationFilter
+    sharesReceived?: ShareRequestListRelationFilter
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
+    nurseAppointments?: AppointmentListRelationFilter
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
@@ -19972,8 +21437,11 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     patients?: PatientOrderByRelationAggregateInput
+    sharesSent?: ShareRequestOrderByRelationAggregateInput
+    sharesReceived?: ShareRequestOrderByRelationAggregateInput
     medications?: MedicationOrderByRelationAggregateInput
     appointments?: AppointmentOrderByRelationAggregateInput
+    nurseAppointments?: AppointmentOrderByRelationAggregateInput
     visits?: VisitOrderByRelationAggregateInput
     notes?: ClinicalNoteOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
@@ -19992,8 +21460,11 @@ export namespace Prisma {
     specialty?: StringFilter<"Provider"> | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     patients?: PatientListRelationFilter
+    sharesSent?: ShareRequestListRelationFilter
+    sharesReceived?: ShareRequestListRelationFilter
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
+    nurseAppointments?: AppointmentListRelationFilter
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
@@ -20046,6 +21517,7 @@ export namespace Prisma {
     allergies?: PatientAllergyListRelationFilter
     conditions?: PatientConditionListRelationFilter
     emergencyContact?: XOR<EmergencyContactNullableScalarRelationFilter, EmergencyContactWhereInput> | null
+    shareRequests?: ShareRequestListRelationFilter
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
     visits?: VisitListRelationFilter
@@ -20071,6 +21543,7 @@ export namespace Prisma {
     allergies?: PatientAllergyOrderByRelationAggregateInput
     conditions?: PatientConditionOrderByRelationAggregateInput
     emergencyContact?: EmergencyContactOrderByWithRelationInput
+    shareRequests?: ShareRequestOrderByRelationAggregateInput
     medications?: MedicationOrderByRelationAggregateInput
     appointments?: AppointmentOrderByRelationAggregateInput
     visits?: VisitOrderByRelationAggregateInput
@@ -20099,6 +21572,7 @@ export namespace Prisma {
     allergies?: PatientAllergyListRelationFilter
     conditions?: PatientConditionListRelationFilter
     emergencyContact?: XOR<EmergencyContactNullableScalarRelationFilter, EmergencyContactWhereInput> | null
+    shareRequests?: ShareRequestListRelationFilter
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
     visits?: VisitListRelationFilter
@@ -20287,6 +21761,72 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"EmergencyContact"> | string
   }
 
+  export type ShareRequestWhereInput = {
+    AND?: ShareRequestWhereInput | ShareRequestWhereInput[]
+    OR?: ShareRequestWhereInput[]
+    NOT?: ShareRequestWhereInput | ShareRequestWhereInput[]
+    id?: StringFilter<"ShareRequest"> | string
+    patientId?: StringFilter<"ShareRequest"> | string
+    fromProviderId?: StringFilter<"ShareRequest"> | string
+    toProviderId?: StringFilter<"ShareRequest"> | string
+    status?: StringFilter<"ShareRequest"> | string
+    createdAt?: DateTimeFilter<"ShareRequest"> | Date | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+    fromProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    toProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }
+
+  export type ShareRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    fromProviderId?: SortOrder
+    toProviderId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    patient?: PatientOrderByWithRelationInput
+    fromProvider?: ProviderOrderByWithRelationInput
+    toProvider?: ProviderOrderByWithRelationInput
+  }
+
+  export type ShareRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ShareRequestWhereInput | ShareRequestWhereInput[]
+    OR?: ShareRequestWhereInput[]
+    NOT?: ShareRequestWhereInput | ShareRequestWhereInput[]
+    patientId?: StringFilter<"ShareRequest"> | string
+    fromProviderId?: StringFilter<"ShareRequest"> | string
+    toProviderId?: StringFilter<"ShareRequest"> | string
+    status?: StringFilter<"ShareRequest"> | string
+    createdAt?: DateTimeFilter<"ShareRequest"> | Date | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+    fromProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    toProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }, "id">
+
+  export type ShareRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    fromProviderId?: SortOrder
+    toProviderId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: ShareRequestCountOrderByAggregateInput
+    _max?: ShareRequestMaxOrderByAggregateInput
+    _min?: ShareRequestMinOrderByAggregateInput
+  }
+
+  export type ShareRequestScalarWhereWithAggregatesInput = {
+    AND?: ShareRequestScalarWhereWithAggregatesInput | ShareRequestScalarWhereWithAggregatesInput[]
+    OR?: ShareRequestScalarWhereWithAggregatesInput[]
+    NOT?: ShareRequestScalarWhereWithAggregatesInput | ShareRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShareRequest"> | string
+    patientId?: StringWithAggregatesFilter<"ShareRequest"> | string
+    fromProviderId?: StringWithAggregatesFilter<"ShareRequest"> | string
+    toProviderId?: StringWithAggregatesFilter<"ShareRequest"> | string
+    status?: StringWithAggregatesFilter<"ShareRequest"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ShareRequest"> | Date | string
+  }
+
   export type MedicationWhereInput = {
     AND?: MedicationWhereInput | MedicationWhereInput[]
     OR?: MedicationWhereInput[]
@@ -20387,14 +21927,18 @@ export namespace Prisma {
     id?: StringFilter<"Appointment"> | string
     patientId?: StringFilter<"Appointment"> | string
     providerId?: StringFilter<"Appointment"> | string
+    nurseId?: StringNullableFilter<"Appointment"> | string | null
     scheduledAt?: DateTimeFilter<"Appointment"> | Date | string
     durationMinutes?: IntFilter<"Appointment"> | number
     appointmentType?: StringFilter<"Appointment"> | string
     status?: StringFilter<"Appointment"> | string
+    title?: StringFilter<"Appointment"> | string
+    description?: StringFilter<"Appointment"> | string
     reasonForVisit?: StringFilter<"Appointment"> | string
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    nurse?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
   }
 
@@ -20402,14 +21946,18 @@ export namespace Prisma {
     id?: SortOrder
     patientId?: SortOrder
     providerId?: SortOrder
+    nurseId?: SortOrderInput | SortOrder
     scheduledAt?: SortOrder
     durationMinutes?: SortOrder
     appointmentType?: SortOrder
     status?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
     reasonForVisit?: SortOrder
     createdAt?: SortOrder
     patient?: PatientOrderByWithRelationInput
     provider?: ProviderOrderByWithRelationInput
+    nurse?: ProviderOrderByWithRelationInput
     visit?: VisitOrderByWithRelationInput
   }
 
@@ -20420,14 +21968,18 @@ export namespace Prisma {
     NOT?: AppointmentWhereInput | AppointmentWhereInput[]
     patientId?: StringFilter<"Appointment"> | string
     providerId?: StringFilter<"Appointment"> | string
+    nurseId?: StringNullableFilter<"Appointment"> | string | null
     scheduledAt?: DateTimeFilter<"Appointment"> | Date | string
     durationMinutes?: IntFilter<"Appointment"> | number
     appointmentType?: StringFilter<"Appointment"> | string
     status?: StringFilter<"Appointment"> | string
+    title?: StringFilter<"Appointment"> | string
+    description?: StringFilter<"Appointment"> | string
     reasonForVisit?: StringFilter<"Appointment"> | string
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    nurse?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
   }, "id">
 
@@ -20435,10 +21987,13 @@ export namespace Prisma {
     id?: SortOrder
     patientId?: SortOrder
     providerId?: SortOrder
+    nurseId?: SortOrderInput | SortOrder
     scheduledAt?: SortOrder
     durationMinutes?: SortOrder
     appointmentType?: SortOrder
     status?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
     reasonForVisit?: SortOrder
     createdAt?: SortOrder
     _count?: AppointmentCountOrderByAggregateInput
@@ -20455,10 +22010,13 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Appointment"> | string
     patientId?: StringWithAggregatesFilter<"Appointment"> | string
     providerId?: StringWithAggregatesFilter<"Appointment"> | string
+    nurseId?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
     scheduledAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
     durationMinutes?: IntWithAggregatesFilter<"Appointment"> | number
     appointmentType?: StringWithAggregatesFilter<"Appointment"> | string
     status?: StringWithAggregatesFilter<"Appointment"> | string
+    title?: StringWithAggregatesFilter<"Appointment"> | string
+    description?: StringWithAggregatesFilter<"Appointment"> | string
     reasonForVisit?: StringWithAggregatesFilter<"Appointment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
   }
@@ -20924,6 +22482,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -20938,6 +22499,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -20952,6 +22516,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -20966,6 +22533,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -20980,6 +22550,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -20989,6 +22562,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -20998,6 +22574,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type VerificationTokenCreateInput = {
@@ -21051,8 +22630,11 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -21067,8 +22649,11 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -21083,8 +22668,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -21099,8 +22687,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -21151,6 +22742,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -21174,6 +22766,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -21197,6 +22790,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -21220,6 +22814,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -21407,6 +23002,66 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ShareRequestCreateInput = {
+    id?: string
+    status: string
+    createdAt?: Date | string
+    patient: PatientCreateNestedOneWithoutShareRequestsInput
+    fromProvider: ProviderCreateNestedOneWithoutSharesSentInput
+    toProvider: ProviderCreateNestedOneWithoutSharesReceivedInput
+  }
+
+  export type ShareRequestUncheckedCreateInput = {
+    id?: string
+    patientId: string
+    fromProviderId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutShareRequestsNestedInput
+    fromProvider?: ProviderUpdateOneRequiredWithoutSharesSentNestedInput
+    toProvider?: ProviderUpdateOneRequiredWithoutSharesReceivedNestedInput
+  }
+
+  export type ShareRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestCreateManyInput = {
+    id?: string
+    patientId: string
+    fromProviderId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MedicationCreateInput = {
     id?: string
     medicationName: string
@@ -21516,10 +23171,13 @@ export namespace Prisma {
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
     provider: ProviderCreateNestedOneWithoutAppointmentsInput
+    nurse?: ProviderCreateNestedOneWithoutNurseAppointmentsInput
     visit?: VisitCreateNestedOneWithoutAppointmentInput
   }
 
@@ -21527,10 +23185,13 @@ export namespace Prisma {
     id?: string
     patientId: string
     providerId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     visit?: VisitUncheckedCreateNestedOneWithoutAppointmentInput
@@ -21542,10 +23203,13 @@ export namespace Prisma {
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
     provider?: ProviderUpdateOneRequiredWithoutAppointmentsNestedInput
+    nurse?: ProviderUpdateOneWithoutNurseAppointmentsNestedInput
     visit?: VisitUpdateOneWithoutAppointmentNestedInput
   }
 
@@ -21553,10 +23217,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visit?: VisitUncheckedUpdateOneWithoutAppointmentNestedInput
@@ -21566,10 +23233,13 @@ export namespace Prisma {
     id?: string
     patientId: string
     providerId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
   }
@@ -21580,6 +23250,8 @@ export namespace Prisma {
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21588,10 +23260,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22169,6 +23844,9 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    primaryInsurance?: SortOrder
+    secondaryInsurance?: SortOrder
+    organization?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -22178,6 +23856,9 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    primaryInsurance?: SortOrder
+    secondaryInsurance?: SortOrder
+    organization?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -22187,6 +23868,9 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    primaryInsurance?: SortOrder
+    secondaryInsurance?: SortOrder
+    organization?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -22237,6 +23921,12 @@ export namespace Prisma {
     none?: PatientWhereInput
   }
 
+  export type ShareRequestListRelationFilter = {
+    every?: ShareRequestWhereInput
+    some?: ShareRequestWhereInput
+    none?: ShareRequestWhereInput
+  }
+
   export type MedicationListRelationFilter = {
     every?: MedicationWhereInput
     some?: MedicationWhereInput
@@ -22268,6 +23958,10 @@ export namespace Prisma {
   }
 
   export type PatientOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ShareRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22461,6 +24155,33 @@ export namespace Prisma {
     phone?: SortOrder
   }
 
+  export type ShareRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    fromProviderId?: SortOrder
+    toProviderId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShareRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    fromProviderId?: SortOrder
+    toProviderId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ShareRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    fromProviderId?: SortOrder
+    toProviderId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type MedicationCountOrderByAggregateInput = {
     id?: SortOrder
     patientId?: SortOrder
@@ -22515,10 +24236,13 @@ export namespace Prisma {
     id?: SortOrder
     patientId?: SortOrder
     providerId?: SortOrder
+    nurseId?: SortOrder
     scheduledAt?: SortOrder
     durationMinutes?: SortOrder
     appointmentType?: SortOrder
     status?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
     reasonForVisit?: SortOrder
     createdAt?: SortOrder
   }
@@ -22531,10 +24255,13 @@ export namespace Prisma {
     id?: SortOrder
     patientId?: SortOrder
     providerId?: SortOrder
+    nurseId?: SortOrder
     scheduledAt?: SortOrder
     durationMinutes?: SortOrder
     appointmentType?: SortOrder
     status?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
     reasonForVisit?: SortOrder
     createdAt?: SortOrder
   }
@@ -22543,10 +24270,13 @@ export namespace Prisma {
     id?: SortOrder
     patientId?: SortOrder
     providerId?: SortOrder
+    nurseId?: SortOrder
     scheduledAt?: SortOrder
     durationMinutes?: SortOrder
     appointmentType?: SortOrder
     status?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
     reasonForVisit?: SortOrder
     createdAt?: SortOrder
   }
@@ -22950,6 +24680,20 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
   }
 
+  export type ShareRequestCreateNestedManyWithoutFromProviderInput = {
+    create?: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput> | ShareRequestCreateWithoutFromProviderInput[] | ShareRequestUncheckedCreateWithoutFromProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutFromProviderInput | ShareRequestCreateOrConnectWithoutFromProviderInput[]
+    createMany?: ShareRequestCreateManyFromProviderInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+  }
+
+  export type ShareRequestCreateNestedManyWithoutToProviderInput = {
+    create?: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput> | ShareRequestCreateWithoutToProviderInput[] | ShareRequestUncheckedCreateWithoutToProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutToProviderInput | ShareRequestCreateOrConnectWithoutToProviderInput[]
+    createMany?: ShareRequestCreateManyToProviderInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+  }
+
   export type MedicationCreateNestedManyWithoutPrescribingProviderInput = {
     create?: XOR<MedicationCreateWithoutPrescribingProviderInput, MedicationUncheckedCreateWithoutPrescribingProviderInput> | MedicationCreateWithoutPrescribingProviderInput[] | MedicationUncheckedCreateWithoutPrescribingProviderInput[]
     connectOrCreate?: MedicationCreateOrConnectWithoutPrescribingProviderInput | MedicationCreateOrConnectWithoutPrescribingProviderInput[]
@@ -22961,6 +24705,13 @@ export namespace Prisma {
     create?: XOR<AppointmentCreateWithoutProviderInput, AppointmentUncheckedCreateWithoutProviderInput> | AppointmentCreateWithoutProviderInput[] | AppointmentUncheckedCreateWithoutProviderInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutProviderInput | AppointmentCreateOrConnectWithoutProviderInput[]
     createMany?: AppointmentCreateManyProviderInputEnvelope
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type AppointmentCreateNestedManyWithoutNurseInput = {
+    create?: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput> | AppointmentCreateWithoutNurseInput[] | AppointmentUncheckedCreateWithoutNurseInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutNurseInput | AppointmentCreateOrConnectWithoutNurseInput[]
+    createMany?: AppointmentCreateManyNurseInputEnvelope
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
   }
 
@@ -22992,6 +24743,20 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
   }
 
+  export type ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput = {
+    create?: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput> | ShareRequestCreateWithoutFromProviderInput[] | ShareRequestUncheckedCreateWithoutFromProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutFromProviderInput | ShareRequestCreateOrConnectWithoutFromProviderInput[]
+    createMany?: ShareRequestCreateManyFromProviderInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+  }
+
+  export type ShareRequestUncheckedCreateNestedManyWithoutToProviderInput = {
+    create?: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput> | ShareRequestCreateWithoutToProviderInput[] | ShareRequestUncheckedCreateWithoutToProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutToProviderInput | ShareRequestCreateOrConnectWithoutToProviderInput[]
+    createMany?: ShareRequestCreateManyToProviderInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+  }
+
   export type MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput = {
     create?: XOR<MedicationCreateWithoutPrescribingProviderInput, MedicationUncheckedCreateWithoutPrescribingProviderInput> | MedicationCreateWithoutPrescribingProviderInput[] | MedicationUncheckedCreateWithoutPrescribingProviderInput[]
     connectOrCreate?: MedicationCreateOrConnectWithoutPrescribingProviderInput | MedicationCreateOrConnectWithoutPrescribingProviderInput[]
@@ -23003,6 +24768,13 @@ export namespace Prisma {
     create?: XOR<AppointmentCreateWithoutProviderInput, AppointmentUncheckedCreateWithoutProviderInput> | AppointmentCreateWithoutProviderInput[] | AppointmentUncheckedCreateWithoutProviderInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutProviderInput | AppointmentCreateOrConnectWithoutProviderInput[]
     createMany?: AppointmentCreateManyProviderInputEnvelope
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type AppointmentUncheckedCreateNestedManyWithoutNurseInput = {
+    create?: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput> | AppointmentCreateWithoutNurseInput[] | AppointmentUncheckedCreateWithoutNurseInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutNurseInput | AppointmentCreateOrConnectWithoutNurseInput[]
+    createMany?: AppointmentCreateManyNurseInputEnvelope
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
   }
 
@@ -23051,6 +24823,34 @@ export namespace Prisma {
     deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
   }
 
+  export type ShareRequestUpdateManyWithoutFromProviderNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput> | ShareRequestCreateWithoutFromProviderInput[] | ShareRequestUncheckedCreateWithoutFromProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutFromProviderInput | ShareRequestCreateOrConnectWithoutFromProviderInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutFromProviderInput | ShareRequestUpsertWithWhereUniqueWithoutFromProviderInput[]
+    createMany?: ShareRequestCreateManyFromProviderInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutFromProviderInput | ShareRequestUpdateWithWhereUniqueWithoutFromProviderInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutFromProviderInput | ShareRequestUpdateManyWithWhereWithoutFromProviderInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+  }
+
+  export type ShareRequestUpdateManyWithoutToProviderNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput> | ShareRequestCreateWithoutToProviderInput[] | ShareRequestUncheckedCreateWithoutToProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutToProviderInput | ShareRequestCreateOrConnectWithoutToProviderInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutToProviderInput | ShareRequestUpsertWithWhereUniqueWithoutToProviderInput[]
+    createMany?: ShareRequestCreateManyToProviderInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutToProviderInput | ShareRequestUpdateWithWhereUniqueWithoutToProviderInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutToProviderInput | ShareRequestUpdateManyWithWhereWithoutToProviderInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+  }
+
   export type MedicationUpdateManyWithoutPrescribingProviderNestedInput = {
     create?: XOR<MedicationCreateWithoutPrescribingProviderInput, MedicationUncheckedCreateWithoutPrescribingProviderInput> | MedicationCreateWithoutPrescribingProviderInput[] | MedicationUncheckedCreateWithoutPrescribingProviderInput[]
     connectOrCreate?: MedicationCreateOrConnectWithoutPrescribingProviderInput | MedicationCreateOrConnectWithoutPrescribingProviderInput[]
@@ -23076,6 +24876,20 @@ export namespace Prisma {
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
     update?: AppointmentUpdateWithWhereUniqueWithoutProviderInput | AppointmentUpdateWithWhereUniqueWithoutProviderInput[]
     updateMany?: AppointmentUpdateManyWithWhereWithoutProviderInput | AppointmentUpdateManyWithWhereWithoutProviderInput[]
+    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type AppointmentUpdateManyWithoutNurseNestedInput = {
+    create?: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput> | AppointmentCreateWithoutNurseInput[] | AppointmentUncheckedCreateWithoutNurseInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutNurseInput | AppointmentCreateOrConnectWithoutNurseInput[]
+    upsert?: AppointmentUpsertWithWhereUniqueWithoutNurseInput | AppointmentUpsertWithWhereUniqueWithoutNurseInput[]
+    createMany?: AppointmentCreateManyNurseInputEnvelope
+    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    update?: AppointmentUpdateWithWhereUniqueWithoutNurseInput | AppointmentUpdateWithWhereUniqueWithoutNurseInput[]
+    updateMany?: AppointmentUpdateManyWithWhereWithoutNurseInput | AppointmentUpdateManyWithWhereWithoutNurseInput[]
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
   }
 
@@ -23135,6 +24949,34 @@ export namespace Prisma {
     deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
   }
 
+  export type ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput> | ShareRequestCreateWithoutFromProviderInput[] | ShareRequestUncheckedCreateWithoutFromProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutFromProviderInput | ShareRequestCreateOrConnectWithoutFromProviderInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutFromProviderInput | ShareRequestUpsertWithWhereUniqueWithoutFromProviderInput[]
+    createMany?: ShareRequestCreateManyFromProviderInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutFromProviderInput | ShareRequestUpdateWithWhereUniqueWithoutFromProviderInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutFromProviderInput | ShareRequestUpdateManyWithWhereWithoutFromProviderInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+  }
+
+  export type ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput> | ShareRequestCreateWithoutToProviderInput[] | ShareRequestUncheckedCreateWithoutToProviderInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutToProviderInput | ShareRequestCreateOrConnectWithoutToProviderInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutToProviderInput | ShareRequestUpsertWithWhereUniqueWithoutToProviderInput[]
+    createMany?: ShareRequestCreateManyToProviderInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutToProviderInput | ShareRequestUpdateWithWhereUniqueWithoutToProviderInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutToProviderInput | ShareRequestUpdateManyWithWhereWithoutToProviderInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+  }
+
   export type MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput = {
     create?: XOR<MedicationCreateWithoutPrescribingProviderInput, MedicationUncheckedCreateWithoutPrescribingProviderInput> | MedicationCreateWithoutPrescribingProviderInput[] | MedicationUncheckedCreateWithoutPrescribingProviderInput[]
     connectOrCreate?: MedicationCreateOrConnectWithoutPrescribingProviderInput | MedicationCreateOrConnectWithoutPrescribingProviderInput[]
@@ -23160,6 +25002,20 @@ export namespace Prisma {
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
     update?: AppointmentUpdateWithWhereUniqueWithoutProviderInput | AppointmentUpdateWithWhereUniqueWithoutProviderInput[]
     updateMany?: AppointmentUpdateManyWithWhereWithoutProviderInput | AppointmentUpdateManyWithWhereWithoutProviderInput[]
+    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutNurseNestedInput = {
+    create?: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput> | AppointmentCreateWithoutNurseInput[] | AppointmentUncheckedCreateWithoutNurseInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutNurseInput | AppointmentCreateOrConnectWithoutNurseInput[]
+    upsert?: AppointmentUpsertWithWhereUniqueWithoutNurseInput | AppointmentUpsertWithWhereUniqueWithoutNurseInput[]
+    createMany?: AppointmentCreateManyNurseInputEnvelope
+    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    update?: AppointmentUpdateWithWhereUniqueWithoutNurseInput | AppointmentUpdateWithWhereUniqueWithoutNurseInput[]
+    updateMany?: AppointmentUpdateManyWithWhereWithoutNurseInput | AppointmentUpdateManyWithWhereWithoutNurseInput[]
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
   }
 
@@ -23237,6 +25093,13 @@ export namespace Prisma {
     connect?: EmergencyContactWhereUniqueInput
   }
 
+  export type ShareRequestCreateNestedManyWithoutPatientInput = {
+    create?: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput> | ShareRequestCreateWithoutPatientInput[] | ShareRequestUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutPatientInput | ShareRequestCreateOrConnectWithoutPatientInput[]
+    createMany?: ShareRequestCreateManyPatientInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+  }
+
   export type MedicationCreateNestedManyWithoutPatientInput = {
     create?: XOR<MedicationCreateWithoutPatientInput, MedicationUncheckedCreateWithoutPatientInput> | MedicationCreateWithoutPatientInput[] | MedicationUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: MedicationCreateOrConnectWithoutPatientInput | MedicationCreateOrConnectWithoutPatientInput[]
@@ -23290,6 +25153,13 @@ export namespace Prisma {
     create?: XOR<EmergencyContactCreateWithoutPatientInput, EmergencyContactUncheckedCreateWithoutPatientInput>
     connectOrCreate?: EmergencyContactCreateOrConnectWithoutPatientInput
     connect?: EmergencyContactWhereUniqueInput
+  }
+
+  export type ShareRequestUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput> | ShareRequestCreateWithoutPatientInput[] | ShareRequestUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutPatientInput | ShareRequestCreateOrConnectWithoutPatientInput[]
+    createMany?: ShareRequestCreateManyPatientInputEnvelope
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
   }
 
   export type MedicationUncheckedCreateNestedManyWithoutPatientInput = {
@@ -23381,6 +25251,20 @@ export namespace Prisma {
     delete?: EmergencyContactWhereInput | boolean
     connect?: EmergencyContactWhereUniqueInput
     update?: XOR<XOR<EmergencyContactUpdateToOneWithWhereWithoutPatientInput, EmergencyContactUpdateWithoutPatientInput>, EmergencyContactUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type ShareRequestUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput> | ShareRequestCreateWithoutPatientInput[] | ShareRequestUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutPatientInput | ShareRequestCreateOrConnectWithoutPatientInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutPatientInput | ShareRequestUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: ShareRequestCreateManyPatientInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutPatientInput | ShareRequestUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutPatientInput | ShareRequestUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
   }
 
   export type MedicationUpdateManyWithoutPatientNestedInput = {
@@ -23489,6 +25373,20 @@ export namespace Prisma {
     delete?: EmergencyContactWhereInput | boolean
     connect?: EmergencyContactWhereUniqueInput
     update?: XOR<XOR<EmergencyContactUpdateToOneWithWhereWithoutPatientInput, EmergencyContactUpdateWithoutPatientInput>, EmergencyContactUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type ShareRequestUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput> | ShareRequestCreateWithoutPatientInput[] | ShareRequestUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: ShareRequestCreateOrConnectWithoutPatientInput | ShareRequestCreateOrConnectWithoutPatientInput[]
+    upsert?: ShareRequestUpsertWithWhereUniqueWithoutPatientInput | ShareRequestUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: ShareRequestCreateManyPatientInputEnvelope
+    set?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    disconnect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    delete?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    connect?: ShareRequestWhereUniqueInput | ShareRequestWhereUniqueInput[]
+    update?: ShareRequestUpdateWithWhereUniqueWithoutPatientInput | ShareRequestUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: ShareRequestUpdateManyWithWhereWithoutPatientInput | ShareRequestUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
   }
 
   export type MedicationUncheckedUpdateManyWithoutPatientNestedInput = {
@@ -23603,6 +25501,48 @@ export namespace Prisma {
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutEmergencyContactInput, PatientUpdateWithoutEmergencyContactInput>, PatientUncheckedUpdateWithoutEmergencyContactInput>
   }
 
+  export type PatientCreateNestedOneWithoutShareRequestsInput = {
+    create?: XOR<PatientCreateWithoutShareRequestsInput, PatientUncheckedCreateWithoutShareRequestsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutShareRequestsInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type ProviderCreateNestedOneWithoutSharesSentInput = {
+    create?: XOR<ProviderCreateWithoutSharesSentInput, ProviderUncheckedCreateWithoutSharesSentInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSharesSentInput
+    connect?: ProviderWhereUniqueInput
+  }
+
+  export type ProviderCreateNestedOneWithoutSharesReceivedInput = {
+    create?: XOR<ProviderCreateWithoutSharesReceivedInput, ProviderUncheckedCreateWithoutSharesReceivedInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSharesReceivedInput
+    connect?: ProviderWhereUniqueInput
+  }
+
+  export type PatientUpdateOneRequiredWithoutShareRequestsNestedInput = {
+    create?: XOR<PatientCreateWithoutShareRequestsInput, PatientUncheckedCreateWithoutShareRequestsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutShareRequestsInput
+    upsert?: PatientUpsertWithoutShareRequestsInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutShareRequestsInput, PatientUpdateWithoutShareRequestsInput>, PatientUncheckedUpdateWithoutShareRequestsInput>
+  }
+
+  export type ProviderUpdateOneRequiredWithoutSharesSentNestedInput = {
+    create?: XOR<ProviderCreateWithoutSharesSentInput, ProviderUncheckedCreateWithoutSharesSentInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSharesSentInput
+    upsert?: ProviderUpsertWithoutSharesSentInput
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutSharesSentInput, ProviderUpdateWithoutSharesSentInput>, ProviderUncheckedUpdateWithoutSharesSentInput>
+  }
+
+  export type ProviderUpdateOneRequiredWithoutSharesReceivedNestedInput = {
+    create?: XOR<ProviderCreateWithoutSharesReceivedInput, ProviderUncheckedCreateWithoutSharesReceivedInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSharesReceivedInput
+    upsert?: ProviderUpsertWithoutSharesReceivedInput
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutSharesReceivedInput, ProviderUpdateWithoutSharesReceivedInput>, ProviderUncheckedUpdateWithoutSharesReceivedInput>
+  }
+
   export type PatientCreateNestedOneWithoutMedicationsInput = {
     create?: XOR<PatientCreateWithoutMedicationsInput, PatientUncheckedCreateWithoutMedicationsInput>
     connectOrCreate?: PatientCreateOrConnectWithoutMedicationsInput
@@ -23643,6 +25583,12 @@ export namespace Prisma {
     connect?: ProviderWhereUniqueInput
   }
 
+  export type ProviderCreateNestedOneWithoutNurseAppointmentsInput = {
+    create?: XOR<ProviderCreateWithoutNurseAppointmentsInput, ProviderUncheckedCreateWithoutNurseAppointmentsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutNurseAppointmentsInput
+    connect?: ProviderWhereUniqueInput
+  }
+
   export type VisitCreateNestedOneWithoutAppointmentInput = {
     create?: XOR<VisitCreateWithoutAppointmentInput, VisitUncheckedCreateWithoutAppointmentInput>
     connectOrCreate?: VisitCreateOrConnectWithoutAppointmentInput
@@ -23669,6 +25615,16 @@ export namespace Prisma {
     upsert?: ProviderUpsertWithoutAppointmentsInput
     connect?: ProviderWhereUniqueInput
     update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutAppointmentsInput, ProviderUpdateWithoutAppointmentsInput>, ProviderUncheckedUpdateWithoutAppointmentsInput>
+  }
+
+  export type ProviderUpdateOneWithoutNurseAppointmentsNestedInput = {
+    create?: XOR<ProviderCreateWithoutNurseAppointmentsInput, ProviderUncheckedCreateWithoutNurseAppointmentsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutNurseAppointmentsInput
+    upsert?: ProviderUpsertWithoutNurseAppointmentsInput
+    disconnect?: ProviderWhereInput | boolean
+    delete?: ProviderWhereInput | boolean
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutNurseAppointmentsInput, ProviderUpdateWithoutNurseAppointmentsInput>, ProviderUncheckedUpdateWithoutNurseAppointmentsInput>
   }
 
   export type VisitUpdateOneWithoutAppointmentNestedInput = {
@@ -24040,6 +25996,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -24053,6 +26012,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -24082,6 +26044,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -24095,6 +26060,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
@@ -24108,6 +26076,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -24121,6 +26092,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -24150,6 +26124,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -24163,6 +26140,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
@@ -24176,6 +26156,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -24189,6 +26172,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -24218,6 +26204,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -24231,6 +26220,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
@@ -24327,8 +26319,11 @@ export namespace Prisma {
     specialty: string
     email: string
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -24342,8 +26337,11 @@ export namespace Prisma {
     specialty: string
     email: string
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -24369,6 +26367,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -24391,6 +26390,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -24510,8 +26510,11 @@ export namespace Prisma {
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -24525,8 +26528,11 @@ export namespace Prisma {
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -24558,6 +26564,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -24580,6 +26587,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -24594,6 +26602,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -24607,6 +26618,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -24633,6 +26647,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -24655,6 +26670,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -24669,6 +26685,56 @@ export namespace Prisma {
 
   export type PatientCreateManyPrimaryProviderInputEnvelope = {
     data: PatientCreateManyPrimaryProviderInput | PatientCreateManyPrimaryProviderInput[]
+  }
+
+  export type ShareRequestCreateWithoutFromProviderInput = {
+    id?: string
+    status: string
+    createdAt?: Date | string
+    patient: PatientCreateNestedOneWithoutShareRequestsInput
+    toProvider: ProviderCreateNestedOneWithoutSharesReceivedInput
+  }
+
+  export type ShareRequestUncheckedCreateWithoutFromProviderInput = {
+    id?: string
+    patientId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestCreateOrConnectWithoutFromProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    create: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput>
+  }
+
+  export type ShareRequestCreateManyFromProviderInputEnvelope = {
+    data: ShareRequestCreateManyFromProviderInput | ShareRequestCreateManyFromProviderInput[]
+  }
+
+  export type ShareRequestCreateWithoutToProviderInput = {
+    id?: string
+    status: string
+    createdAt?: Date | string
+    patient: PatientCreateNestedOneWithoutShareRequestsInput
+    fromProvider: ProviderCreateNestedOneWithoutSharesSentInput
+  }
+
+  export type ShareRequestUncheckedCreateWithoutToProviderInput = {
+    id?: string
+    patientId: string
+    fromProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestCreateOrConnectWithoutToProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    create: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput>
+  }
+
+  export type ShareRequestCreateManyToProviderInputEnvelope = {
+    data: ShareRequestCreateManyToProviderInput | ShareRequestCreateManyToProviderInput[]
   }
 
   export type MedicationCreateWithoutPrescribingProviderInput = {
@@ -24714,19 +26780,25 @@ export namespace Prisma {
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
+    nurse?: ProviderCreateNestedOneWithoutNurseAppointmentsInput
     visit?: VisitCreateNestedOneWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutProviderInput = {
     id?: string
     patientId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     visit?: VisitUncheckedCreateNestedOneWithoutAppointmentInput
@@ -24739,6 +26811,45 @@ export namespace Prisma {
 
   export type AppointmentCreateManyProviderInputEnvelope = {
     data: AppointmentCreateManyProviderInput | AppointmentCreateManyProviderInput[]
+  }
+
+  export type AppointmentCreateWithoutNurseInput = {
+    id?: string
+    scheduledAt: Date | string
+    durationMinutes: number
+    appointmentType: string
+    status: string
+    title: string
+    description: string
+    reasonForVisit: string
+    createdAt: Date | string
+    patient: PatientCreateNestedOneWithoutAppointmentsInput
+    provider: ProviderCreateNestedOneWithoutAppointmentsInput
+    visit?: VisitCreateNestedOneWithoutAppointmentInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutNurseInput = {
+    id?: string
+    patientId: string
+    providerId: string
+    scheduledAt: Date | string
+    durationMinutes: number
+    appointmentType: string
+    status: string
+    title: string
+    description: string
+    reasonForVisit: string
+    createdAt: Date | string
+    visit?: VisitUncheckedCreateNestedOneWithoutAppointmentInput
+  }
+
+  export type AppointmentCreateOrConnectWithoutNurseInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput>
+  }
+
+  export type AppointmentCreateManyNurseInputEnvelope = {
+    data: AppointmentCreateManyNurseInput | AppointmentCreateManyNurseInput[]
   }
 
   export type VisitCreateWithoutProviderInput = {
@@ -24854,6 +26965,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -24867,6 +26981,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -24905,6 +27022,50 @@ export namespace Prisma {
     userId?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
+  }
+
+  export type ShareRequestUpsertWithWhereUniqueWithoutFromProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    update: XOR<ShareRequestUpdateWithoutFromProviderInput, ShareRequestUncheckedUpdateWithoutFromProviderInput>
+    create: XOR<ShareRequestCreateWithoutFromProviderInput, ShareRequestUncheckedCreateWithoutFromProviderInput>
+  }
+
+  export type ShareRequestUpdateWithWhereUniqueWithoutFromProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    data: XOR<ShareRequestUpdateWithoutFromProviderInput, ShareRequestUncheckedUpdateWithoutFromProviderInput>
+  }
+
+  export type ShareRequestUpdateManyWithWhereWithoutFromProviderInput = {
+    where: ShareRequestScalarWhereInput
+    data: XOR<ShareRequestUpdateManyMutationInput, ShareRequestUncheckedUpdateManyWithoutFromProviderInput>
+  }
+
+  export type ShareRequestScalarWhereInput = {
+    AND?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+    OR?: ShareRequestScalarWhereInput[]
+    NOT?: ShareRequestScalarWhereInput | ShareRequestScalarWhereInput[]
+    id?: StringFilter<"ShareRequest"> | string
+    patientId?: StringFilter<"ShareRequest"> | string
+    fromProviderId?: StringFilter<"ShareRequest"> | string
+    toProviderId?: StringFilter<"ShareRequest"> | string
+    status?: StringFilter<"ShareRequest"> | string
+    createdAt?: DateTimeFilter<"ShareRequest"> | Date | string
+  }
+
+  export type ShareRequestUpsertWithWhereUniqueWithoutToProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    update: XOR<ShareRequestUpdateWithoutToProviderInput, ShareRequestUncheckedUpdateWithoutToProviderInput>
+    create: XOR<ShareRequestCreateWithoutToProviderInput, ShareRequestUncheckedCreateWithoutToProviderInput>
+  }
+
+  export type ShareRequestUpdateWithWhereUniqueWithoutToProviderInput = {
+    where: ShareRequestWhereUniqueInput
+    data: XOR<ShareRequestUpdateWithoutToProviderInput, ShareRequestUncheckedUpdateWithoutToProviderInput>
+  }
+
+  export type ShareRequestUpdateManyWithWhereWithoutToProviderInput = {
+    where: ShareRequestScalarWhereInput
+    data: XOR<ShareRequestUpdateManyMutationInput, ShareRequestUncheckedUpdateManyWithoutToProviderInput>
   }
 
   export type MedicationUpsertWithWhereUniqueWithoutPrescribingProviderInput = {
@@ -24964,12 +27125,31 @@ export namespace Prisma {
     id?: StringFilter<"Appointment"> | string
     patientId?: StringFilter<"Appointment"> | string
     providerId?: StringFilter<"Appointment"> | string
+    nurseId?: StringNullableFilter<"Appointment"> | string | null
     scheduledAt?: DateTimeFilter<"Appointment"> | Date | string
     durationMinutes?: IntFilter<"Appointment"> | number
     appointmentType?: StringFilter<"Appointment"> | string
     status?: StringFilter<"Appointment"> | string
+    title?: StringFilter<"Appointment"> | string
+    description?: StringFilter<"Appointment"> | string
     reasonForVisit?: StringFilter<"Appointment"> | string
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
+  }
+
+  export type AppointmentUpsertWithWhereUniqueWithoutNurseInput = {
+    where: AppointmentWhereUniqueInput
+    update: XOR<AppointmentUpdateWithoutNurseInput, AppointmentUncheckedUpdateWithoutNurseInput>
+    create: XOR<AppointmentCreateWithoutNurseInput, AppointmentUncheckedCreateWithoutNurseInput>
+  }
+
+  export type AppointmentUpdateWithWhereUniqueWithoutNurseInput = {
+    where: AppointmentWhereUniqueInput
+    data: XOR<AppointmentUpdateWithoutNurseInput, AppointmentUncheckedUpdateWithoutNurseInput>
+  }
+
+  export type AppointmentUpdateManyWithWhereWithoutNurseInput = {
+    where: AppointmentScalarWhereInput
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutNurseInput>
   }
 
   export type VisitUpsertWithWhereUniqueWithoutProviderInput = {
@@ -25073,8 +27253,11 @@ export namespace Prisma {
     specialty: string
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -25088,8 +27271,11 @@ export namespace Prisma {
     specialty: string
     email: string
     userId?: string | null
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -25107,6 +27293,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -25120,6 +27309,9 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    organization?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -25188,6 +27380,31 @@ export namespace Prisma {
     create: XOR<EmergencyContactCreateWithoutPatientInput, EmergencyContactUncheckedCreateWithoutPatientInput>
   }
 
+  export type ShareRequestCreateWithoutPatientInput = {
+    id?: string
+    status: string
+    createdAt?: Date | string
+    fromProvider: ProviderCreateNestedOneWithoutSharesSentInput
+    toProvider: ProviderCreateNestedOneWithoutSharesReceivedInput
+  }
+
+  export type ShareRequestUncheckedCreateWithoutPatientInput = {
+    id?: string
+    fromProviderId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestCreateOrConnectWithoutPatientInput = {
+    where: ShareRequestWhereUniqueInput
+    create: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput>
+  }
+
+  export type ShareRequestCreateManyPatientInputEnvelope = {
+    data: ShareRequestCreateManyPatientInput | ShareRequestCreateManyPatientInput[]
+  }
+
   export type MedicationCreateWithoutPatientInput = {
     id?: string
     medicationName: string
@@ -25231,19 +27448,25 @@ export namespace Prisma {
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     provider: ProviderCreateNestedOneWithoutAppointmentsInput
+    nurse?: ProviderCreateNestedOneWithoutNurseAppointmentsInput
     visit?: VisitCreateNestedOneWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutPatientInput = {
     id?: string
     providerId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     visit?: VisitUncheckedCreateNestedOneWithoutAppointmentInput
@@ -25372,8 +27595,11 @@ export namespace Prisma {
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -25387,8 +27613,11 @@ export namespace Prisma {
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -25412,6 +27641,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -25425,6 +27657,9 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -25504,6 +27739,22 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     relationship?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ShareRequestUpsertWithWhereUniqueWithoutPatientInput = {
+    where: ShareRequestWhereUniqueInput
+    update: XOR<ShareRequestUpdateWithoutPatientInput, ShareRequestUncheckedUpdateWithoutPatientInput>
+    create: XOR<ShareRequestCreateWithoutPatientInput, ShareRequestUncheckedCreateWithoutPatientInput>
+  }
+
+  export type ShareRequestUpdateWithWhereUniqueWithoutPatientInput = {
+    where: ShareRequestWhereUniqueInput
+    data: XOR<ShareRequestUpdateWithoutPatientInput, ShareRequestUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type ShareRequestUpdateManyWithWhereWithoutPatientInput = {
+    where: ShareRequestScalarWhereInput
+    data: XOR<ShareRequestUpdateManyMutationInput, ShareRequestUncheckedUpdateManyWithoutPatientInput>
   }
 
   export type MedicationUpsertWithWhereUniqueWithoutPatientInput = {
@@ -25601,6 +27852,7 @@ export namespace Prisma {
     user?: UserCreateNestedOneWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -25623,6 +27875,7 @@ export namespace Prisma {
     updatedAt: Date | string
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -25661,6 +27914,7 @@ export namespace Prisma {
     user?: UserUpdateOneWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -25683,6 +27937,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -25705,6 +27960,7 @@ export namespace Prisma {
     user?: UserCreateNestedOneWithoutPatientInput
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -25727,6 +27983,7 @@ export namespace Prisma {
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -25765,6 +28022,7 @@ export namespace Prisma {
     user?: UserUpdateOneWithoutPatientNestedInput
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -25787,6 +28045,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -25809,6 +28068,7 @@ export namespace Prisma {
     user?: UserCreateNestedOneWithoutPatientInput
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -25831,6 +28091,7 @@ export namespace Prisma {
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -25869,6 +28130,7 @@ export namespace Prisma {
     user?: UserUpdateOneWithoutPatientNestedInput
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -25891,11 +28153,296 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientCreateWithoutShareRequestsInput = {
+    id: string
+    firstName: string
+    lastName: string
+    dateOfBirth: Date | string
+    gender: string
+    email: string
+    phone: string
+    psychiatricHistory: string
+    createdAt: Date | string
+    updatedAt: Date | string
+    primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
+    user?: UserCreateNestedOneWithoutPatientInput
+    allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
+    conditions?: PatientConditionCreateNestedManyWithoutPatientInput
+    emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    medications?: MedicationCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    visits?: VisitCreateNestedManyWithoutPatientInput
+    notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
+    tasks?: TaskCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutShareRequestsInput = {
+    id: string
+    firstName: string
+    lastName: string
+    dateOfBirth: Date | string
+    gender: string
+    email: string
+    phone: string
+    psychiatricHistory: string
+    primaryProviderId: string
+    userId?: string | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
+    conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
+    emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutShareRequestsInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutShareRequestsInput, PatientUncheckedCreateWithoutShareRequestsInput>
+  }
+
+  export type ProviderCreateWithoutSharesSentInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderUncheckedCreateWithoutSharesSentInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderCreateOrConnectWithoutSharesSentInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutSharesSentInput, ProviderUncheckedCreateWithoutSharesSentInput>
+  }
+
+  export type ProviderCreateWithoutSharesReceivedInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderUncheckedCreateWithoutSharesReceivedInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderCreateOrConnectWithoutSharesReceivedInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutSharesReceivedInput, ProviderUncheckedCreateWithoutSharesReceivedInput>
+  }
+
+  export type PatientUpsertWithoutShareRequestsInput = {
+    update: XOR<PatientUpdateWithoutShareRequestsInput, PatientUncheckedUpdateWithoutShareRequestsInput>
+    create: XOR<PatientCreateWithoutShareRequestsInput, PatientUncheckedCreateWithoutShareRequestsInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutShareRequestsInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutShareRequestsInput, PatientUncheckedUpdateWithoutShareRequestsInput>
+  }
+
+  export type PatientUpdateWithoutShareRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
+    user?: UserUpdateOneWithoutPatientNestedInput
+    allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
+    conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
+    emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    medications?: MedicationUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    visits?: VisitUpdateManyWithoutPatientNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
+    tasks?: TaskUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutShareRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    primaryProviderId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
+    conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
+    emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type ProviderUpsertWithoutSharesSentInput = {
+    update: XOR<ProviderUpdateWithoutSharesSentInput, ProviderUncheckedUpdateWithoutSharesSentInput>
+    create: XOR<ProviderCreateWithoutSharesSentInput, ProviderUncheckedCreateWithoutSharesSentInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutSharesSentInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutSharesSentInput, ProviderUncheckedUpdateWithoutSharesSentInput>
+  }
+
+  export type ProviderUpdateWithoutSharesSentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutSharesSentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUpsertWithoutSharesReceivedInput = {
+    update: XOR<ProviderUpdateWithoutSharesReceivedInput, ProviderUncheckedUpdateWithoutSharesReceivedInput>
+    create: XOR<ProviderCreateWithoutSharesReceivedInput, ProviderUncheckedCreateWithoutSharesReceivedInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutSharesReceivedInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutSharesReceivedInput, ProviderUncheckedUpdateWithoutSharesReceivedInput>
+  }
+
+  export type ProviderUpdateWithoutSharesReceivedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutSharesReceivedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
 
   export type PatientCreateWithoutMedicationsInput = {
@@ -25914,6 +28461,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
@@ -25936,6 +28484,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
@@ -25956,7 +28505,10 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -25971,7 +28523,10 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -26009,6 +28564,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
@@ -26031,6 +28587,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
@@ -26057,7 +28614,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -26072,7 +28632,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -26094,6 +28657,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
@@ -26116,6 +28680,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
@@ -26136,7 +28701,10 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -26151,7 +28719,10 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -26160,6 +28731,47 @@ export namespace Prisma {
   export type ProviderCreateOrConnectWithoutAppointmentsInput = {
     where: ProviderWhereUniqueInput
     create: XOR<ProviderCreateWithoutAppointmentsInput, ProviderUncheckedCreateWithoutAppointmentsInput>
+  }
+
+  export type ProviderCreateWithoutNurseAppointmentsInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderUncheckedCreateWithoutNurseAppointmentsInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderCreateOrConnectWithoutNurseAppointmentsInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutNurseAppointmentsInput, ProviderUncheckedCreateWithoutNurseAppointmentsInput>
   }
 
   export type VisitCreateWithoutAppointmentInput = {
@@ -26218,6 +28830,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
@@ -26240,6 +28853,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
@@ -26266,7 +28880,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -26281,7 +28898,57 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUpsertWithoutNurseAppointmentsInput = {
+    update: XOR<ProviderUpdateWithoutNurseAppointmentsInput, ProviderUncheckedUpdateWithoutNurseAppointmentsInput>
+    create: XOR<ProviderCreateWithoutNurseAppointmentsInput, ProviderUncheckedCreateWithoutNurseAppointmentsInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutNurseAppointmentsInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutNurseAppointmentsInput, ProviderUncheckedUpdateWithoutNurseAppointmentsInput>
+  }
+
+  export type ProviderUpdateWithoutNurseAppointmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutNurseAppointmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -26328,20 +28995,26 @@ export namespace Prisma {
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
     provider: ProviderCreateNestedOneWithoutAppointmentsInput
+    nurse?: ProviderCreateNestedOneWithoutNurseAppointmentsInput
   }
 
   export type AppointmentUncheckedCreateWithoutVisitInput = {
     id?: string
     patientId: string
     providerId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
   }
@@ -26367,6 +29040,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
@@ -26389,6 +29063,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
@@ -26409,8 +29084,11 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
   }
@@ -26424,8 +29102,11 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
   }
@@ -26483,20 +29164,26 @@ export namespace Prisma {
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
     provider?: ProviderUpdateOneRequiredWithoutAppointmentsNestedInput
+    nurse?: ProviderUpdateOneWithoutNurseAppointmentsNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutVisitInput = {
     id?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26528,6 +29215,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
@@ -26550,6 +29238,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
@@ -26576,8 +29265,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -26591,8 +29283,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -26658,6 +29353,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -26680,6 +29376,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -26700,8 +29397,11 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
   }
@@ -26715,8 +29415,11 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
   }
@@ -26788,6 +29491,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -26810,6 +29514,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -26836,8 +29541,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -26851,8 +29559,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -26873,6 +29584,7 @@ export namespace Prisma {
     allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
     medications?: MedicationCreateNestedManyWithoutPatientInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
@@ -26895,6 +29607,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
     emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
@@ -26915,8 +29628,11 @@ export namespace Prisma {
     email: string
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
   }
@@ -26930,8 +29646,11 @@ export namespace Prisma {
     email: string
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
   }
@@ -26968,6 +29687,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -26990,6 +29710,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -27016,8 +29737,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
   }
@@ -27031,8 +29755,11 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
   }
@@ -27162,6 +29889,22 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
+  export type ShareRequestCreateManyFromProviderInput = {
+    id?: string
+    patientId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type ShareRequestCreateManyToProviderInput = {
+    id?: string
+    patientId: string
+    fromProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
   export type MedicationCreateManyPrescribingProviderInput = {
     id?: string
     patientId: string
@@ -27179,10 +29922,27 @@ export namespace Prisma {
   export type AppointmentCreateManyProviderInput = {
     id?: string
     patientId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
+    reasonForVisit: string
+    createdAt: Date | string
+  }
+
+  export type AppointmentCreateManyNurseInput = {
+    id?: string
+    patientId: string
+    providerId: string
+    scheduledAt: Date | string
+    durationMinutes: number
+    appointmentType: string
+    status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
   }
@@ -27235,6 +29995,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
     medications?: MedicationUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
@@ -27257,6 +30018,7 @@ export namespace Prisma {
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
     emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
@@ -27276,6 +30038,54 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUpdateWithoutFromProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutShareRequestsNestedInput
+    toProvider?: ProviderUpdateOneRequiredWithoutSharesReceivedNestedInput
+  }
+
+  export type ShareRequestUncheckedUpdateWithoutFromProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUncheckedUpdateManyWithoutFromProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUpdateWithoutToProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutShareRequestsNestedInput
+    fromProvider?: ProviderUpdateOneRequiredWithoutSharesSentNestedInput
+  }
+
+  export type ShareRequestUncheckedUpdateWithoutToProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUncheckedUpdateManyWithoutToProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MedicationUpdateWithoutPrescribingProviderInput = {
@@ -27326,19 +30136,25 @@ export namespace Prisma {
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
+    nurse?: ProviderUpdateOneWithoutNurseAppointmentsNestedInput
     visit?: VisitUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visit?: VisitUncheckedUpdateOneWithoutAppointmentNestedInput
@@ -27347,10 +30163,57 @@ export namespace Prisma {
   export type AppointmentUncheckedUpdateManyWithoutProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    reasonForVisit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUpdateWithoutNurseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    reasonForVisit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
+    provider?: ProviderUpdateOneRequiredWithoutAppointmentsNestedInput
+    visit?: VisitUpdateOneWithoutAppointmentNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateWithoutNurseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    reasonForVisit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    visit?: VisitUncheckedUpdateOneWithoutAppointmentNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutNurseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27466,6 +30329,14 @@ export namespace Prisma {
     description: string
   }
 
+  export type ShareRequestCreateManyPatientInput = {
+    id?: string
+    fromProviderId: string
+    toProviderId: string
+    status: string
+    createdAt?: Date | string
+  }
+
   export type MedicationCreateManyPatientInput = {
     id?: string
     prescribingProviderId: string
@@ -27483,10 +30354,13 @@ export namespace Prisma {
   export type AppointmentCreateManyPatientInput = {
     id?: string
     providerId: string
+    nurseId?: string | null
     scheduledAt: Date | string
     durationMinutes: number
     appointmentType: string
     status: string
+    title: string
+    description: string
     reasonForVisit: string
     createdAt: Date | string
   }
@@ -27554,6 +30428,30 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ShareRequestUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromProvider?: ProviderUpdateOneRequiredWithoutSharesSentNestedInput
+    toProvider?: ProviderUpdateOneRequiredWithoutSharesReceivedNestedInput
+  }
+
+  export type ShareRequestUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShareRequestUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromProviderId?: StringFieldUpdateOperationsInput | string
+    toProviderId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MedicationUpdateWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
     medicationName?: StringFieldUpdateOperationsInput | string
@@ -27602,19 +30500,25 @@ export namespace Prisma {
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutAppointmentsNestedInput
+    nurse?: ProviderUpdateOneWithoutNurseAppointmentsNestedInput
     visit?: VisitUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visit?: VisitUncheckedUpdateOneWithoutAppointmentNestedInput
@@ -27623,10 +30527,13 @@ export namespace Prisma {
   export type AppointmentUncheckedUpdateManyWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    nurseId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     durationMinutes?: IntFieldUpdateOperationsInput | number
     appointmentType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

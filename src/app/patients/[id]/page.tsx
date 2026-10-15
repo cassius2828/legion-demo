@@ -10,6 +10,7 @@ import {
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { ageInYears, formatDate, fullName } from "~/lib/chart";
+import { canViewPatient, viewerRecord } from "~/server/access";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import type { Prisma } from "../../../../generated/prisma";
@@ -33,11 +34,19 @@ export default async function PatientChartPage({
   if (!session.user.role) redirect("/onboarding");
 
   const { id } = await params;
+  const viewer = await viewerRecord(session.user.id, session.user.role);
   const patient = await db.patient.findUnique({
     where: { id },
     include: chartInclude,
   });
   if (!patient) notFound();
+  const allowed = canViewPatient({
+    role: session.user.role,
+    ownPatientId: viewer.patient?.id ?? null,
+    ownProviderId: viewer.provider?.id ?? null,
+    patient,
+  });
+  if (!allowed) notFound();
 
   if (session.user.role === "patient") {
     return <SleekChart patient={patient} />;

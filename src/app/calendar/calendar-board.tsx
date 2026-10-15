@@ -41,11 +41,13 @@ export function CalendarBoard({
   view,
   date,
   events,
+  note,
   loadError,
 }: {
   view: CalendarView;
   date: string;
   events: CalendarEvent[];
+  note?: string;
   loadError?: string;
 }) {
   const router = useRouter();
@@ -131,7 +133,7 @@ export function CalendarBoard({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Calendar</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Appointments on your Google Calendar. Drag one to reschedule.
+            {note ?? "Appointments on your Google Calendar. Drag one to reschedule."}
           </p>
         </div>
         <Card className="w-full lg:max-w-sm">

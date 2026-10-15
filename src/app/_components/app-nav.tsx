@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
+import { isDevAdmin } from "~/lib/admin";
 import { auth, signIn, signOut } from "~/server/auth";
 
 export async function AppNav() {
@@ -15,9 +16,25 @@ export async function AppNav() {
             Legion demo
           </Link>
           {session?.user ? (
-            <Link href="/calendar" className="text-sm font-medium hover:text-primary">
-              Calendar
-            </Link>
+            <>
+              <Link href="/calendar" className="text-sm font-medium hover:text-primary">
+                Calendar
+              </Link>
+              {session.user.role === "psychiatrist" || session.user.role === "nurse" ? (
+                <Link href="/transfers" className="inline-flex items-center gap-1 text-sm font-medium hover:text-primary">
+                  <ShareIcon />
+                  Transfers
+                </Link>
+              ) : null}
+              <Link href="/profile" className="text-sm font-medium hover:text-primary">
+                Profile
+              </Link>
+              {isDevAdmin(session.user.email) ? (
+                <Link href="/dev-admin" className="text-sm font-medium hover:text-primary">
+                  Admin
+                </Link>
+              ) : null}
+            </>
           ) : null}
         </div>
         <div className="flex items-center gap-3">
@@ -38,6 +55,26 @@ export async function AppNav() {
         </div>
       </div>
     </header>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="size-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="M8.6 13.5 15.4 17.5" />
+      <path d="M15.4 6.5 8.6 10.5" />
+    </svg>
   );
 }
 

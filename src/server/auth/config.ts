@@ -1,8 +1,10 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
+import { DEV_PASSWORD, userForDevSignIn } from "~/server/auth/dev-sign-in";
 import { saveGoogleOAuthTokens } from "~/server/auth/google-account";
 import { db } from "~/server/db";
 
@@ -48,15 +50,44 @@ export const authConfig = {
         },
       },
     }),
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = typeof credentials?.email === "string" ? credentials.email.trim() : "";
+        const password = typeof credentials?.password === "string" ? credentials.password : "";
+        if (password !== DEV_PASSWORD) return null;
+        return userForDevSignIn(email);
+      },
+    }),
   ],
   adapter: PrismaAdapter(db),
+  session: { strategy: "jwt" },
   callbacks: {
-    session: ({ session, user }) => ({
+    async jwt({ token, user }) {
+      const userId = user?.id ?? (typeof token.id === "string" ? token.id : token.sub);
+      if (!userId) return token;
+      const row = await db.user.findUnique({
+        where: { id: userId },
+        select: { id: true, name: true, email: true, role: true },
+      });
+      if (!row) return token;
+      token.id = row.id;
+      token.name = row.name;
+      token.email = row.email;
+      token.role = row.role;
+      return token;
+    },
+    session: ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
-        role: user.role ?? null,
+        id: typeof token.id === "string" ? token.id : "",
+        role: typeof token.role === "string" ? token.role : null,
+        name: typeof token.name === "string" ? token.name : session.user.name,
+        email: typeof token.email === "string" ? token.email : session.user.email,
       },
     }),
   },

@@ -9,35 +9,34 @@ import {
 import { ageInYears, fullName } from "~/lib/chart";
 import { db } from "~/server/db";
 
-export async function PatientHome() {
-  const patients = await db.patient.findMany({
-    orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
+export async function PatientHome({ userId }: { userId: string }) {
+  const patient = await db.patient.findUnique({
+    where: { userId },
     include: { primaryProvider: true },
   });
 
+  if (!patient) {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+        <h1 className="text-3xl font-semibold tracking-tight">Your chart</h1>
+        <p className="mt-2 text-muted-foreground">No chart is linked to this account.</p>
+      </main>
+    );
+  }
+
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">Charts</h1>
-      <p className="mt-2 text-muted-foreground">
-        Open a chart to review history, allergies, and emergency contact.
-      </p>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {patients.map((patient) => (
-          <Link key={patient.id} href={`/patients/${patient.id}`} className="block">
-            <Card className="h-full transition hover:ring-primary/40">
-              <CardHeader>
-                <CardTitle className="text-lg">{fullName(patient)}</CardTitle>
-                <CardDescription>
-                  {ageInYears(patient.dateOfBirth)} years
-                </CardDescription>
-                <p className="text-sm text-muted-foreground">
-                  {fullName(patient.primaryProvider)}
-                </p>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
-      </div>
+    <main className="mx-auto max-w-xl px-4 py-10 sm:px-6">
+      <h1 className="text-3xl font-semibold tracking-tight">Your chart</h1>
+      <p className="mt-2 text-muted-foreground">Only your record is available here.</p>
+      <Link href={`/patients/${patient.id}`} className="mt-8 block">
+        <Card className="transition hover:ring-primary/40">
+          <CardHeader>
+            <CardTitle className="text-lg">{fullName(patient)}</CardTitle>
+            <CardDescription>{ageInYears(patient.dateOfBirth)} years</CardDescription>
+            <p className="text-sm text-muted-foreground">{fullName(patient.primaryProvider)}</p>
+          </CardHeader>
+        </Card>
+      </Link>
     </main>
   );
 }

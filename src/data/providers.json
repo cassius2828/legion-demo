@@ -22,5 +22,13 @@
     "credentials": "DO",
     "specialty": "Psychiatry",
     "email": "marcus.okonkwo@example.com"
+  },
+  {
+    "id": "prv_04",
+    "firstName": "Muhammad",
+    "lastName": "Ali",
+    "credentials": "MD",
+    "specialty": "Psychiatry",
+    "email": "cassius2828@gmail.com"
   }
 ]
