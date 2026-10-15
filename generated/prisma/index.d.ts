@@ -74,6 +74,11 @@ export type ShareRequest = $Result.DefaultSelection<Prisma.$ShareRequestPayload>
  */
 export type Medication = $Result.DefaultSelection<Prisma.$MedicationPayload>
 /**
+ * Model ProviderScheduleBlock
+ * 
+ */
+export type ProviderScheduleBlock = $Result.DefaultSelection<Prisma.$ProviderScheduleBlockPayload>
+/**
  * Model Appointment
  * 
  */
@@ -331,6 +336,16 @@ export class PrismaClient<
     * ```
     */
   get medication(): Prisma.MedicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.providerScheduleBlock`: Exposes CRUD operations for the **ProviderScheduleBlock** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProviderScheduleBlocks
+    * const providerScheduleBlocks = await prisma.providerScheduleBlock.findMany()
+    * ```
+    */
+  get providerScheduleBlock(): Prisma.ProviderScheduleBlockDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
@@ -824,6 +839,7 @@ export namespace Prisma {
     EmergencyContact: 'EmergencyContact',
     ShareRequest: 'ShareRequest',
     Medication: 'Medication',
+    ProviderScheduleBlock: 'ProviderScheduleBlock',
     Appointment: 'Appointment',
     Visit: 'Visit',
     ClinicalNote: 'ClinicalNote',
@@ -846,7 +862,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "shareRequest" | "medication" | "appointment" | "visit" | "clinicalNote" | "task"
+      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "shareRequest" | "medication" | "providerScheduleBlock" | "appointment" | "visit" | "clinicalNote" | "task"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1738,6 +1754,80 @@ export namespace Prisma {
           }
         }
       }
+      ProviderScheduleBlock: {
+        payload: Prisma.$ProviderScheduleBlockPayload<ExtArgs>
+        fields: Prisma.ProviderScheduleBlockFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProviderScheduleBlockFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProviderScheduleBlockFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          findFirst: {
+            args: Prisma.ProviderScheduleBlockFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProviderScheduleBlockFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          findMany: {
+            args: Prisma.ProviderScheduleBlockFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>[]
+          }
+          create: {
+            args: Prisma.ProviderScheduleBlockCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          createMany: {
+            args: Prisma.ProviderScheduleBlockCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProviderScheduleBlockCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>[]
+          }
+          delete: {
+            args: Prisma.ProviderScheduleBlockDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          update: {
+            args: Prisma.ProviderScheduleBlockUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProviderScheduleBlockDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProviderScheduleBlockUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProviderScheduleBlockUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProviderScheduleBlockUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderScheduleBlockPayload>
+          }
+          aggregate: {
+            args: Prisma.ProviderScheduleBlockAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProviderScheduleBlock>
+          }
+          groupBy: {
+            args: Prisma.ProviderScheduleBlockGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProviderScheduleBlockGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProviderScheduleBlockCountArgs<ExtArgs>
+            result: $Utils.Optional<ProviderScheduleBlockCountAggregateOutputType> | number
+          }
+        }
+      }
       Appointment: {
         payload: Prisma.$AppointmentPayload<ExtArgs>
         fields: Prisma.AppointmentFieldRefs
@@ -2142,6 +2232,7 @@ export namespace Prisma {
     emergencyContact?: EmergencyContactOmit
     shareRequest?: ShareRequestOmit
     medication?: MedicationOmit
+    providerScheduleBlock?: ProviderScheduleBlockOmit
     appointment?: AppointmentOmit
     visit?: VisitOmit
     clinicalNote?: ClinicalNoteOmit
@@ -2281,6 +2372,7 @@ export namespace Prisma {
     medications: number
     appointments: number
     nurseAppointments: number
+    scheduleBlocks: number
     visits: number
     notes: number
     tasks: number
@@ -2293,6 +2385,7 @@ export namespace Prisma {
     medications?: boolean | ProviderCountOutputTypeCountMedicationsArgs
     appointments?: boolean | ProviderCountOutputTypeCountAppointmentsArgs
     nurseAppointments?: boolean | ProviderCountOutputTypeCountNurseAppointmentsArgs
+    scheduleBlocks?: boolean | ProviderCountOutputTypeCountScheduleBlocksArgs
     visits?: boolean | ProviderCountOutputTypeCountVisitsArgs
     notes?: boolean | ProviderCountOutputTypeCountNotesArgs
     tasks?: boolean | ProviderCountOutputTypeCountTasksArgs
@@ -2349,6 +2442,13 @@ export namespace Prisma {
    */
   export type ProviderCountOutputTypeCountNurseAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AppointmentWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountScheduleBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderScheduleBlockWhereInput
   }
 
   /**
@@ -8209,6 +8309,7 @@ export namespace Prisma {
     medications?: boolean | Provider$medicationsArgs<ExtArgs>
     appointments?: boolean | Provider$appointmentsArgs<ExtArgs>
     nurseAppointments?: boolean | Provider$nurseAppointmentsArgs<ExtArgs>
+    scheduleBlocks?: boolean | Provider$scheduleBlocksArgs<ExtArgs>
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
@@ -8256,6 +8357,7 @@ export namespace Prisma {
     medications?: boolean | Provider$medicationsArgs<ExtArgs>
     appointments?: boolean | Provider$appointmentsArgs<ExtArgs>
     nurseAppointments?: boolean | Provider$nurseAppointmentsArgs<ExtArgs>
+    scheduleBlocks?: boolean | Provider$scheduleBlocksArgs<ExtArgs>
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
@@ -8278,6 +8380,7 @@ export namespace Prisma {
       medications: Prisma.$MedicationPayload<ExtArgs>[]
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       nurseAppointments: Prisma.$AppointmentPayload<ExtArgs>[]
+      scheduleBlocks: Prisma.$ProviderScheduleBlockPayload<ExtArgs>[]
       visits: Prisma.$VisitPayload<ExtArgs>[]
       notes: Prisma.$ClinicalNotePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
@@ -8691,6 +8794,7 @@ export namespace Prisma {
     medications<T extends Provider$medicationsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$medicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MedicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     appointments<T extends Provider$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     nurseAppointments<T extends Provider$nurseAppointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$nurseAppointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    scheduleBlocks<T extends Provider$scheduleBlocksArgs<ExtArgs> = {}>(args?: Subset<T, Provider$scheduleBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visits<T extends Provider$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notes<T extends Provider$notesArgs<ExtArgs> = {}>(args?: Subset<T, Provider$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Provider$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Provider$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9284,6 +9388,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AppointmentScalarFieldEnum | AppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * Provider.scheduleBlocks
+   */
+  export type Provider$scheduleBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    where?: ProviderScheduleBlockWhereInput
+    orderBy?: ProviderScheduleBlockOrderByWithRelationInput | ProviderScheduleBlockOrderByWithRelationInput[]
+    cursor?: ProviderScheduleBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProviderScheduleBlockScalarFieldEnum | ProviderScheduleBlockScalarFieldEnum[]
   }
 
   /**
@@ -16157,6 +16285,1134 @@ export namespace Prisma {
 
 
   /**
+   * Model ProviderScheduleBlock
+   */
+
+  export type AggregateProviderScheduleBlock = {
+    _count: ProviderScheduleBlockCountAggregateOutputType | null
+    _avg: ProviderScheduleBlockAvgAggregateOutputType | null
+    _sum: ProviderScheduleBlockSumAggregateOutputType | null
+    _min: ProviderScheduleBlockMinAggregateOutputType | null
+    _max: ProviderScheduleBlockMaxAggregateOutputType | null
+  }
+
+  export type ProviderScheduleBlockAvgAggregateOutputType = {
+    dayOfWeek: number | null
+    startMinute: number | null
+    endMinute: number | null
+    slotMinutes: number | null
+  }
+
+  export type ProviderScheduleBlockSumAggregateOutputType = {
+    dayOfWeek: number | null
+    startMinute: number | null
+    endMinute: number | null
+    slotMinutes: number | null
+  }
+
+  export type ProviderScheduleBlockMinAggregateOutputType = {
+    id: string | null
+    providerId: string | null
+    dayOfWeek: number | null
+    startMinute: number | null
+    endMinute: number | null
+    slotMinutes: number | null
+    kind: string | null
+  }
+
+  export type ProviderScheduleBlockMaxAggregateOutputType = {
+    id: string | null
+    providerId: string | null
+    dayOfWeek: number | null
+    startMinute: number | null
+    endMinute: number | null
+    slotMinutes: number | null
+    kind: string | null
+  }
+
+  export type ProviderScheduleBlockCountAggregateOutputType = {
+    id: number
+    providerId: number
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: number
+    _all: number
+  }
+
+
+  export type ProviderScheduleBlockAvgAggregateInputType = {
+    dayOfWeek?: true
+    startMinute?: true
+    endMinute?: true
+    slotMinutes?: true
+  }
+
+  export type ProviderScheduleBlockSumAggregateInputType = {
+    dayOfWeek?: true
+    startMinute?: true
+    endMinute?: true
+    slotMinutes?: true
+  }
+
+  export type ProviderScheduleBlockMinAggregateInputType = {
+    id?: true
+    providerId?: true
+    dayOfWeek?: true
+    startMinute?: true
+    endMinute?: true
+    slotMinutes?: true
+    kind?: true
+  }
+
+  export type ProviderScheduleBlockMaxAggregateInputType = {
+    id?: true
+    providerId?: true
+    dayOfWeek?: true
+    startMinute?: true
+    endMinute?: true
+    slotMinutes?: true
+    kind?: true
+  }
+
+  export type ProviderScheduleBlockCountAggregateInputType = {
+    id?: true
+    providerId?: true
+    dayOfWeek?: true
+    startMinute?: true
+    endMinute?: true
+    slotMinutes?: true
+    kind?: true
+    _all?: true
+  }
+
+  export type ProviderScheduleBlockAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProviderScheduleBlock to aggregate.
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderScheduleBlocks to fetch.
+     */
+    orderBy?: ProviderScheduleBlockOrderByWithRelationInput | ProviderScheduleBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProviderScheduleBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderScheduleBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderScheduleBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProviderScheduleBlocks
+    **/
+    _count?: true | ProviderScheduleBlockCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProviderScheduleBlockAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProviderScheduleBlockSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProviderScheduleBlockMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProviderScheduleBlockMaxAggregateInputType
+  }
+
+  export type GetProviderScheduleBlockAggregateType<T extends ProviderScheduleBlockAggregateArgs> = {
+        [P in keyof T & keyof AggregateProviderScheduleBlock]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProviderScheduleBlock[P]>
+      : GetScalarType<T[P], AggregateProviderScheduleBlock[P]>
+  }
+
+
+
+
+  export type ProviderScheduleBlockGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderScheduleBlockWhereInput
+    orderBy?: ProviderScheduleBlockOrderByWithAggregationInput | ProviderScheduleBlockOrderByWithAggregationInput[]
+    by: ProviderScheduleBlockScalarFieldEnum[] | ProviderScheduleBlockScalarFieldEnum
+    having?: ProviderScheduleBlockScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProviderScheduleBlockCountAggregateInputType | true
+    _avg?: ProviderScheduleBlockAvgAggregateInputType
+    _sum?: ProviderScheduleBlockSumAggregateInputType
+    _min?: ProviderScheduleBlockMinAggregateInputType
+    _max?: ProviderScheduleBlockMaxAggregateInputType
+  }
+
+  export type ProviderScheduleBlockGroupByOutputType = {
+    id: string
+    providerId: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+    _count: ProviderScheduleBlockCountAggregateOutputType | null
+    _avg: ProviderScheduleBlockAvgAggregateOutputType | null
+    _sum: ProviderScheduleBlockSumAggregateOutputType | null
+    _min: ProviderScheduleBlockMinAggregateOutputType | null
+    _max: ProviderScheduleBlockMaxAggregateOutputType | null
+  }
+
+  type GetProviderScheduleBlockGroupByPayload<T extends ProviderScheduleBlockGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProviderScheduleBlockGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProviderScheduleBlockGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProviderScheduleBlockGroupByOutputType[P]>
+            : GetScalarType<T[P], ProviderScheduleBlockGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProviderScheduleBlockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerId?: boolean
+    dayOfWeek?: boolean
+    startMinute?: boolean
+    endMinute?: boolean
+    slotMinutes?: boolean
+    kind?: boolean
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["providerScheduleBlock"]>
+
+  export type ProviderScheduleBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerId?: boolean
+    dayOfWeek?: boolean
+    startMinute?: boolean
+    endMinute?: boolean
+    slotMinutes?: boolean
+    kind?: boolean
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["providerScheduleBlock"]>
+
+  export type ProviderScheduleBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerId?: boolean
+    dayOfWeek?: boolean
+    startMinute?: boolean
+    endMinute?: boolean
+    slotMinutes?: boolean
+    kind?: boolean
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["providerScheduleBlock"]>
+
+  export type ProviderScheduleBlockSelectScalar = {
+    id?: boolean
+    providerId?: boolean
+    dayOfWeek?: boolean
+    startMinute?: boolean
+    endMinute?: boolean
+    slotMinutes?: boolean
+    kind?: boolean
+  }
+
+  export type ProviderScheduleBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "dayOfWeek" | "startMinute" | "endMinute" | "slotMinutes" | "kind", ExtArgs["result"]["providerScheduleBlock"]>
+  export type ProviderScheduleBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type ProviderScheduleBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type ProviderScheduleBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provider?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+
+  export type $ProviderScheduleBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProviderScheduleBlock"
+    objects: {
+      provider: Prisma.$ProviderPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      providerId: string
+      dayOfWeek: number
+      startMinute: number
+      endMinute: number
+      slotMinutes: number
+      kind: string
+    }, ExtArgs["result"]["providerScheduleBlock"]>
+    composites: {}
+  }
+
+  type ProviderScheduleBlockGetPayload<S extends boolean | null | undefined | ProviderScheduleBlockDefaultArgs> = $Result.GetResult<Prisma.$ProviderScheduleBlockPayload, S>
+
+  type ProviderScheduleBlockCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProviderScheduleBlockFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProviderScheduleBlockCountAggregateInputType | true
+    }
+
+  export interface ProviderScheduleBlockDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProviderScheduleBlock'], meta: { name: 'ProviderScheduleBlock' } }
+    /**
+     * Find zero or one ProviderScheduleBlock that matches the filter.
+     * @param {ProviderScheduleBlockFindUniqueArgs} args - Arguments to find a ProviderScheduleBlock
+     * @example
+     * // Get one ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProviderScheduleBlockFindUniqueArgs>(args: SelectSubset<T, ProviderScheduleBlockFindUniqueArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProviderScheduleBlock that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProviderScheduleBlockFindUniqueOrThrowArgs} args - Arguments to find a ProviderScheduleBlock
+     * @example
+     * // Get one ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProviderScheduleBlockFindUniqueOrThrowArgs>(args: SelectSubset<T, ProviderScheduleBlockFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProviderScheduleBlock that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockFindFirstArgs} args - Arguments to find a ProviderScheduleBlock
+     * @example
+     * // Get one ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProviderScheduleBlockFindFirstArgs>(args?: SelectSubset<T, ProviderScheduleBlockFindFirstArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProviderScheduleBlock that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockFindFirstOrThrowArgs} args - Arguments to find a ProviderScheduleBlock
+     * @example
+     * // Get one ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProviderScheduleBlockFindFirstOrThrowArgs>(args?: SelectSubset<T, ProviderScheduleBlockFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProviderScheduleBlocks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProviderScheduleBlocks
+     * const providerScheduleBlocks = await prisma.providerScheduleBlock.findMany()
+     * 
+     * // Get first 10 ProviderScheduleBlocks
+     * const providerScheduleBlocks = await prisma.providerScheduleBlock.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const providerScheduleBlockWithIdOnly = await prisma.providerScheduleBlock.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProviderScheduleBlockFindManyArgs>(args?: SelectSubset<T, ProviderScheduleBlockFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProviderScheduleBlock.
+     * @param {ProviderScheduleBlockCreateArgs} args - Arguments to create a ProviderScheduleBlock.
+     * @example
+     * // Create one ProviderScheduleBlock
+     * const ProviderScheduleBlock = await prisma.providerScheduleBlock.create({
+     *   data: {
+     *     // ... data to create a ProviderScheduleBlock
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProviderScheduleBlockCreateArgs>(args: SelectSubset<T, ProviderScheduleBlockCreateArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProviderScheduleBlocks.
+     * @param {ProviderScheduleBlockCreateManyArgs} args - Arguments to create many ProviderScheduleBlocks.
+     * @example
+     * // Create many ProviderScheduleBlocks
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProviderScheduleBlockCreateManyArgs>(args?: SelectSubset<T, ProviderScheduleBlockCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProviderScheduleBlocks and returns the data saved in the database.
+     * @param {ProviderScheduleBlockCreateManyAndReturnArgs} args - Arguments to create many ProviderScheduleBlocks.
+     * @example
+     * // Create many ProviderScheduleBlocks
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProviderScheduleBlocks and only return the `id`
+     * const providerScheduleBlockWithIdOnly = await prisma.providerScheduleBlock.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProviderScheduleBlockCreateManyAndReturnArgs>(args?: SelectSubset<T, ProviderScheduleBlockCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProviderScheduleBlock.
+     * @param {ProviderScheduleBlockDeleteArgs} args - Arguments to delete one ProviderScheduleBlock.
+     * @example
+     * // Delete one ProviderScheduleBlock
+     * const ProviderScheduleBlock = await prisma.providerScheduleBlock.delete({
+     *   where: {
+     *     // ... filter to delete one ProviderScheduleBlock
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProviderScheduleBlockDeleteArgs>(args: SelectSubset<T, ProviderScheduleBlockDeleteArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProviderScheduleBlock.
+     * @param {ProviderScheduleBlockUpdateArgs} args - Arguments to update one ProviderScheduleBlock.
+     * @example
+     * // Update one ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProviderScheduleBlockUpdateArgs>(args: SelectSubset<T, ProviderScheduleBlockUpdateArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProviderScheduleBlocks.
+     * @param {ProviderScheduleBlockDeleteManyArgs} args - Arguments to filter ProviderScheduleBlocks to delete.
+     * @example
+     * // Delete a few ProviderScheduleBlocks
+     * const { count } = await prisma.providerScheduleBlock.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProviderScheduleBlockDeleteManyArgs>(args?: SelectSubset<T, ProviderScheduleBlockDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProviderScheduleBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProviderScheduleBlocks
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProviderScheduleBlockUpdateManyArgs>(args: SelectSubset<T, ProviderScheduleBlockUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProviderScheduleBlocks and returns the data updated in the database.
+     * @param {ProviderScheduleBlockUpdateManyAndReturnArgs} args - Arguments to update many ProviderScheduleBlocks.
+     * @example
+     * // Update many ProviderScheduleBlocks
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProviderScheduleBlocks and only return the `id`
+     * const providerScheduleBlockWithIdOnly = await prisma.providerScheduleBlock.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProviderScheduleBlockUpdateManyAndReturnArgs>(args: SelectSubset<T, ProviderScheduleBlockUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProviderScheduleBlock.
+     * @param {ProviderScheduleBlockUpsertArgs} args - Arguments to update or create a ProviderScheduleBlock.
+     * @example
+     * // Update or create a ProviderScheduleBlock
+     * const providerScheduleBlock = await prisma.providerScheduleBlock.upsert({
+     *   create: {
+     *     // ... data to create a ProviderScheduleBlock
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProviderScheduleBlock we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProviderScheduleBlockUpsertArgs>(args: SelectSubset<T, ProviderScheduleBlockUpsertArgs<ExtArgs>>): Prisma__ProviderScheduleBlockClient<$Result.GetResult<Prisma.$ProviderScheduleBlockPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProviderScheduleBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockCountArgs} args - Arguments to filter ProviderScheduleBlocks to count.
+     * @example
+     * // Count the number of ProviderScheduleBlocks
+     * const count = await prisma.providerScheduleBlock.count({
+     *   where: {
+     *     // ... the filter for the ProviderScheduleBlocks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProviderScheduleBlockCountArgs>(
+      args?: Subset<T, ProviderScheduleBlockCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProviderScheduleBlockCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProviderScheduleBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProviderScheduleBlockAggregateArgs>(args: Subset<T, ProviderScheduleBlockAggregateArgs>): Prisma.PrismaPromise<GetProviderScheduleBlockAggregateType<T>>
+
+    /**
+     * Group by ProviderScheduleBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderScheduleBlockGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProviderScheduleBlockGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProviderScheduleBlockGroupByArgs['orderBy'] }
+        : { orderBy?: ProviderScheduleBlockGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProviderScheduleBlockGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProviderScheduleBlockGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProviderScheduleBlock model
+   */
+  readonly fields: ProviderScheduleBlockFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProviderScheduleBlock.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProviderScheduleBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    provider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProviderScheduleBlock model
+   */
+  interface ProviderScheduleBlockFieldRefs {
+    readonly id: FieldRef<"ProviderScheduleBlock", 'String'>
+    readonly providerId: FieldRef<"ProviderScheduleBlock", 'String'>
+    readonly dayOfWeek: FieldRef<"ProviderScheduleBlock", 'Int'>
+    readonly startMinute: FieldRef<"ProviderScheduleBlock", 'Int'>
+    readonly endMinute: FieldRef<"ProviderScheduleBlock", 'Int'>
+    readonly slotMinutes: FieldRef<"ProviderScheduleBlock", 'Int'>
+    readonly kind: FieldRef<"ProviderScheduleBlock", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProviderScheduleBlock findUnique
+   */
+  export type ProviderScheduleBlockFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderScheduleBlock to fetch.
+     */
+    where: ProviderScheduleBlockWhereUniqueInput
+  }
+
+  /**
+   * ProviderScheduleBlock findUniqueOrThrow
+   */
+  export type ProviderScheduleBlockFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderScheduleBlock to fetch.
+     */
+    where: ProviderScheduleBlockWhereUniqueInput
+  }
+
+  /**
+   * ProviderScheduleBlock findFirst
+   */
+  export type ProviderScheduleBlockFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderScheduleBlock to fetch.
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderScheduleBlocks to fetch.
+     */
+    orderBy?: ProviderScheduleBlockOrderByWithRelationInput | ProviderScheduleBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProviderScheduleBlocks.
+     */
+    cursor?: ProviderScheduleBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderScheduleBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderScheduleBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProviderScheduleBlocks.
+     */
+    distinct?: ProviderScheduleBlockScalarFieldEnum | ProviderScheduleBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderScheduleBlock findFirstOrThrow
+   */
+  export type ProviderScheduleBlockFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderScheduleBlock to fetch.
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderScheduleBlocks to fetch.
+     */
+    orderBy?: ProviderScheduleBlockOrderByWithRelationInput | ProviderScheduleBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProviderScheduleBlocks.
+     */
+    cursor?: ProviderScheduleBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderScheduleBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderScheduleBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProviderScheduleBlocks.
+     */
+    distinct?: ProviderScheduleBlockScalarFieldEnum | ProviderScheduleBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderScheduleBlock findMany
+   */
+  export type ProviderScheduleBlockFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderScheduleBlocks to fetch.
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderScheduleBlocks to fetch.
+     */
+    orderBy?: ProviderScheduleBlockOrderByWithRelationInput | ProviderScheduleBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProviderScheduleBlocks.
+     */
+    cursor?: ProviderScheduleBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderScheduleBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderScheduleBlocks.
+     */
+    skip?: number
+    distinct?: ProviderScheduleBlockScalarFieldEnum | ProviderScheduleBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderScheduleBlock create
+   */
+  export type ProviderScheduleBlockCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProviderScheduleBlock.
+     */
+    data: XOR<ProviderScheduleBlockCreateInput, ProviderScheduleBlockUncheckedCreateInput>
+  }
+
+  /**
+   * ProviderScheduleBlock createMany
+   */
+  export type ProviderScheduleBlockCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProviderScheduleBlocks.
+     */
+    data: ProviderScheduleBlockCreateManyInput | ProviderScheduleBlockCreateManyInput[]
+  }
+
+  /**
+   * ProviderScheduleBlock createManyAndReturn
+   */
+  export type ProviderScheduleBlockCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProviderScheduleBlocks.
+     */
+    data: ProviderScheduleBlockCreateManyInput | ProviderScheduleBlockCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProviderScheduleBlock update
+   */
+  export type ProviderScheduleBlockUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProviderScheduleBlock.
+     */
+    data: XOR<ProviderScheduleBlockUpdateInput, ProviderScheduleBlockUncheckedUpdateInput>
+    /**
+     * Choose, which ProviderScheduleBlock to update.
+     */
+    where: ProviderScheduleBlockWhereUniqueInput
+  }
+
+  /**
+   * ProviderScheduleBlock updateMany
+   */
+  export type ProviderScheduleBlockUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProviderScheduleBlocks.
+     */
+    data: XOR<ProviderScheduleBlockUpdateManyMutationInput, ProviderScheduleBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which ProviderScheduleBlocks to update
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * Limit how many ProviderScheduleBlocks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProviderScheduleBlock updateManyAndReturn
+   */
+  export type ProviderScheduleBlockUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * The data used to update ProviderScheduleBlocks.
+     */
+    data: XOR<ProviderScheduleBlockUpdateManyMutationInput, ProviderScheduleBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which ProviderScheduleBlocks to update
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * Limit how many ProviderScheduleBlocks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProviderScheduleBlock upsert
+   */
+  export type ProviderScheduleBlockUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProviderScheduleBlock to update in case it exists.
+     */
+    where: ProviderScheduleBlockWhereUniqueInput
+    /**
+     * In case the ProviderScheduleBlock found by the `where` argument doesn't exist, create a new ProviderScheduleBlock with this data.
+     */
+    create: XOR<ProviderScheduleBlockCreateInput, ProviderScheduleBlockUncheckedCreateInput>
+    /**
+     * In case the ProviderScheduleBlock was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProviderScheduleBlockUpdateInput, ProviderScheduleBlockUncheckedUpdateInput>
+  }
+
+  /**
+   * ProviderScheduleBlock delete
+   */
+  export type ProviderScheduleBlockDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+    /**
+     * Filter which ProviderScheduleBlock to delete.
+     */
+    where: ProviderScheduleBlockWhereUniqueInput
+  }
+
+  /**
+   * ProviderScheduleBlock deleteMany
+   */
+  export type ProviderScheduleBlockDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProviderScheduleBlocks to delete
+     */
+    where?: ProviderScheduleBlockWhereInput
+    /**
+     * Limit how many ProviderScheduleBlocks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProviderScheduleBlock without action
+   */
+  export type ProviderScheduleBlockDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderScheduleBlock
+     */
+    select?: ProviderScheduleBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderScheduleBlock
+     */
+    omit?: ProviderScheduleBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderScheduleBlockInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Appointment
    */
 
@@ -20954,6 +22210,19 @@ export namespace Prisma {
   export type MedicationScalarFieldEnum = (typeof MedicationScalarFieldEnum)[keyof typeof MedicationScalarFieldEnum]
 
 
+  export const ProviderScheduleBlockScalarFieldEnum: {
+    id: 'id',
+    providerId: 'providerId',
+    dayOfWeek: 'dayOfWeek',
+    startMinute: 'startMinute',
+    endMinute: 'endMinute',
+    slotMinutes: 'slotMinutes',
+    kind: 'kind'
+  };
+
+  export type ProviderScheduleBlockScalarFieldEnum = (typeof ProviderScheduleBlockScalarFieldEnum)[keyof typeof ProviderScheduleBlockScalarFieldEnum]
+
+
   export const AppointmentScalarFieldEnum: {
     id: 'id',
     patientId: 'patientId',
@@ -21422,6 +22691,7 @@ export namespace Prisma {
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
     nurseAppointments?: AppointmentListRelationFilter
+    scheduleBlocks?: ProviderScheduleBlockListRelationFilter
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
@@ -21442,6 +22712,7 @@ export namespace Prisma {
     medications?: MedicationOrderByRelationAggregateInput
     appointments?: AppointmentOrderByRelationAggregateInput
     nurseAppointments?: AppointmentOrderByRelationAggregateInput
+    scheduleBlocks?: ProviderScheduleBlockOrderByRelationAggregateInput
     visits?: VisitOrderByRelationAggregateInput
     notes?: ClinicalNoteOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
@@ -21465,6 +22736,7 @@ export namespace Prisma {
     medications?: MedicationListRelationFilter
     appointments?: AppointmentListRelationFilter
     nurseAppointments?: AppointmentListRelationFilter
+    scheduleBlocks?: ProviderScheduleBlockListRelationFilter
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
@@ -21918,6 +23190,73 @@ export namespace Prisma {
     startDate?: DateTimeWithAggregatesFilter<"Medication"> | Date | string
     endDate?: DateTimeNullableWithAggregatesFilter<"Medication"> | Date | string | null
     notes?: StringNullableWithAggregatesFilter<"Medication"> | string | null
+  }
+
+  export type ProviderScheduleBlockWhereInput = {
+    AND?: ProviderScheduleBlockWhereInput | ProviderScheduleBlockWhereInput[]
+    OR?: ProviderScheduleBlockWhereInput[]
+    NOT?: ProviderScheduleBlockWhereInput | ProviderScheduleBlockWhereInput[]
+    id?: StringFilter<"ProviderScheduleBlock"> | string
+    providerId?: StringFilter<"ProviderScheduleBlock"> | string
+    dayOfWeek?: IntFilter<"ProviderScheduleBlock"> | number
+    startMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    endMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    slotMinutes?: IntFilter<"ProviderScheduleBlock"> | number
+    kind?: StringFilter<"ProviderScheduleBlock"> | string
+    provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }
+
+  export type ProviderScheduleBlockOrderByWithRelationInput = {
+    id?: SortOrder
+    providerId?: SortOrder
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+    kind?: SortOrder
+    provider?: ProviderOrderByWithRelationInput
+  }
+
+  export type ProviderScheduleBlockWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProviderScheduleBlockWhereInput | ProviderScheduleBlockWhereInput[]
+    OR?: ProviderScheduleBlockWhereInput[]
+    NOT?: ProviderScheduleBlockWhereInput | ProviderScheduleBlockWhereInput[]
+    providerId?: StringFilter<"ProviderScheduleBlock"> | string
+    dayOfWeek?: IntFilter<"ProviderScheduleBlock"> | number
+    startMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    endMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    slotMinutes?: IntFilter<"ProviderScheduleBlock"> | number
+    kind?: StringFilter<"ProviderScheduleBlock"> | string
+    provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }, "id">
+
+  export type ProviderScheduleBlockOrderByWithAggregationInput = {
+    id?: SortOrder
+    providerId?: SortOrder
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+    kind?: SortOrder
+    _count?: ProviderScheduleBlockCountOrderByAggregateInput
+    _avg?: ProviderScheduleBlockAvgOrderByAggregateInput
+    _max?: ProviderScheduleBlockMaxOrderByAggregateInput
+    _min?: ProviderScheduleBlockMinOrderByAggregateInput
+    _sum?: ProviderScheduleBlockSumOrderByAggregateInput
+  }
+
+  export type ProviderScheduleBlockScalarWhereWithAggregatesInput = {
+    AND?: ProviderScheduleBlockScalarWhereWithAggregatesInput | ProviderScheduleBlockScalarWhereWithAggregatesInput[]
+    OR?: ProviderScheduleBlockScalarWhereWithAggregatesInput[]
+    NOT?: ProviderScheduleBlockScalarWhereWithAggregatesInput | ProviderScheduleBlockScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProviderScheduleBlock"> | string
+    providerId?: StringWithAggregatesFilter<"ProviderScheduleBlock"> | string
+    dayOfWeek?: IntWithAggregatesFilter<"ProviderScheduleBlock"> | number
+    startMinute?: IntWithAggregatesFilter<"ProviderScheduleBlock"> | number
+    endMinute?: IntWithAggregatesFilter<"ProviderScheduleBlock"> | number
+    slotMinutes?: IntWithAggregatesFilter<"ProviderScheduleBlock"> | number
+    kind?: StringWithAggregatesFilter<"ProviderScheduleBlock"> | string
   }
 
   export type AppointmentWhereInput = {
@@ -22635,6 +23974,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -22654,6 +23994,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -22673,6 +24014,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -22692,6 +24034,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -23163,6 +24506,75 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProviderScheduleBlockCreateInput = {
+    id?: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+    provider: ProviderCreateNestedOneWithoutScheduleBlocksInput
+  }
+
+  export type ProviderScheduleBlockUncheckedCreateInput = {
+    id?: string
+    providerId: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+  }
+
+  export type ProviderScheduleBlockUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
+    provider?: ProviderUpdateOneRequiredWithoutScheduleBlocksNestedInput
+  }
+
+  export type ProviderScheduleBlockUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProviderScheduleBlockCreateManyInput = {
+    id?: string
+    providerId: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+  }
+
+  export type ProviderScheduleBlockUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProviderScheduleBlockUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type AppointmentCreateInput = {
@@ -23939,6 +25351,12 @@ export namespace Prisma {
     none?: AppointmentWhereInput
   }
 
+  export type ProviderScheduleBlockListRelationFilter = {
+    every?: ProviderScheduleBlockWhereInput
+    some?: ProviderScheduleBlockWhereInput
+    none?: ProviderScheduleBlockWhereInput
+  }
+
   export type VisitListRelationFilter = {
     every?: VisitWhereInput
     some?: VisitWhereInput
@@ -23970,6 +25388,10 @@ export namespace Prisma {
   }
 
   export type AppointmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProviderScheduleBlockOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -24225,6 +25647,50 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     notes?: SortOrder
+  }
+
+  export type ProviderScheduleBlockCountOrderByAggregateInput = {
+    id?: SortOrder
+    providerId?: SortOrder
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+    kind?: SortOrder
+  }
+
+  export type ProviderScheduleBlockAvgOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+  }
+
+  export type ProviderScheduleBlockMaxOrderByAggregateInput = {
+    id?: SortOrder
+    providerId?: SortOrder
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+    kind?: SortOrder
+  }
+
+  export type ProviderScheduleBlockMinOrderByAggregateInput = {
+    id?: SortOrder
+    providerId?: SortOrder
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
+    kind?: SortOrder
+  }
+
+  export type ProviderScheduleBlockSumOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+    startMinute?: SortOrder
+    endMinute?: SortOrder
+    slotMinutes?: SortOrder
   }
 
   export type VisitNullableScalarRelationFilter = {
@@ -24715,6 +26181,13 @@ export namespace Prisma {
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
   }
 
+  export type ProviderScheduleBlockCreateNestedManyWithoutProviderInput = {
+    create?: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput> | ProviderScheduleBlockCreateWithoutProviderInput[] | ProviderScheduleBlockUncheckedCreateWithoutProviderInput[]
+    connectOrCreate?: ProviderScheduleBlockCreateOrConnectWithoutProviderInput | ProviderScheduleBlockCreateOrConnectWithoutProviderInput[]
+    createMany?: ProviderScheduleBlockCreateManyProviderInputEnvelope
+    connect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+  }
+
   export type VisitCreateNestedManyWithoutProviderInput = {
     create?: XOR<VisitCreateWithoutProviderInput, VisitUncheckedCreateWithoutProviderInput> | VisitCreateWithoutProviderInput[] | VisitUncheckedCreateWithoutProviderInput[]
     connectOrCreate?: VisitCreateOrConnectWithoutProviderInput | VisitCreateOrConnectWithoutProviderInput[]
@@ -24776,6 +26249,13 @@ export namespace Prisma {
     connectOrCreate?: AppointmentCreateOrConnectWithoutNurseInput | AppointmentCreateOrConnectWithoutNurseInput[]
     createMany?: AppointmentCreateManyNurseInputEnvelope
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput = {
+    create?: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput> | ProviderScheduleBlockCreateWithoutProviderInput[] | ProviderScheduleBlockUncheckedCreateWithoutProviderInput[]
+    connectOrCreate?: ProviderScheduleBlockCreateOrConnectWithoutProviderInput | ProviderScheduleBlockCreateOrConnectWithoutProviderInput[]
+    createMany?: ProviderScheduleBlockCreateManyProviderInputEnvelope
+    connect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
   }
 
   export type VisitUncheckedCreateNestedManyWithoutProviderInput = {
@@ -24891,6 +26371,20 @@ export namespace Prisma {
     update?: AppointmentUpdateWithWhereUniqueWithoutNurseInput | AppointmentUpdateWithWhereUniqueWithoutNurseInput[]
     updateMany?: AppointmentUpdateManyWithWhereWithoutNurseInput | AppointmentUpdateManyWithWhereWithoutNurseInput[]
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type ProviderScheduleBlockUpdateManyWithoutProviderNestedInput = {
+    create?: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput> | ProviderScheduleBlockCreateWithoutProviderInput[] | ProviderScheduleBlockUncheckedCreateWithoutProviderInput[]
+    connectOrCreate?: ProviderScheduleBlockCreateOrConnectWithoutProviderInput | ProviderScheduleBlockCreateOrConnectWithoutProviderInput[]
+    upsert?: ProviderScheduleBlockUpsertWithWhereUniqueWithoutProviderInput | ProviderScheduleBlockUpsertWithWhereUniqueWithoutProviderInput[]
+    createMany?: ProviderScheduleBlockCreateManyProviderInputEnvelope
+    set?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    disconnect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    delete?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    connect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    update?: ProviderScheduleBlockUpdateWithWhereUniqueWithoutProviderInput | ProviderScheduleBlockUpdateWithWhereUniqueWithoutProviderInput[]
+    updateMany?: ProviderScheduleBlockUpdateManyWithWhereWithoutProviderInput | ProviderScheduleBlockUpdateManyWithWhereWithoutProviderInput[]
+    deleteMany?: ProviderScheduleBlockScalarWhereInput | ProviderScheduleBlockScalarWhereInput[]
   }
 
   export type VisitUpdateManyWithoutProviderNestedInput = {
@@ -25017,6 +26511,20 @@ export namespace Prisma {
     update?: AppointmentUpdateWithWhereUniqueWithoutNurseInput | AppointmentUpdateWithWhereUniqueWithoutNurseInput[]
     updateMany?: AppointmentUpdateManyWithWhereWithoutNurseInput | AppointmentUpdateManyWithWhereWithoutNurseInput[]
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput = {
+    create?: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput> | ProviderScheduleBlockCreateWithoutProviderInput[] | ProviderScheduleBlockUncheckedCreateWithoutProviderInput[]
+    connectOrCreate?: ProviderScheduleBlockCreateOrConnectWithoutProviderInput | ProviderScheduleBlockCreateOrConnectWithoutProviderInput[]
+    upsert?: ProviderScheduleBlockUpsertWithWhereUniqueWithoutProviderInput | ProviderScheduleBlockUpsertWithWhereUniqueWithoutProviderInput[]
+    createMany?: ProviderScheduleBlockCreateManyProviderInputEnvelope
+    set?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    disconnect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    delete?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    connect?: ProviderScheduleBlockWhereUniqueInput | ProviderScheduleBlockWhereUniqueInput[]
+    update?: ProviderScheduleBlockUpdateWithWhereUniqueWithoutProviderInput | ProviderScheduleBlockUpdateWithWhereUniqueWithoutProviderInput[]
+    updateMany?: ProviderScheduleBlockUpdateManyWithWhereWithoutProviderInput | ProviderScheduleBlockUpdateManyWithWhereWithoutProviderInput[]
+    deleteMany?: ProviderScheduleBlockScalarWhereInput | ProviderScheduleBlockScalarWhereInput[]
   }
 
   export type VisitUncheckedUpdateManyWithoutProviderNestedInput = {
@@ -25569,6 +27077,20 @@ export namespace Prisma {
     upsert?: ProviderUpsertWithoutMedicationsInput
     connect?: ProviderWhereUniqueInput
     update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutMedicationsInput, ProviderUpdateWithoutMedicationsInput>, ProviderUncheckedUpdateWithoutMedicationsInput>
+  }
+
+  export type ProviderCreateNestedOneWithoutScheduleBlocksInput = {
+    create?: XOR<ProviderCreateWithoutScheduleBlocksInput, ProviderUncheckedCreateWithoutScheduleBlocksInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutScheduleBlocksInput
+    connect?: ProviderWhereUniqueInput
+  }
+
+  export type ProviderUpdateOneRequiredWithoutScheduleBlocksNestedInput = {
+    create?: XOR<ProviderCreateWithoutScheduleBlocksInput, ProviderUncheckedCreateWithoutScheduleBlocksInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutScheduleBlocksInput
+    upsert?: ProviderUpsertWithoutScheduleBlocksInput
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutScheduleBlocksInput, ProviderUpdateWithoutScheduleBlocksInput>, ProviderUncheckedUpdateWithoutScheduleBlocksInput>
   }
 
   export type PatientCreateNestedOneWithoutAppointmentsInput = {
@@ -26324,6 +27846,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -26342,6 +27865,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -26515,6 +28039,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -26533,6 +28058,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -26852,6 +28378,33 @@ export namespace Prisma {
     data: AppointmentCreateManyNurseInput | AppointmentCreateManyNurseInput[]
   }
 
+  export type ProviderScheduleBlockCreateWithoutProviderInput = {
+    id?: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+  }
+
+  export type ProviderScheduleBlockUncheckedCreateWithoutProviderInput = {
+    id?: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
+  }
+
+  export type ProviderScheduleBlockCreateOrConnectWithoutProviderInput = {
+    where: ProviderScheduleBlockWhereUniqueInput
+    create: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput>
+  }
+
+  export type ProviderScheduleBlockCreateManyProviderInputEnvelope = {
+    data: ProviderScheduleBlockCreateManyProviderInput | ProviderScheduleBlockCreateManyProviderInput[]
+  }
+
   export type VisitCreateWithoutProviderInput = {
     id?: string
     visitDate: Date | string
@@ -27152,6 +28705,35 @@ export namespace Prisma {
     data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutNurseInput>
   }
 
+  export type ProviderScheduleBlockUpsertWithWhereUniqueWithoutProviderInput = {
+    where: ProviderScheduleBlockWhereUniqueInput
+    update: XOR<ProviderScheduleBlockUpdateWithoutProviderInput, ProviderScheduleBlockUncheckedUpdateWithoutProviderInput>
+    create: XOR<ProviderScheduleBlockCreateWithoutProviderInput, ProviderScheduleBlockUncheckedCreateWithoutProviderInput>
+  }
+
+  export type ProviderScheduleBlockUpdateWithWhereUniqueWithoutProviderInput = {
+    where: ProviderScheduleBlockWhereUniqueInput
+    data: XOR<ProviderScheduleBlockUpdateWithoutProviderInput, ProviderScheduleBlockUncheckedUpdateWithoutProviderInput>
+  }
+
+  export type ProviderScheduleBlockUpdateManyWithWhereWithoutProviderInput = {
+    where: ProviderScheduleBlockScalarWhereInput
+    data: XOR<ProviderScheduleBlockUpdateManyMutationInput, ProviderScheduleBlockUncheckedUpdateManyWithoutProviderInput>
+  }
+
+  export type ProviderScheduleBlockScalarWhereInput = {
+    AND?: ProviderScheduleBlockScalarWhereInput | ProviderScheduleBlockScalarWhereInput[]
+    OR?: ProviderScheduleBlockScalarWhereInput[]
+    NOT?: ProviderScheduleBlockScalarWhereInput | ProviderScheduleBlockScalarWhereInput[]
+    id?: StringFilter<"ProviderScheduleBlock"> | string
+    providerId?: StringFilter<"ProviderScheduleBlock"> | string
+    dayOfWeek?: IntFilter<"ProviderScheduleBlock"> | number
+    startMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    endMinute?: IntFilter<"ProviderScheduleBlock"> | number
+    slotMinutes?: IntFilter<"ProviderScheduleBlock"> | number
+    kind?: StringFilter<"ProviderScheduleBlock"> | string
+  }
+
   export type VisitUpsertWithWhereUniqueWithoutProviderInput = {
     where: VisitWhereUniqueInput
     update: XOR<VisitUpdateWithoutProviderInput, VisitUncheckedUpdateWithoutProviderInput>
@@ -27258,6 +28840,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -27276,6 +28859,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -27600,6 +29184,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -27618,6 +29203,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -28225,6 +29811,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -28243,6 +29830,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -28266,6 +29854,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -28284,6 +29873,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -28375,6 +29965,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -28393,6 +29984,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -28422,6 +30014,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -28440,6 +30033,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -28509,6 +30103,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -28527,6 +30122,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -28618,6 +30214,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -28634,6 +30231,99 @@ export namespace Prisma {
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderCreateWithoutScheduleBlocksInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderUncheckedCreateWithoutScheduleBlocksInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderCreateOrConnectWithoutScheduleBlocksInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutScheduleBlocksInput, ProviderUncheckedCreateWithoutScheduleBlocksInput>
+  }
+
+  export type ProviderUpsertWithoutScheduleBlocksInput = {
+    update: XOR<ProviderUpdateWithoutScheduleBlocksInput, ProviderUncheckedUpdateWithoutScheduleBlocksInput>
+    create: XOR<ProviderCreateWithoutScheduleBlocksInput, ProviderUncheckedCreateWithoutScheduleBlocksInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutScheduleBlocksInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutScheduleBlocksInput, ProviderUncheckedUpdateWithoutScheduleBlocksInput>
+  }
+
+  export type ProviderUpdateWithoutScheduleBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutScheduleBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
@@ -28705,6 +30395,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -28723,6 +30414,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -28746,6 +30438,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
@@ -28764,6 +30457,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
@@ -28884,6 +30578,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -28902,6 +30597,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -28931,6 +30627,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
@@ -28949,6 +30646,7 @@ export namespace Prisma {
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
@@ -29089,6 +30787,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
   }
@@ -29107,6 +30806,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
   }
@@ -29270,6 +30970,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -29288,6 +30989,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -29402,6 +31104,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
   }
@@ -29420,6 +31123,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
   }
@@ -29546,6 +31250,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -29564,6 +31269,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
@@ -29633,6 +31339,7 @@ export namespace Prisma {
     medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
   }
@@ -29651,6 +31358,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
     appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
     nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
   }
@@ -29742,6 +31450,7 @@ export namespace Prisma {
     medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
   }
@@ -29760,6 +31469,7 @@ export namespace Prisma {
     medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
     appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
   }
@@ -29945,6 +31655,15 @@ export namespace Prisma {
     description: string
     reasonForVisit: string
     createdAt: Date | string
+  }
+
+  export type ProviderScheduleBlockCreateManyProviderInput = {
+    id?: string
+    dayOfWeek: number
+    startMinute: number
+    endMinute: number
+    slotMinutes: number
+    kind: string
   }
 
   export type VisitCreateManyProviderInput = {
@@ -30216,6 +31935,33 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     reasonForVisit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderScheduleBlockUpdateWithoutProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProviderScheduleBlockUncheckedUpdateWithoutProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProviderScheduleBlockUncheckedUpdateManyWithoutProviderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startMinute?: IntFieldUpdateOperationsInput | number
+    endMinute?: IntFieldUpdateOperationsInput | number
+    slotMinutes?: IntFieldUpdateOperationsInput | number
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type VisitUpdateWithoutProviderInput = {

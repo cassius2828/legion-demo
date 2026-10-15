@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "../generated/prisma/index.js";
-import { seedClinicHistory } from "./clinic-history.mjs";
+import { seedClinicHistory, seedMedications } from "./clinic-history.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const providers = JSON.parse(
@@ -11,6 +11,9 @@ const providers = JSON.parse(
 );
 const patients = JSON.parse(
   readFileSync(path.join(root, "src/data/patients.json"), "utf8"),
+);
+const schedules = JSON.parse(
+  readFileSync(path.join(root, "src/data/schedules.json"), "utf8"),
 );
 
 const db = new PrismaClient();
@@ -99,6 +102,11 @@ for (const patient of patients) {
   });
 }
 
+await db.providerScheduleBlock.deleteMany({
+  where: { providerId: { in: providers.map((provider) => provider.id) } },
+});
+await db.providerScheduleBlock.createMany({ data: schedules });
+
 await linkLogin("cassius2828@gmail.com", "psychiatrist", "Muhammad Ali", "provider", "prv_04");
 await linkLogin(
   "cassius.reynolds.dev@gmail.com",
@@ -109,11 +117,12 @@ await linkLogin(
 );
 
 const history = await seedClinicHistory(db, patients);
+const medicationCount = await seedMedications(db, patients);
 const [providerCount, patientCount] = await Promise.all([
   db.provider.count(),
   db.patient.count(),
 ]);
 console.log(
-  `Seeded ${providerCount} providers, ${patientCount} patients, ${history.appointments} appointments, ${history.visits} visits, and ${history.notes} notes`,
+  `Seeded ${providerCount} providers, ${patientCount} patients, ${schedules.length} schedule blocks, ${history.appointments} appointments, ${history.visits} visits, ${history.notes} notes, and ${medicationCount} medications`,
 );
 await db.$disconnect();

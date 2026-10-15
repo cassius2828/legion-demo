@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { ageInYears, fullName } from "~/lib/chart";
+import { ageInYears, fullName, providerLabel } from "~/lib/chart";
 import { db } from "~/server/db";
 
 export async function PatientHome({ userId }: { userId: string }) {
@@ -28,7 +28,17 @@ export async function PatientHome({ userId }: { userId: string }) {
     <main className="mx-auto max-w-xl px-4 py-10 sm:px-6">
       <h1 className="text-3xl font-semibold tracking-tight">Your chart</h1>
       <p className="mt-2 text-muted-foreground">Only your record is available here.</p>
-      <Link href={`/patients/${patient.id}`} className="mt-8 block">
+      <Link href="/appointments/book" className="mt-8 block">
+        <Card className="transition hover:ring-primary/40">
+          <CardHeader>
+            <CardTitle className="text-lg">Request an appointment</CardTitle>
+            <CardDescription>
+              Book a follow-up with {providerLabel(patient.primaryProvider)}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </Link>
+      <Link href={`/patients/${patient.id}`} className="mt-4 block">
         <Card className="transition hover:ring-primary/40">
           <CardHeader>
             <CardTitle className="text-lg">{fullName(patient)}</CardTitle>

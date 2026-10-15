@@ -236,6 +236,16 @@ exports.Prisma.MedicationScalarFieldEnum = {
   notes: 'notes'
 };
 
+exports.Prisma.ProviderScheduleBlockScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  dayOfWeek: 'dayOfWeek',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  slotMinutes: 'slotMinutes',
+  kind: 'kind'
+};
+
 exports.Prisma.AppointmentScalarFieldEnum = {
   id: 'id',
   patientId: 'patientId',
@@ -311,6 +321,7 @@ exports.Prisma.ModelName = {
   EmergencyContact: 'EmergencyContact',
   ShareRequest: 'ShareRequest',
   Medication: 'Medication',
+  ProviderScheduleBlock: 'ProviderScheduleBlock',
   Appointment: 'Appointment',
   Visit: 'Visit',
   ClinicalNote: 'ClinicalNote',

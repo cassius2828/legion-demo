@@ -56,17 +56,20 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          String?
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  provider      Provider?
-  patient       Patient?
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  image              String?
+  role               String?
+  primaryInsurance   String?
+  secondaryInsurance String?
+  organization       String?
+  accounts           Account[]
+  sessions           Session[]
+  posts              Post[]
+  provider           Provider?
+  patient            Patient?
 }
 
 model VerificationToken {
@@ -78,20 +81,24 @@ model VerificationToken {
 }
 
 model Provider {
-  id           String         @id
-  firstName    String
-  lastName     String
-  credentials  String
-  specialty    String
-  email        String         @unique
-  userId       String?        @unique
-  user         User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
-  patients     Patient[]      @relation("ProviderPanel")
-  medications  Medication[]
-  appointments Appointment[]
-  visits       Visit[]
-  notes        ClinicalNote[]
-  tasks        Task[]
+  id                String                  @id
+  firstName         String
+  lastName          String
+  credentials       String
+  specialty         String
+  email             String                  @unique
+  userId            String?                 @unique
+  user              User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  patients          Patient[]               @relation("ProviderPanel")
+  sharesSent        ShareRequest[]          @relation("ShareFrom")
+  sharesReceived    ShareRequest[]          @relation("ShareTo")
+  medications       Medication[]
+  appointments      Appointment[]           @relation("AppointmentProvider")
+  nurseAppointments Appointment[]           @relation("AppointmentNurse")
+  scheduleBlocks    ProviderScheduleBlock[]
+  visits            Visit[]
+  notes             ClinicalNote[]
+  tasks             Task[]
 }
 
 model Patient {
@@ -112,6 +119,7 @@ model Patient {
   allergies          PatientAllergy[]
   conditions         PatientCondition[]
   emergencyContact   EmergencyContact?
+  shareRequests      ShareRequest[]
   medications        Medication[]
   appointments       Appointment[]
   visits             Visit[]
@@ -148,6 +156,22 @@ model EmergencyContact {
   phone        String
 }
 
+model ShareRequest {
+  id             String   @id @default(cuid())
+  patientId      String
+  patient        Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  fromProviderId String
+  fromProvider   Provider @relation("ShareFrom", fields: [fromProviderId], references: [id])
+  toProviderId   String
+  toProvider     Provider @relation("ShareTo", fields: [toProviderId], references: [id])
+  status         String
+  createdAt      DateTime @default(now())
+
+  @@index([patientId])
+  @@index([fromProviderId])
+  @@index([toProviderId])
+}
+
 model Medication {
   id                    String    @id @default(cuid())
   patientId             String
@@ -167,22 +191,41 @@ model Medication {
   @@index([patientId])
 }
 
+model ProviderScheduleBlock {
+  id          String   @id @default(cuid())
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  dayOfWeek   Int
+  startMinute Int
+  endMinute   Int
+  slotMinutes Int
+  kind        String
+
+  @@index([providerId])
+}
+
 model Appointment {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   patientId       String
-  patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patient         Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
   providerId      String
-  provider        Provider @relation(fields: [providerId], references: [id])
+  provider        Provider  @relation("AppointmentProvider", fields: [providerId], references: [id])
+  nurseId         String?
+  nurse           Provider? @relation("AppointmentNurse", fields: [nurseId], references: [id], onDelete: SetNull)
   scheduledAt     DateTime
   durationMinutes Int
   appointmentType String
   status          String
+  title           String
+  description     String
   reasonForVisit  String
   createdAt       DateTime
   visit           Visit?
 
   @@index([patientId])
   @@index([providerId])
+  @@index([nurseId])
+  @@index([scheduledAt])
 }
 
 model Visit {

@@ -1,0 +1,35 @@
+[
+  { "providerId": "prv_01", "dayOfWeek": 1, "startMinute": 510, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 1, "startMinute": 780, "endMinute": 990, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 2, "startMinute": 510, "endMinute": 630, "slotMinutes": 60, "kind": "intake" },
+  { "providerId": "prv_01", "dayOfWeek": 2, "startMinute": 630, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 2, "startMinute": 780, "endMinute": 990, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 3, "startMinute": 510, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 3, "startMinute": 780, "endMinute": 990, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 4, "startMinute": 510, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_01", "dayOfWeek": 4, "startMinute": 780, "endMinute": 990, "slotMinutes": 30, "kind": "follow-up" },
+
+  { "providerId": "prv_02", "dayOfWeek": 1, "startMinute": 600, "endMinute": 720, "slotMinutes": 60, "kind": "intake" },
+  { "providerId": "prv_02", "dayOfWeek": 1, "startMinute": 720, "endMinute": 750, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 1, "startMinute": 810, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 2, "startMinute": 600, "endMinute": 750, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 2, "startMinute": 810, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 4, "startMinute": 600, "endMinute": 750, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 4, "startMinute": 810, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 5, "startMinute": 600, "endMinute": 750, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_02", "dayOfWeek": 5, "startMinute": 810, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+
+  { "providerId": "prv_03", "dayOfWeek": 1, "startMinute": 540, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 1, "startMinute": 780, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 2, "startMinute": 540, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 2, "startMinute": 780, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 3, "startMinute": 540, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 4, "startMinute": 540, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_03", "dayOfWeek": 4, "startMinute": 780, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+
+  { "providerId": "prv_04", "dayOfWeek": 1, "startMinute": 480, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_04", "dayOfWeek": 3, "startMinute": 480, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_04", "dayOfWeek": 4, "startMinute": 780, "endMinute": 1080, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_04", "dayOfWeek": 5, "startMinute": 480, "endMinute": 600, "slotMinutes": 60, "kind": "intake" },
+  { "providerId": "prv_04", "dayOfWeek": 5, "startMinute": 600, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" }
+]

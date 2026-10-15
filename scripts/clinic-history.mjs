@@ -469,6 +469,111 @@ async function createChunked(rows, write) {
   }
 }
 
+const MEDS_BY_COURSE = {
+  depression: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "100 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14 },
+    { medicationName: "Bupropion XL", genericName: "bupropion", dosage: "150 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 45, notes: "Stopped for insomnia and jitteriness." },
+  ],
+  anxiety: [
+    { medicationName: "Escitalopram", genericName: "escitalopram", dosage: "10 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 7 },
+    { medicationName: "Hydroxyzine", genericName: "hydroxyzine", dosage: "25 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 7, durationDays: 60, notes: "Stopped after morning grogginess." },
+  ],
+  "anxiety-stopped": [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "50 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 120, notes: "Tapered off after symptoms eased. Therapy continues." },
+  ],
+  panic: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "50 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 10 },
+    { medicationName: "Lorazepam", genericName: "lorazepam", dosage: "0.5 mg", route: "oral", frequency: "as needed for a panic attack", status: "discontinued", startAfterDays: 0, durationDays: 30, notes: "Short bridge only. Not continued." },
+  ],
+  bipolar: [
+    { medicationName: "Lamotrigine", genericName: "lamotrigine", dosage: "200 mg", route: "oral", frequency: "every evening", status: "active", startAfterDays: 21 },
+    { medicationName: "Quetiapine", genericName: "quetiapine", dosage: "50 mg", route: "oral", frequency: "at bedtime", status: "discontinued", startAfterDays: 0, durationDays: 40, notes: "Stopped for daytime sedation once sleep settled." },
+  ],
+  ptsd: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "100 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14 },
+    { medicationName: "Prazosin", genericName: "prazosin", dosage: "2 mg", route: "oral", frequency: "at bedtime", status: "discontinued", startAfterDays: 30, durationDays: 70, notes: "Stopped after lightheadedness on standing." },
+  ],
+  adhd: [
+    { medicationName: "Atomoxetine", genericName: "atomoxetine", dosage: "80 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14 },
+    { medicationName: "Methylphenidate ER", genericName: "methylphenidate", dosage: "18 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 28, notes: "Stopped for appetite loss and a racing heart." },
+  ],
+  intake: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "25 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 0 },
+  ],
+  remission: [
+    { medicationName: "Escitalopram", genericName: "escitalopram", dosage: "10 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 180, notes: "Tapered after a stable year. Watching for relapse." },
+  ],
+  psychosis: [
+    { medicationName: "Aripiprazole", genericName: "aripiprazole", dosage: "10 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 7 },
+    { medicationName: "Risperidone", genericName: "risperidone", dosage: "1 mg", route: "oral", frequency: "at bedtime", status: "discontinued", startAfterDays: 0, durationDays: 35, notes: "Switched after stiffness and restlessness." },
+  ],
+  performance: [
+    { medicationName: "Escitalopram", genericName: "escitalopram", dosage: "10 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14, notes: "For rumination and worry that starts days before a performance." },
+    { medicationName: "Propranolol", genericName: "propranolol", dosage: "10 mg", route: "oral", frequency: "about an hour before a performance", status: "active", startAfterDays: 21, notes: "For racing heart and tremor once the event is close." },
+    { medicationName: "Hydroxyzine", genericName: "hydroxyzine", dosage: "25 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 0, durationDays: 40, notes: "Tried for short sleep before events. Stopped after morning grogginess." },
+    { medicationName: "Zolpidem", genericName: "zolpidem", dosage: "5 mg", route: "oral", frequency: "at bedtime the night before an evaluation", status: "discontinued", startAfterDays: 45, durationDays: 21, notes: "Short trial for the sleepless night before an evaluation. Stopped because of fog the next morning." },
+  ],
+};
+
+const MEDS_BY_PATIENT = {
+  pat_16: [
+    { medicationName: "Escitalopram", genericName: "escitalopram", dosage: "10 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14, notes: "For the worry and replaying that start two days before a performance." },
+    { medicationName: "Propranolol", genericName: "propranolol", dosage: "10 mg", route: "oral", frequency: "about an hour before a performance or evaluation", status: "active", startAfterDays: 28, notes: "For racing heart and tremor once the event is close. Not for daily use." },
+    { medicationName: "Trazodone", genericName: "trazodone", dosage: "50 mg", route: "oral", frequency: "at bedtime the night before a performance", status: "active", startAfterDays: 60, notes: "For the short sleep the night before an evaluation, after hydroxyzine was stopped." },
+    { medicationName: "Hydroxyzine", genericName: "hydroxyzine", dosage: "25 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 0, durationDays: 50, notes: "First try for pre-event insomnia. Stopped after morning grogginess before rehearsal." },
+    { medicationName: "Zolpidem", genericName: "zolpidem", dosage: "5 mg", route: "oral", frequency: "at bedtime the night before an evaluation", status: "discontinued", startAfterDays: 21, durationDays: 18, notes: "Brief trial for the sleepless night before an evaluation. Stopped because of fog the next morning." },
+  ],
+  pat_29: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "50 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14, notes: "For worry in the days before a teaching evaluation." },
+    { medicationName: "Propranolol", genericName: "propranolol", dosage: "10 mg", route: "oral", frequency: "about an hour before a teaching evaluation", status: "active", startAfterDays: 21, notes: "For tremor and a racing heart in the classroom." },
+    { medicationName: "Trazodone", genericName: "trazodone", dosage: "50 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 7, durationDays: 45, notes: "Tried for light sleep. Stopped because she was too drowsy to teach the next morning." },
+  ],
+  pat_15: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "100 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 14, notes: "For low mood. Dose has been stable since 2025." },
+    { medicationName: "Trazodone", genericName: "trazodone", dosage: "50 mg", route: "oral", frequency: "at bedtime", status: "active", startAfterDays: 21, notes: "For insomnia that stayed after mood began to lift." },
+    { medicationName: "Methylphenidate ER", genericName: "methylphenidate", dosage: "18 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 30, notes: "A stimulant trial for low energy. Not continued because of a racing heart and worse sleep." },
+  ],
+  pat_04: [
+    { medicationName: "Sertraline", genericName: "sertraline", dosage: "50 mg", route: "oral", frequency: "every morning", status: "discontinued", startAfterDays: 0, durationDays: 200, notes: "Stopped in early 2026 at the patient's request after social anxiety eased." },
+    { medicationName: "Hydroxyzine", genericName: "hydroxyzine", dosage: "25 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 30, durationDays: 90, notes: "Stopped with the antidepressant. It had been for interrupted sleep." },
+  ],
+  pat_10: [
+    { medicationName: "Escitalopram", genericName: "escitalopram", dosage: "10 mg", route: "oral", frequency: "every morning", status: "active", startAfterDays: 0, notes: "First psychiatric medication, started in this clinic for worry and muscle tension." },
+    { medicationName: "Hydroxyzine", genericName: "hydroxyzine", dosage: "25 mg", route: "oral", frequency: "at bedtime as needed", status: "discontinued", startAfterDays: 14, durationDays: 40, notes: "Added for tension at night. Stopped after morning grogginess." },
+  ],
+};
+
+export async function seedMedications(db, patients) {
+  const ids = patients.map((patient) => patient.id);
+  await db.medication.deleteMany({ where: { patientId: { in: ids } } });
+  const rows = [];
+  for (const patient of patients) {
+    const course = COURSE_BY_PATIENT[patient.id] ?? "depression";
+    const plans = MEDS_BY_PATIENT[patient.id] ?? MEDS_BY_COURSE[course] ?? [];
+    const created = new Date(patient.createdAt);
+    plans.forEach((plan, index) => {
+      const startDate = addDays(created, plan.startAfterDays);
+      const endDate = plan.status === "discontinued" ? addDays(startDate, plan.durationDays) : null;
+      rows.push({
+        id: `med_${patient.id}_${index + 1}`,
+        patientId: patient.id,
+        prescribingProviderId: patient.primaryProviderId,
+        medicationName: plan.medicationName,
+        genericName: plan.genericName,
+        dosage: plan.dosage,
+        route: plan.route,
+        frequency: plan.frequency,
+        status: plan.status,
+        startDate,
+        endDate,
+        notes: plan.notes ?? null,
+      });
+    });
+  }
+  await createChunked(rows, (data) => db.medication.createMany({ data }));
+  return rows.length;
+}
+
 export async function seedClinicHistory(db, patients) {
   const ids = patients.map((patient) => patient.id);
   await db.clinicalNote.deleteMany({ where: { patientId: { in: ids } } });
@@ -488,6 +593,8 @@ export async function seedClinicHistory(db, patients) {
   await createChunked(appointments, (data) => db.appointment.createMany({ data }));
   await createChunked(visits, (data) => db.visit.createMany({ data }));
   await createChunked(notes, (data) => db.clinicalNote.createMany({ data }));
+  const { applyRoseVisitNotes } = await import("./vary-rose-notes.mjs");
+  await applyRoseVisitNotes(db);
 
   return {
     appointments: appointments.length,

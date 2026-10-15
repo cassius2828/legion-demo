@@ -95,6 +95,7 @@ model Provider {
     medications  Medication[]
     appointments Appointment[] @relation("AppointmentProvider")
     nurseAppointments Appointment[] @relation("AppointmentNurse")
+    scheduleBlocks ProviderScheduleBlock[]
     visits       Visit[]
     notes        ClinicalNote[]
     tasks        Task[]
@@ -188,6 +189,19 @@ model Medication {
     notes                 String?
 
     @@index([patientId])
+}
+
+model ProviderScheduleBlock {
+    id          String   @id @default(cuid())
+    providerId  String
+    provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+    dayOfWeek   Int
+    startMinute Int
+    endMinute   Int
+    slotMinutes Int
+    kind        String
+
+    @@index([providerId])
 }
 
 model Appointment {

@@ -20,6 +20,11 @@ export async function AppNav() {
               <Link href="/calendar" className="text-sm font-medium hover:text-primary">
                 Calendar
               </Link>
+              {session.user.role === "patient" ? (
+                <Link href="/appointments/book" className="text-sm font-medium hover:text-primary">
+                  Book
+                </Link>
+              ) : null}
               {session.user.role === "psychiatrist" || session.user.role === "nurse" ? (
                 <Link href="/transfers" className="inline-flex items-center gap-1 text-sm font-medium hover:text-primary">
                   <ShareIcon />

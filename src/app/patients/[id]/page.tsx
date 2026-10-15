@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { ClinicalHistory } from "~/app/_components/clinical-history";
 import { Badge } from "~/components/ui/badge";
 import {
   Card,
@@ -20,6 +21,12 @@ const chartInclude = {
   allergies: { orderBy: { substance: "asc" } },
   conditions: { orderBy: { description: "asc" } },
   emergencyContact: true,
+  visits: {
+    where: { status: "completed" },
+    orderBy: { visitDate: "desc" },
+    include: { appointment: { select: { appointmentType: true } } },
+  },
+  medications: { orderBy: { startDate: "desc" } },
 } satisfies Prisma.PatientInclude;
 
 type Chart = Prisma.PatientGetPayload<{ include: typeof chartInclude }>;
@@ -170,6 +177,7 @@ function SleekChart({ patient }: { patient: Chart }) {
             )}
           </CardContent>
         </Card>
+        <ClinicalHistory visits={patient.visits} medications={patient.medications} />
         <Card>
           <CardHeader>
             <CardTitle>Emergency contact</CardTitle>
