@@ -3,6 +3,7 @@ import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
+import { saveGoogleOAuthTokens } from "~/server/auth/google-account";
 import { db } from "~/server/db";
 
 /**
@@ -34,6 +35,18 @@ export const authConfig = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          access_type: "offline",
+          prompt: "consent",
+          scope: [
+            "openid",
+            "email",
+            "profile",
+            "https://www.googleapis.com/auth/calendar.events",
+          ].join(" "),
+        },
+      },
     }),
   ],
   adapter: PrismaAdapter(db),
@@ -46,5 +59,22 @@ export const authConfig = {
         role: user.role ?? null,
       },
     }),
+  },
+  events: {
+    async signIn({ user, account }) {
+      if (!user.id || account?.provider !== "google" || !account.providerAccountId) {
+        return;
+      }
+      await saveGoogleOAuthTokens({
+        userId: user.id,
+        providerAccountId: account.providerAccountId,
+        access_token: account.access_token,
+        refresh_token: account.refresh_token,
+        expires_at: account.expires_at,
+        token_type: account.token_type,
+        scope: account.scope,
+        id_token: account.id_token,
+      });
+    },
   },
 } satisfies NextAuthConfig;
