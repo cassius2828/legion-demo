@@ -56,15 +56,16 @@ model Session {
 }
 
 model User {
-  id                 String    @id @default(cuid())
+  id                 String        @id @default(cuid())
   name               String?
-  email              String?   @unique
+  email              String?       @unique
   emailVerified      DateTime?
   image              String?
   role               String?
   primaryInsurance   String?
   secondaryInsurance String?
-  organization       String?
+  organizationId     String?
+  organization       Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   accounts           Account[]
   sessions           Session[]
   posts              Post[]
@@ -80,6 +81,13 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Organization {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  users      User[]
+  clinicians Provider[]
+}
+
 model Provider {
   id                String                  @id
   firstName         String
@@ -87,6 +95,8 @@ model Provider {
   credentials       String
   specialty         String
   email             String                  @unique
+  organizationId    String?
+  organization      Organization?           @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   userId            String?                 @unique
   user              User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
   patients          Patient[]               @relation("ProviderPanel")
@@ -99,21 +109,22 @@ model Provider {
   visits            Visit[]
   notes             ClinicalNote[]
   tasks             Task[]
+  approvedSummaries PatientSummaryRecord[]
 }
 
 model Patient {
-  id                 String             @id
+  id                 String                @id
   firstName          String
   lastName           String
   dateOfBirth        DateTime
   gender             String
-  email              String             @unique
+  email              String                @unique
   phone              String
   psychiatricHistory String
   primaryProviderId  String
-  primaryProvider    Provider           @relation("ProviderPanel", fields: [primaryProviderId], references: [id])
-  userId             String?            @unique
-  user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  primaryProvider    Provider              @relation("ProviderPanel", fields: [primaryProviderId], references: [id])
+  userId             String?               @unique
+  user               User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt          DateTime
   updatedAt          DateTime
   allergies          PatientAllergy[]
@@ -125,6 +136,7 @@ model Patient {
   visits             Visit[]
   notes              ClinicalNote[]
   tasks              Task[]
+  summary            PatientSummaryRecord?
 
   @@index([primaryProviderId])
 }
@@ -261,6 +273,22 @@ model ClinicalNote {
   updatedAt  DateTime
 
   @@index([visitId])
+}
+
+model PatientSummaryRecord {
+  id                      String   @id @default(cuid())
+  patientId               String   @unique
+  patient                 Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  approvedByProviderId    String
+  approvedBy              Provider @relation(fields: [approvedByProviderId], references: [id])
+  approvedAt              DateTime
+  overview                String
+  recentVisitSummary      String
+  diagnoses               String
+  currentMedications      String
+  discontinuedMedications String
+  outstandingTasks        String
+  fingerprint             String
 }
 
 model Task {

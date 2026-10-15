@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "../generated/prisma/index.js";
 import { seedClinicHistory, seedMedications } from "./clinic-history.mjs";
+import { seedTasks } from "./clinic-tasks.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const providers = JSON.parse(
@@ -118,11 +119,12 @@ await linkLogin(
 
 const history = await seedClinicHistory(db, patients);
 const medicationCount = await seedMedications(db, patients);
+const taskCount = await seedTasks(db);
 const [providerCount, patientCount] = await Promise.all([
   db.provider.count(),
   db.patient.count(),
 ]);
 console.log(
-  `Seeded ${providerCount} providers, ${patientCount} patients, ${schedules.length} schedule blocks, ${history.appointments} appointments, ${history.visits} visits, ${history.notes} notes, and ${medicationCount} medications`,
+  `Seeded ${providerCount} providers, ${patientCount} patients, ${schedules.length} schedule blocks, ${history.appointments} appointments, ${history.visits} visits, ${history.notes} notes, ${medicationCount} medications, and ${taskCount} tasks`,
 );
 await db.$disconnect();

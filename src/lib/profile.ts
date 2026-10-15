@@ -6,6 +6,7 @@ export const ROLES = [
 
 export const ORGANIZATIONS = [
   "Kaiser Permanente",
+  "Sutter Health",
   "Cleveland Clinic",
   "Mayo Clinic",
   "HCA Healthcare",

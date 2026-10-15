@@ -13,9 +13,16 @@ export default async function ProfilePage() {
   if (!session?.user) redirect("/");
   if (!session.user.role) redirect("/onboarding");
 
-  const user = await db.user.findUnique({ where: { id: session.user.id } });
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+    include: { organization: true },
+  });
   if (!user?.role || !isRole(user.role)) redirect("/onboarding");
 
+  const organizations = await db.organization.findMany({
+    orderBy: { name: "asc" },
+    select: { name: true },
+  });
   const chart =
     user.role === "patient"
       ? await db.patient.findUnique({
@@ -50,8 +57,9 @@ export default async function ProfilePage() {
               role: user.role,
               primaryInsurance: user.primaryInsurance ?? "",
               secondaryInsurance: user.secondaryInsurance ?? "",
-              organization: user.organization ?? "",
+              organization: user.organization?.name ?? "",
             }}
+            organizations={organizations.map((item) => item.name)}
           />
         </CardContent>
       </Card>

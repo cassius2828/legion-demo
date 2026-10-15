@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import type { ReactNode } from "react";
 
-import { ClinicalHistory } from "~/app/_components/clinical-history";
+import { ClinicalHistory, PastVisitNotes } from "~/app/_components/clinical-history";
+import { SummaryPanel } from "~/app/patients/[id]/summary-panel";
 import { Badge } from "~/components/ui/badge";
 import {
   Card,
@@ -11,10 +13,14 @@ import {
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { ageInYears, formatDate, fullName } from "~/lib/chart";
+import type { SavedPatientSummary } from "~/lib/patient-summary";
 import { canViewPatient, viewerRecord } from "~/server/access";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import { loadSavedSummary } from "~/server/summary-fingerprint";
 import type { Prisma } from "../../../../generated/prisma";
+
+export const maxDuration = 60;
 
 const chartInclude = {
   primaryProvider: true,
@@ -59,58 +65,106 @@ export default async function PatientChartPage({
     return <SleekChart patient={patient} />;
   }
 
-  return <PlainChart patient={patient} />;
+  const saved = await loadSavedSummary(patient.id);
+  return <PlainChart patient={patient} saved={saved} />;
 }
 
-function PlainChart({ patient }: { patient: Chart }) {
+function PlainChart({
+  patient,
+  saved,
+}: {
+  patient: Chart;
+  saved: SavedPatientSummary | null;
+}) {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-6 text-sm sm:px-6">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 text-sm sm:px-6">
       <Link href="/" className="text-muted-foreground hover:text-foreground">
         Back
       </Link>
-      <h1 className="mt-3 text-base font-semibold">{fullName(patient)}</h1>
-      <dl className="mt-4 grid gap-3">
-        <Row label="Date of birth" value={formatDate(patient.dateOfBirth)} />
-        <Row label="Phone" value={patient.phone} />
-        <Row label="Email" value={patient.email} />
-        <Row
-          label="Provider"
-          value={`${fullName(patient.primaryProvider)}, ${patient.primaryProvider.credentials}`}
-        />
-        <Row label="Psychiatric history" value={patient.psychiatricHistory} />
-        <Row
-          label="Conditions"
-          value={
-            patient.conditions.map((condition) => condition.description).join(", ") ||
-            "None recorded"
-          }
-        />
-        <Row
-          label="Allergies"
-          value={
-            patient.allergies.map((allergy) => allergy.substance).join(", ") ||
-            "None recorded"
-          }
-        />
-        <Row
-          label="Emergency contact"
-          value={
-            patient.emergencyContact
-              ? `${patient.emergencyContact.name} (${patient.emergencyContact.relationship}) ${patient.emergencyContact.phone}`
-              : "None recorded"
-          }
-        />
-      </dl>
+      <header className="mt-3 flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
+        <div>
+          <h1 className="text-xl font-semibold">{fullName(patient)}</h1>
+          <p className="mt-1 text-muted-foreground">
+            {ageInYears(patient.dateOfBirth)} years · Born {formatDate(patient.dateOfBirth)}
+          </p>
+        </div>
+        <p className="text-muted-foreground">
+          {patient.phone} · {patient.email}
+          <span className="mt-1 block">
+            {fullName(patient.primaryProvider)}, {patient.primaryProvider.credentials}
+          </span>
+        </p>
+      </header>
+      <div className="mt-5 grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-[16rem_minmax(0,1.25fr)_minmax(18rem,0.9fr)]">
+        <div className="min-w-0 xl:col-start-2">
+          <SummaryPanel patientId={patient.id} saved={saved} />
+        </div>
+        <div className="min-w-0 xl:col-start-3">
+          <PastVisitNotes visits={patient.visits} panel />
+        </div>
+        <aside className="grid content-start gap-3 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4 xl:col-span-1 xl:col-start-1 xl:row-start-1 xl:grid-cols-1">
+          <ChartFacts patient={patient} />
+        </aside>
+      </div>
     </main>
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function ChartFacts({ patient }: { patient: Chart }) {
   return (
-    <div className="grid gap-1 border-b py-2 sm:grid-cols-[11rem_1fr]">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd>{value}</dd>
-    </div>
+    <>
+      <FactCard title="Psychiatric history">
+        <p className="leading-6">{patient.psychiatricHistory}</p>
+      </FactCard>
+      <FactCard title="Conditions">
+        {patient.conditions.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {patient.conditions.map((condition) => (
+              <Badge key={condition.id} variant="secondary">
+                {condition.description}
+              </Badge>
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground">None recorded</p>
+        )}
+      </FactCard>
+      <FactCard title="Allergies">
+        {patient.allergies.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {patient.allergies.map((allergy) => (
+              <Badge key={allergy.id}>{allergy.substance}</Badge>
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground">None recorded</p>
+        )}
+      </FactCard>
+      <FactCard title="Emergency contact">
+        {patient.emergencyContact ? (
+          <p className="leading-6">
+            {patient.emergencyContact.name}
+            <span className="text-muted-foreground">
+              {" "}
+              · {patient.emergencyContact.relationship} · {patient.emergencyContact.phone}
+            </span>
+          </p>
+        ) : (
+          <p className="text-muted-foreground">None recorded</p>
+        )}
+      </FactCard>
+    </>
+  );
+}
+
+function FactCard({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
   );
 }
 

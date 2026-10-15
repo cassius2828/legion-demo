@@ -158,13 +158,18 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   primaryInsurance: 'primaryInsurance',
   secondaryInsurance: 'secondaryInsurance',
-  organization: 'organization'
+  organizationId: 'organizationId'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
   identifier: 'identifier',
   token: 'token',
   expires: 'expires'
+};
+
+exports.Prisma.OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
 };
 
 exports.Prisma.ProviderScalarFieldEnum = {
@@ -174,6 +179,7 @@ exports.Prisma.ProviderScalarFieldEnum = {
   credentials: 'credentials',
   specialty: 'specialty',
   email: 'email',
+  organizationId: 'organizationId',
   userId: 'userId'
 };
 
@@ -285,6 +291,20 @@ exports.Prisma.ClinicalNoteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PatientSummaryRecordScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  approvedByProviderId: 'approvedByProviderId',
+  approvedAt: 'approvedAt',
+  overview: 'overview',
+  recentVisitSummary: 'recentVisitSummary',
+  diagnoses: 'diagnoses',
+  currentMedications: 'currentMedications',
+  discontinuedMedications: 'discontinuedMedications',
+  outstandingTasks: 'outstandingTasks',
+  fingerprint: 'fingerprint'
+};
+
 exports.Prisma.TaskScalarFieldEnum = {
   id: 'id',
   patientId: 'patientId',
@@ -314,6 +334,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   User: 'User',
   VerificationToken: 'VerificationToken',
+  Organization: 'Organization',
   Provider: 'Provider',
   Patient: 'Patient',
   PatientAllergy: 'PatientAllergy',
@@ -325,6 +346,7 @@ exports.Prisma.ModelName = {
   Appointment: 'Appointment',
   Visit: 'Visit',
   ClinicalNote: 'ClinicalNote',
+  PatientSummaryRecord: 'PatientSummaryRecord',
   Task: 'Task'
 };
 

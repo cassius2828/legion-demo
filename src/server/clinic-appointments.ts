@@ -32,6 +32,11 @@ export async function listClinicEvents(
       status: { in: ["completed", "scheduled"] },
       scheduledAt: { gte: range.start, lt: range.end },
     },
+    include: {
+      patient: { select: { id: true, firstName: true, lastName: true } },
+      provider: { select: { firstName: true, lastName: true, credentials: true } },
+      nurse: { select: { firstName: true, lastName: true, credentials: true } },
+    },
     orderBy: { scheduledAt: "asc" },
   });
 
@@ -44,8 +49,23 @@ export async function listClinicEvents(
       start: start.toISOString(),
       end: end.toISOString(),
       allDay: false,
+      appointment: {
+        patientId: row.patient.id,
+        patientName: `${row.patient.firstName} ${row.patient.lastName}`,
+        providerName: staffName(row.provider),
+        nurseName: row.nurse ? staffName(row.nurse) : null,
+        appointmentType: row.appointmentType,
+        status: row.status,
+        reasonForVisit: row.reasonForVisit,
+        description: row.description,
+        durationMinutes: row.durationMinutes,
+      },
     } satisfies CalendarEvent;
   });
+}
+
+function staffName(person: { firstName: string; lastName: string; credentials: string }) {
+  return `${person.firstName} ${person.lastName}, ${person.credentials}`;
 }
 
 export async function moveClinicAppointment(

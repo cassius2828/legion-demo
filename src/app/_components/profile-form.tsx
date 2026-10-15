@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 
 import { Button } from "~/components/ui/button";
-import { ORGANIZATIONS, ROLES, type Role } from "~/lib/profile";
+import { ROLES, type Role } from "~/lib/profile";
 
 const inputClass = "h-9 rounded-lg border bg-background px-3";
 
@@ -11,9 +11,11 @@ export function ProfileForm({
   action,
   mode,
   defaults,
+  organizations,
 }: {
   action: (state: { error: string } | null, formData: FormData) => Promise<{ error: string } | null>;
   mode: "signup" | "edit";
+  organizations: string[];
   defaults: {
     name: string;
     email: string;
@@ -25,7 +27,7 @@ export function ProfileForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
   const [role, setRole] = useState<Role | "">(defaults.role ?? "");
-  const knownOrganization = ORGANIZATIONS.find((item) => item === defaults.organization);
+  const knownOrganization = organizations.find((item) => item === defaults.organization);
   const [organizationChoice, setOrganizationChoice] = useState(
     knownOrganization ?? (defaults.organization ? "other" : ""),
   );
@@ -98,7 +100,7 @@ export function ProfileForm({
       {role === "psychiatrist" || role === "nurse" ? (
         <>
           <label className="grid gap-1 text-sm">
-            Organization
+            Provider
             <select
               name="organizationChoice"
               required
@@ -106,8 +108,8 @@ export function ProfileForm({
               onChange={(event) => setOrganizationChoice(event.target.value)}
               className={inputClass}
             >
-              <option value="">Select an organization</option>
-              {ORGANIZATIONS.map((item) => (
+              <option value="">Select a provider</option>
+              {organizations.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
@@ -117,7 +119,7 @@ export function ProfileForm({
           </label>
           {organizationChoice === "other" ? (
             <label className="grid gap-1 text-sm">
-              Organization name
+              Provider name
               <input
                 name="organizationOther"
                 required

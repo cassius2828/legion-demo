@@ -12,11 +12,19 @@ import {
 } from "@dnd-kit/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type FormEvent,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
 
 import { rescheduleAppointment, scheduleAppointment } from "~/app/calendar/actions";
 import { Button, buttonVariants } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   atHour,
   eventsOnDay,
@@ -53,6 +61,7 @@ export function CalendarBoard({
   const router = useRouter();
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   const [selected, setSelected] = useState(date);
+  const [openEvent, setOpenEvent] = useState<CalendarEvent | null>(null);
   const [error, setError] = useState<string | null>(loadError ?? null);
   const [pending, startTransition] = useTransition();
 
@@ -208,15 +217,28 @@ export function CalendarBoard({
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
-      <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragEnd={onDragEnd}>
+      <DndContext id="clinic-calendar" sensors={sensors} collisionDetection={pointerWithin} onDragEnd={onDragEnd}>
         <div className={`mt-4 ${pending ? "opacity-70" : ""}`}>
           {view === "month" ? (
-            <MonthView date={date} selected={selected} events={events} onSelect={setSelected} />
+            <MonthView
+              date={date}
+              selected={selected}
+              events={events}
+              onSelect={setSelected}
+              onOpen={setOpenEvent}
+            />
           ) : (
-            <TimeGrid days={view === "week" ? weekDays(date) : [date]} selected={selected} events={events} onSelect={setSelected} />
+            <TimeGrid
+              days={view === "week" ? weekDays(date) : [date]}
+              selected={selected}
+              events={events}
+              onSelect={setSelected}
+              onOpen={setOpenEvent}
+            />
           )}
         </div>
       </DndContext>
+      {openEvent ? <AppointmentModal event={openEvent} onClose={() => setOpenEvent(null)} /> : null}
     </main>
   );
 }
@@ -237,11 +259,13 @@ function MonthView({
   selected,
   events,
   onSelect,
+  onOpen,
 }: {
   date: string;
   selected: string;
   events: CalendarEvent[];
   onSelect: (ymd: string) => void;
+  onOpen: (event: CalendarEvent) => void;
 }) {
   const days = monthGrid(date);
   const month = date.slice(0, 7);
@@ -264,6 +288,7 @@ function MonthView({
             selected={ymd === selected}
             events={eventsOnDay(events, ymd)}
             onSelect={onSelect}
+            onOpen={onOpen}
           />
         ))}
       </div>
@@ -277,12 +302,14 @@ function DayCell({
   selected,
   events,
   onSelect,
+  onOpen,
 }: {
   ymd: string;
   muted: boolean;
   selected: boolean;
   events: CalendarEvent[];
   onSelect: (ymd: string) => void;
+  onOpen: (event: CalendarEvent) => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: `day:${ymd}` });
   const today = ymd === formatYmd(new Date());
@@ -301,7 +328,7 @@ function DayCell({
       </button>
       <div className="grid gap-1">
         {events.map((event) => (
-          <EventChip key={event.id} event={event} />
+          <EventChip key={event.id} event={event} onOpen={onOpen} />
         ))}
       </div>
     </div>
@@ -313,11 +340,13 @@ function TimeGrid({
   selected,
   events,
   onSelect,
+  onOpen,
 }: {
   days: string[];
   selected: string;
   events: CalendarEvent[];
   onSelect: (ymd: string) => void;
+  onOpen: (event: CalendarEvent) => void;
 }) {
   const hours = hourSlots();
 
@@ -336,9 +365,14 @@ function TimeGrid({
                 {formatDayHeading(ymd)}
               </button>
               {allDay.map((event) => (
-                <p key={event.id} className="mt-1 truncate text-xs text-muted-foreground">
+                <button
+                  key={event.id}
+                  type="button"
+                  onClick={() => onOpen(event)}
+                  className="mt-1 w-full truncate text-left text-xs text-muted-foreground hover:text-foreground"
+                >
                   {event.title}
-                </p>
+                </button>
               ))}
             </div>
           );
@@ -352,56 +386,113 @@ function TimeGrid({
                 ymd={ymd}
                 hour={hour}
                 events={eventsOnDay(events, ymd).filter((event) => !event.allDay && hourOf(event) === hour)}
+                onOpen={onOpen}
               />
             ))}
           </div>
         ))}
       </div>
-      <OutsideHours days={days} events={events} />
+      <OutsideHours days={days} events={events} onOpen={onOpen} />
     </div>
   );
 }
 
-function OutsideHours({ days, events }: { days: string[]; events: CalendarEvent[] }) {
+function OutsideHours({
+  days,
+  events,
+  onOpen,
+}: {
+  days: string[];
+  events: CalendarEvent[];
+  onOpen: (event: CalendarEvent) => void;
+}) {
   const outside = days.flatMap((ymd) =>
     eventsOnDay(events, ymd).filter((event) => !event.allDay && hourOf(event) === null),
   );
   if (outside.length === 0) return null;
   return (
-    <div className="border-t px-3 py-2 text-sm text-muted-foreground">
-      Outside 8 AM–6 PM: {outside.map((event) => `${event.title} ${formatTime(event.start)}`).join(", ")}
-    </div>
-  );
-}
-
-function HourCell({ ymd, hour, events }: { ymd: string; hour: number; events: CalendarEvent[] }) {
-  const { setNodeRef, isOver } = useDroppable({ id: `slot:${ymd}@${hour}` });
-  return (
-    <div ref={setNodeRef} className={`min-h-14 border-b border-l p-1 ${isOver ? "bg-accent" : ""}`}>
-      {events.map((event) => (
-        <EventChip key={event.id} event={event} detailed />
+    <div className="flex flex-wrap items-center gap-2 border-t px-3 py-2 text-sm text-muted-foreground">
+      <span>Outside 8 AM–6 PM:</span>
+      {outside.map((event) => (
+        <button
+          key={event.id}
+          type="button"
+          onClick={() => onOpen(event)}
+          className="rounded-md bg-primary/10 px-1.5 py-0.5 text-xs text-primary"
+        >
+          {event.title} {formatTime(event.start)}
+        </button>
       ))}
     </div>
   );
 }
 
-function EventChip({ event, detailed = false }: { event: CalendarEvent; detailed?: boolean }) {
+function HourCell({
+  ymd,
+  hour,
+  events,
+  onOpen,
+}: {
+  ymd: string;
+  hour: number;
+  events: CalendarEvent[];
+  onOpen: (event: CalendarEvent) => void;
+}) {
+  const { setNodeRef, isOver } = useDroppable({ id: `slot:${ymd}@${hour}` });
+  return (
+    <div ref={setNodeRef} className={`min-h-14 border-b border-l p-1 ${isOver ? "bg-accent" : ""}`}>
+      {events.map((event) => (
+        <EventChip key={event.id} event={event} detailed onOpen={onOpen} />
+      ))}
+    </div>
+  );
+}
+
+function EventChip({
+  event,
+  detailed = false,
+  onOpen,
+}: {
+  event: CalendarEvent;
+  detailed?: boolean;
+  onOpen: (event: CalendarEvent) => void;
+}) {
   if (event.allDay) {
     return (
-      <p className="truncate rounded-md bg-secondary px-1.5 py-0.5 text-xs">{event.title}</p>
+      <button
+        type="button"
+        onClick={() => onOpen(event)}
+        className="w-full truncate rounded-md bg-secondary px-1.5 py-0.5 text-left text-xs"
+      >
+        {event.title}
+      </button>
     );
   }
 
-  return <TimedEventChip event={event} detailed={detailed} />;
+  return <TimedEventChip event={event} detailed={detailed} onOpen={onOpen} />;
 }
 
-function TimedEventChip({ event, detailed }: { event: CalendarEvent; detailed: boolean }) {
+function TimedEventChip({
+  event,
+  detailed,
+  onOpen,
+}: {
+  event: CalendarEvent;
+  detailed: boolean;
+  onOpen: (event: CalendarEvent) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `event:${event.id}`,
   });
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const style = transform
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
+
+  function onPointerDown(pointerEvent: ReactPointerEvent<HTMLButtonElement>) {
+    pointerStart.current = { x: pointerEvent.clientX, y: pointerEvent.clientY };
+    listeners?.onPointerDown?.(pointerEvent);
+  }
 
   return (
     <button
@@ -411,9 +502,104 @@ function TimedEventChip({ event, detailed }: { event: CalendarEvent; detailed: b
       className={`w-full truncate rounded-md bg-primary/10 px-1.5 py-0.5 text-left text-xs text-primary ${isDragging ? "z-10 opacity-70" : ""}`}
       {...listeners}
       {...attributes}
+      onPointerDown={onPointerDown}
+      onClick={(clickEvent) => {
+        const origin = pointerStart.current;
+        pointerStart.current = null;
+        if (origin) {
+          const moved = Math.hypot(clickEvent.clientX - origin.x, clickEvent.clientY - origin.y);
+          if (moved > 6) return;
+        }
+        onOpen(event);
+      }}
     >
       {detailed ? `${formatTime(event.start)} ` : null}
       {event.title}
     </button>
   );
+}
+
+function AppointmentModal({ event, onClose }: { event: CalendarEvent; onClose: () => void }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const details = event.appointment;
+
+  useEffect(() => {
+    panelRef.current?.focus();
+    function onKey(keyEvent: KeyboardEvent) {
+      if (keyEvent.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      onClick={onClose}
+    >
+      <Card
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="appointment-dialog-title"
+        tabIndex={-1}
+        className="max-h-[min(32rem,calc(100vh-2rem))] w-full max-w-md outline-none"
+        onClick={(clickEvent) => clickEvent.stopPropagation()}
+      >
+        <CardHeader>
+          <CardTitle id="appointment-dialog-title">{event.title}</CardTitle>
+          <CardAction>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Close
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="grid min-h-0 gap-4 overflow-y-auto">
+          <p className="text-sm text-muted-foreground">{formatAppointmentWhen(event)}</p>
+          {details ? (
+            <dl className="grid gap-3 text-sm">
+              <Detail label="Type">{details.appointmentType}</Detail>
+              <Detail label="Status">{labelStatus(details.status)}</Detail>
+              <Detail label="Length">{details.durationMinutes} min</Detail>
+              <Detail label="Patient">
+                <Link href={`/patients/${details.patientId}`} className="text-primary hover:underline">
+                  {details.patientName}
+                </Link>
+              </Detail>
+              <Detail label="Provider">{details.providerName}</Detail>
+              {details.nurseName ? <Detail label="Nurse">{details.nurseName}</Detail> : null}
+              {details.reasonForVisit ? <Detail label="Reason">{details.reasonForVisit}</Detail> : null}
+              {details.description ? <Detail label="Notes">{details.description}</Detail> : null}
+            </dl>
+          ) : null}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Detail({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="grid gap-0.5">
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd className="leading-6">{children}</dd>
+    </div>
+  );
+}
+
+function formatAppointmentWhen(event: CalendarEvent) {
+  const start = new Date(event.start);
+  const date = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(start);
+  if (event.allDay) return `${date} · All day`;
+  return `${date} · ${formatTime(event.start)} – ${formatTime(event.end)}`;
+}
+
+function labelStatus(status: string) {
+  if (status.length === 0) return status;
+  return status.charAt(0).toUpperCase() + status.slice(1);
 }

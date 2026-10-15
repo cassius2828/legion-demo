@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+export const maxDuration = 60;
+
 import { BookingForm } from "~/app/appointments/book/booking-form";
 import { providerLabel } from "~/lib/chart";
 import { auth } from "~/server/auth";

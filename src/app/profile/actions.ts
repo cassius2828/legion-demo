@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { isRole, ORGANIZATIONS, type Role } from "~/lib/profile";
+import { isRole, type Role } from "~/lib/profile";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
@@ -23,8 +23,17 @@ function readText(formData: FormData, key: string) {
 function organizationName(formData: FormData) {
   const choice = readText(formData, "organizationChoice");
   if (choice === "other") return readText(formData, "organizationOther");
-  if (ORGANIZATIONS.some((item) => item === choice)) return choice;
-  return "";
+  return choice;
+}
+
+async function organizationIdFor(name: string) {
+  const organization = await db.organization.upsert({
+    where: { name },
+    create: { name },
+    update: {},
+    select: { id: true },
+  });
+  return organization.id;
 }
 
 export async function saveSignup(_state: { error: string } | null, formData: FormData) {
@@ -77,19 +86,20 @@ async function saveProfileFields(
     return { error: "Enter a primary insurance." };
   }
   if (!patient && (organization.length === 0 || organization.length > 120)) {
-    return { error: "Choose an organization." };
+    return { error: "Choose a provider." };
   }
   if (secondaryInsurance.length > 120) {
     return { error: "Secondary insurance is too long." };
   }
 
+  const organizationId = patient ? null : await organizationIdFor(organization);
   const data = {
     name,
     email,
     role,
     primaryInsurance: patient ? primaryInsurance : null,
     secondaryInsurance: patient && secondaryInsurance.length > 0 ? secondaryInsurance : null,
-    organization: patient ? null : organization,
+    organizationId,
   };
   const existingId = await findUserIdByEmail(email);
 
@@ -100,6 +110,11 @@ async function saveProfileFields(
         await tx.account.updateMany({ where: { userId }, data: { userId: created.id } });
         await tx.session.updateMany({ where: { userId }, data: { userId: created.id } });
         await tx.post.updateMany({ where: { createdById: userId }, data: { createdById: created.id } });
+        await tx.provider.updateMany({
+          where: { userId },
+          data: { userId: created.id, organizationId },
+        });
+        await tx.patient.updateMany({ where: { userId }, data: { userId: created.id } });
         await tx.user.delete({ where: { id: userId } });
       });
       return null;
@@ -110,6 +125,7 @@ async function saveProfileFields(
     }
 
     await db.user.update({ where: { id: userId }, data });
+    await db.provider.updateMany({ where: { userId }, data: { organizationId } });
   } catch (error) {
     if (isUniqueEmail(error)) return { error: "That email is already in use." };
     throw error;

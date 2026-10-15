@@ -6,6 +6,17 @@ export type CalendarEvent = {
   start: string;
   end: string;
   allDay: boolean;
+  appointment?: {
+    patientId: string;
+    patientName: string;
+    providerName: string;
+    nurseName: string | null;
+    appointmentType: string;
+    status: string;
+    reasonForVisit: string;
+    description: string;
+    durationMinutes: number;
+  };
 };
 
 const HOUR_START = 8;

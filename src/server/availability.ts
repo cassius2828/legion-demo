@@ -38,6 +38,7 @@ export async function listOpenFollowUpSlots(
     patientId: string;
     now?: Date;
     database?: SlotDb;
+    ignoreAppointmentId?: string;
   },
 ) {
   const database = input.database ?? db;
@@ -65,7 +66,9 @@ export async function listOpenFollowUpSlots(
     }),
   ]);
 
-  const busy = appointments.map((row) => ({
+  const busy = appointments
+    .filter((row) => row.id !== input.ignoreAppointmentId)
+    .map((row) => ({
     start: row.scheduledAt,
     end: new Date(row.scheduledAt.getTime() + row.durationMinutes * 60 * 1000),
   }));

@@ -39,6 +39,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
 /**
+ * Model Organization
+ * 
+ */
+export type Organization = $Result.DefaultSelection<Prisma.$OrganizationPayload>
+/**
  * Model Provider
  * 
  */
@@ -93,6 +98,11 @@ export type Visit = $Result.DefaultSelection<Prisma.$VisitPayload>
  * 
  */
 export type ClinicalNote = $Result.DefaultSelection<Prisma.$ClinicalNotePayload>
+/**
+ * Model PatientSummaryRecord
+ * 
+ */
+export type PatientSummaryRecord = $Result.DefaultSelection<Prisma.$PatientSummaryRecordPayload>
 /**
  * Model Task
  * 
@@ -268,6 +278,16 @@ export class PrismaClient<
   get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.organization`: Exposes CRUD operations for the **Organization** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Organizations
+    * const organizations = await prisma.organization.findMany()
+    * ```
+    */
+  get organization(): Prisma.OrganizationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.provider`: Exposes CRUD operations for the **Provider** model.
     * Example usage:
     * ```ts
@@ -376,6 +396,16 @@ export class PrismaClient<
     * ```
     */
   get clinicalNote(): Prisma.ClinicalNoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.patientSummaryRecord`: Exposes CRUD operations for the **PatientSummaryRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientSummaryRecords
+    * const patientSummaryRecords = await prisma.patientSummaryRecord.findMany()
+    * ```
+    */
+  get patientSummaryRecord(): Prisma.PatientSummaryRecordDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.task`: Exposes CRUD operations for the **Task** model.
@@ -832,6 +862,7 @@ export namespace Prisma {
     Session: 'Session',
     User: 'User',
     VerificationToken: 'VerificationToken',
+    Organization: 'Organization',
     Provider: 'Provider',
     Patient: 'Patient',
     PatientAllergy: 'PatientAllergy',
@@ -843,6 +874,7 @@ export namespace Prisma {
     Appointment: 'Appointment',
     Visit: 'Visit',
     ClinicalNote: 'ClinicalNote',
+    PatientSummaryRecord: 'PatientSummaryRecord',
     Task: 'Task'
   };
 
@@ -862,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "shareRequest" | "medication" | "providerScheduleBlock" | "appointment" | "visit" | "clinicalNote" | "task"
+      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "organization" | "provider" | "patient" | "patientAllergy" | "patientCondition" | "emergencyContact" | "shareRequest" | "medication" | "providerScheduleBlock" | "appointment" | "visit" | "clinicalNote" | "patientSummaryRecord" | "task"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1233,6 +1265,80 @@ export namespace Prisma {
           count: {
             args: Prisma.VerificationTokenCountArgs<ExtArgs>
             result: $Utils.Optional<VerificationTokenCountAggregateOutputType> | number
+          }
+        }
+      }
+      Organization: {
+        payload: Prisma.$OrganizationPayload<ExtArgs>
+        fields: Prisma.OrganizationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrganizationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrganizationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          findFirst: {
+            args: Prisma.OrganizationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrganizationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          findMany: {
+            args: Prisma.OrganizationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>[]
+          }
+          create: {
+            args: Prisma.OrganizationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          createMany: {
+            args: Prisma.OrganizationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrganizationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>[]
+          }
+          delete: {
+            args: Prisma.OrganizationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          update: {
+            args: Prisma.OrganizationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrganizationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrganizationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrganizationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrganizationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>
+          }
+          aggregate: {
+            args: Prisma.OrganizationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrganization>
+          }
+          groupBy: {
+            args: Prisma.OrganizationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrganizationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrganizationCountArgs<ExtArgs>
+            result: $Utils.Optional<OrganizationCountAggregateOutputType> | number
           }
         }
       }
@@ -2050,6 +2156,80 @@ export namespace Prisma {
           }
         }
       }
+      PatientSummaryRecord: {
+        payload: Prisma.$PatientSummaryRecordPayload<ExtArgs>
+        fields: Prisma.PatientSummaryRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientSummaryRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientSummaryRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.PatientSummaryRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientSummaryRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          findMany: {
+            args: Prisma.PatientSummaryRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>[]
+          }
+          create: {
+            args: Prisma.PatientSummaryRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          createMany: {
+            args: Prisma.PatientSummaryRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientSummaryRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.PatientSummaryRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          update: {
+            args: Prisma.PatientSummaryRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientSummaryRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientSummaryRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PatientSummaryRecordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>[]
+          }
+          upsert: {
+            args: Prisma.PatientSummaryRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientSummaryRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.PatientSummaryRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientSummaryRecord>
+          }
+          groupBy: {
+            args: Prisma.PatientSummaryRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientSummaryRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientSummaryRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientSummaryRecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Task: {
         payload: Prisma.$TaskPayload<ExtArgs>
         fields: Prisma.TaskFieldRefs
@@ -2225,6 +2405,7 @@ export namespace Prisma {
     session?: SessionOmit
     user?: UserOmit
     verificationToken?: VerificationTokenOmit
+    organization?: OrganizationOmit
     provider?: ProviderOmit
     patient?: PatientOmit
     patientAllergy?: PatientAllergyOmit
@@ -2236,6 +2417,7 @@ export namespace Prisma {
     appointment?: AppointmentOmit
     visit?: VisitOmit
     clinicalNote?: ClinicalNoteOmit
+    patientSummaryRecord?: PatientSummaryRecordOmit
     task?: TaskOmit
   }
 
@@ -2362,6 +2544,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type OrganizationCountOutputType
+   */
+
+  export type OrganizationCountOutputType = {
+    users: number
+    clinicians: number
+  }
+
+  export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | OrganizationCountOutputTypeCountUsersArgs
+    clinicians?: boolean | OrganizationCountOutputTypeCountCliniciansArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizationCountOutputType
+     */
+    select?: OrganizationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountCliniciansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderWhereInput
+  }
+
+
+  /**
    * Count Type ProviderCountOutputType
    */
 
@@ -2376,6 +2598,7 @@ export namespace Prisma {
     visits: number
     notes: number
     tasks: number
+    approvedSummaries: number
   }
 
   export type ProviderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2389,6 +2612,7 @@ export namespace Prisma {
     visits?: boolean | ProviderCountOutputTypeCountVisitsArgs
     notes?: boolean | ProviderCountOutputTypeCountNotesArgs
     tasks?: boolean | ProviderCountOutputTypeCountTasksArgs
+    approvedSummaries?: boolean | ProviderCountOutputTypeCountApprovedSummariesArgs
   }
 
   // Custom InputTypes
@@ -2470,6 +2694,13 @@ export namespace Prisma {
    */
   export type ProviderCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountApprovedSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientSummaryRecordWhereInput
   }
 
 
@@ -5952,7 +6183,7 @@ export namespace Prisma {
     role: string | null
     primaryInsurance: string | null
     secondaryInsurance: string | null
-    organization: string | null
+    organizationId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -5964,7 +6195,7 @@ export namespace Prisma {
     role: string | null
     primaryInsurance: string | null
     secondaryInsurance: string | null
-    organization: string | null
+    organizationId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -5976,7 +6207,7 @@ export namespace Prisma {
     role: number
     primaryInsurance: number
     secondaryInsurance: number
-    organization: number
+    organizationId: number
     _all: number
   }
 
@@ -5990,7 +6221,7 @@ export namespace Prisma {
     role?: true
     primaryInsurance?: true
     secondaryInsurance?: true
-    organization?: true
+    organizationId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -6002,7 +6233,7 @@ export namespace Prisma {
     role?: true
     primaryInsurance?: true
     secondaryInsurance?: true
-    organization?: true
+    organizationId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -6014,7 +6245,7 @@ export namespace Prisma {
     role?: true
     primaryInsurance?: true
     secondaryInsurance?: true
-    organization?: true
+    organizationId?: true
     _all?: true
   }
 
@@ -6099,7 +6330,7 @@ export namespace Prisma {
     role: string | null
     primaryInsurance: string | null
     secondaryInsurance: string | null
-    organization: string | null
+    organizationId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -6128,7 +6359,8 @@ export namespace Prisma {
     role?: boolean
     primaryInsurance?: boolean
     secondaryInsurance?: boolean
-    organization?: boolean
+    organizationId?: boolean
+    organization?: boolean | User$organizationArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
@@ -6146,7 +6378,8 @@ export namespace Prisma {
     role?: boolean
     primaryInsurance?: boolean
     secondaryInsurance?: boolean
-    organization?: boolean
+    organizationId?: boolean
+    organization?: boolean | User$organizationArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6158,7 +6391,8 @@ export namespace Prisma {
     role?: boolean
     primaryInsurance?: boolean
     secondaryInsurance?: boolean
-    organization?: boolean
+    organizationId?: boolean
+    organization?: boolean | User$organizationArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -6170,11 +6404,12 @@ export namespace Prisma {
     role?: boolean
     primaryInsurance?: boolean
     secondaryInsurance?: boolean
-    organization?: boolean
+    organizationId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "primaryInsurance" | "secondaryInsurance" | "organization", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "primaryInsurance" | "secondaryInsurance" | "organizationId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | User$organizationArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
@@ -6182,12 +6417,17 @@ export namespace Prisma {
     patient?: boolean | User$patientArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | User$organizationArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | User$organizationArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs> | null
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
@@ -6203,7 +6443,7 @@ export namespace Prisma {
       role: string | null
       primaryInsurance: string | null
       secondaryInsurance: string | null
-      organization: string | null
+      organizationId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -6598,6 +6838,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends User$organizationArgs<ExtArgs> = {}>(args?: Subset<T, User$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6640,7 +6881,7 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'String'>
     readonly primaryInsurance: FieldRef<"User", 'String'>
     readonly secondaryInsurance: FieldRef<"User", 'String'>
-    readonly organization: FieldRef<"User", 'String'>
+    readonly organizationId: FieldRef<"User", 'String'>
   }
     
 
@@ -6888,6 +7129,10 @@ export namespace Prisma {
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6958,6 +7203,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7024,6 +7273,25 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.organization
+   */
+  export type User$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    where?: OrganizationWhereInput
   }
 
   /**
@@ -8123,6 +8391,1063 @@ export namespace Prisma {
 
 
   /**
+   * Model Organization
+   */
+
+  export type AggregateOrganization = {
+    _count: OrganizationCountAggregateOutputType | null
+    _min: OrganizationMinAggregateOutputType | null
+    _max: OrganizationMaxAggregateOutputType | null
+  }
+
+  export type OrganizationMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type OrganizationMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type OrganizationCountAggregateOutputType = {
+    id: number
+    name: number
+    _all: number
+  }
+
+
+  export type OrganizationMinAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type OrganizationMaxAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type OrganizationCountAggregateInputType = {
+    id?: true
+    name?: true
+    _all?: true
+  }
+
+  export type OrganizationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Organization to aggregate.
+     */
+    where?: OrganizationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Organizations to fetch.
+     */
+    orderBy?: OrganizationOrderByWithRelationInput | OrganizationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrganizationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Organizations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Organizations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Organizations
+    **/
+    _count?: true | OrganizationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrganizationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrganizationMaxAggregateInputType
+  }
+
+  export type GetOrganizationAggregateType<T extends OrganizationAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrganization]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrganization[P]>
+      : GetScalarType<T[P], AggregateOrganization[P]>
+  }
+
+
+
+
+  export type OrganizationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrganizationWhereInput
+    orderBy?: OrganizationOrderByWithAggregationInput | OrganizationOrderByWithAggregationInput[]
+    by: OrganizationScalarFieldEnum[] | OrganizationScalarFieldEnum
+    having?: OrganizationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrganizationCountAggregateInputType | true
+    _min?: OrganizationMinAggregateInputType
+    _max?: OrganizationMaxAggregateInputType
+  }
+
+  export type OrganizationGroupByOutputType = {
+    id: string
+    name: string
+    _count: OrganizationCountAggregateOutputType | null
+    _min: OrganizationMinAggregateOutputType | null
+    _max: OrganizationMaxAggregateOutputType | null
+  }
+
+  type GetOrganizationGroupByPayload<T extends OrganizationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrganizationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrganizationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrganizationGroupByOutputType[P]>
+            : GetScalarType<T[P], OrganizationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrganizationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    users?: boolean | Organization$usersArgs<ExtArgs>
+    clinicians?: boolean | Organization$cliniciansArgs<ExtArgs>
+    _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["organization"]>
+
+  export type OrganizationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["organization"]>
+
+  export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["organization"]>
+
+  export type OrganizationSelectScalar = {
+    id?: boolean
+    name?: boolean
+  }
+
+  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["organization"]>
+  export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | Organization$usersArgs<ExtArgs>
+    clinicians?: boolean | Organization$cliniciansArgs<ExtArgs>
+    _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $OrganizationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Organization"
+    objects: {
+      users: Prisma.$UserPayload<ExtArgs>[]
+      clinicians: Prisma.$ProviderPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+    }, ExtArgs["result"]["organization"]>
+    composites: {}
+  }
+
+  type OrganizationGetPayload<S extends boolean | null | undefined | OrganizationDefaultArgs> = $Result.GetResult<Prisma.$OrganizationPayload, S>
+
+  type OrganizationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrganizationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrganizationCountAggregateInputType | true
+    }
+
+  export interface OrganizationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Organization'], meta: { name: 'Organization' } }
+    /**
+     * Find zero or one Organization that matches the filter.
+     * @param {OrganizationFindUniqueArgs} args - Arguments to find a Organization
+     * @example
+     * // Get one Organization
+     * const organization = await prisma.organization.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrganizationFindUniqueArgs>(args: SelectSubset<T, OrganizationFindUniqueArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Organization that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrganizationFindUniqueOrThrowArgs} args - Arguments to find a Organization
+     * @example
+     * // Get one Organization
+     * const organization = await prisma.organization.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrganizationFindUniqueOrThrowArgs>(args: SelectSubset<T, OrganizationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Organization that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationFindFirstArgs} args - Arguments to find a Organization
+     * @example
+     * // Get one Organization
+     * const organization = await prisma.organization.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrganizationFindFirstArgs>(args?: SelectSubset<T, OrganizationFindFirstArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Organization that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationFindFirstOrThrowArgs} args - Arguments to find a Organization
+     * @example
+     * // Get one Organization
+     * const organization = await prisma.organization.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrganizationFindFirstOrThrowArgs>(args?: SelectSubset<T, OrganizationFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Organizations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Organizations
+     * const organizations = await prisma.organization.findMany()
+     * 
+     * // Get first 10 Organizations
+     * const organizations = await prisma.organization.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const organizationWithIdOnly = await prisma.organization.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrganizationFindManyArgs>(args?: SelectSubset<T, OrganizationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Organization.
+     * @param {OrganizationCreateArgs} args - Arguments to create a Organization.
+     * @example
+     * // Create one Organization
+     * const Organization = await prisma.organization.create({
+     *   data: {
+     *     // ... data to create a Organization
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrganizationCreateArgs>(args: SelectSubset<T, OrganizationCreateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Organizations.
+     * @param {OrganizationCreateManyArgs} args - Arguments to create many Organizations.
+     * @example
+     * // Create many Organizations
+     * const organization = await prisma.organization.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrganizationCreateManyArgs>(args?: SelectSubset<T, OrganizationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Organizations and returns the data saved in the database.
+     * @param {OrganizationCreateManyAndReturnArgs} args - Arguments to create many Organizations.
+     * @example
+     * // Create many Organizations
+     * const organization = await prisma.organization.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Organizations and only return the `id`
+     * const organizationWithIdOnly = await prisma.organization.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrganizationCreateManyAndReturnArgs>(args?: SelectSubset<T, OrganizationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Organization.
+     * @param {OrganizationDeleteArgs} args - Arguments to delete one Organization.
+     * @example
+     * // Delete one Organization
+     * const Organization = await prisma.organization.delete({
+     *   where: {
+     *     // ... filter to delete one Organization
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrganizationDeleteArgs>(args: SelectSubset<T, OrganizationDeleteArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Organization.
+     * @param {OrganizationUpdateArgs} args - Arguments to update one Organization.
+     * @example
+     * // Update one Organization
+     * const organization = await prisma.organization.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrganizationUpdateArgs>(args: SelectSubset<T, OrganizationUpdateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Organizations.
+     * @param {OrganizationDeleteManyArgs} args - Arguments to filter Organizations to delete.
+     * @example
+     * // Delete a few Organizations
+     * const { count } = await prisma.organization.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrganizationDeleteManyArgs>(args?: SelectSubset<T, OrganizationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Organizations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Organizations
+     * const organization = await prisma.organization.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrganizationUpdateManyArgs>(args: SelectSubset<T, OrganizationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Organizations and returns the data updated in the database.
+     * @param {OrganizationUpdateManyAndReturnArgs} args - Arguments to update many Organizations.
+     * @example
+     * // Update many Organizations
+     * const organization = await prisma.organization.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Organizations and only return the `id`
+     * const organizationWithIdOnly = await prisma.organization.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrganizationUpdateManyAndReturnArgs>(args: SelectSubset<T, OrganizationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Organization.
+     * @param {OrganizationUpsertArgs} args - Arguments to update or create a Organization.
+     * @example
+     * // Update or create a Organization
+     * const organization = await prisma.organization.upsert({
+     *   create: {
+     *     // ... data to create a Organization
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Organization we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrganizationUpsertArgs>(args: SelectSubset<T, OrganizationUpsertArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Organizations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationCountArgs} args - Arguments to filter Organizations to count.
+     * @example
+     * // Count the number of Organizations
+     * const count = await prisma.organization.count({
+     *   where: {
+     *     // ... the filter for the Organizations we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrganizationCountArgs>(
+      args?: Subset<T, OrganizationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrganizationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Organization.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrganizationAggregateArgs>(args: Subset<T, OrganizationAggregateArgs>): Prisma.PrismaPromise<GetOrganizationAggregateType<T>>
+
+    /**
+     * Group by Organization.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrganizationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrganizationGroupByArgs['orderBy'] }
+        : { orderBy?: OrganizationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrganizationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrganizationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Organization model
+   */
+  readonly fields: OrganizationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Organization.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    clinicians<T extends Organization$cliniciansArgs<ExtArgs> = {}>(args?: Subset<T, Organization$cliniciansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Organization model
+   */
+  interface OrganizationFieldRefs {
+    readonly id: FieldRef<"Organization", 'String'>
+    readonly name: FieldRef<"Organization", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Organization findUnique
+   */
+  export type OrganizationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter, which Organization to fetch.
+     */
+    where: OrganizationWhereUniqueInput
+  }
+
+  /**
+   * Organization findUniqueOrThrow
+   */
+  export type OrganizationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter, which Organization to fetch.
+     */
+    where: OrganizationWhereUniqueInput
+  }
+
+  /**
+   * Organization findFirst
+   */
+  export type OrganizationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter, which Organization to fetch.
+     */
+    where?: OrganizationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Organizations to fetch.
+     */
+    orderBy?: OrganizationOrderByWithRelationInput | OrganizationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Organizations.
+     */
+    cursor?: OrganizationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Organizations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Organizations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Organizations.
+     */
+    distinct?: OrganizationScalarFieldEnum | OrganizationScalarFieldEnum[]
+  }
+
+  /**
+   * Organization findFirstOrThrow
+   */
+  export type OrganizationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter, which Organization to fetch.
+     */
+    where?: OrganizationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Organizations to fetch.
+     */
+    orderBy?: OrganizationOrderByWithRelationInput | OrganizationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Organizations.
+     */
+    cursor?: OrganizationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Organizations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Organizations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Organizations.
+     */
+    distinct?: OrganizationScalarFieldEnum | OrganizationScalarFieldEnum[]
+  }
+
+  /**
+   * Organization findMany
+   */
+  export type OrganizationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter, which Organizations to fetch.
+     */
+    where?: OrganizationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Organizations to fetch.
+     */
+    orderBy?: OrganizationOrderByWithRelationInput | OrganizationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Organizations.
+     */
+    cursor?: OrganizationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Organizations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Organizations.
+     */
+    skip?: number
+    distinct?: OrganizationScalarFieldEnum | OrganizationScalarFieldEnum[]
+  }
+
+  /**
+   * Organization create
+   */
+  export type OrganizationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Organization.
+     */
+    data: XOR<OrganizationCreateInput, OrganizationUncheckedCreateInput>
+  }
+
+  /**
+   * Organization createMany
+   */
+  export type OrganizationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Organizations.
+     */
+    data: OrganizationCreateManyInput | OrganizationCreateManyInput[]
+  }
+
+  /**
+   * Organization createManyAndReturn
+   */
+  export type OrganizationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Organizations.
+     */
+    data: OrganizationCreateManyInput | OrganizationCreateManyInput[]
+  }
+
+  /**
+   * Organization update
+   */
+  export type OrganizationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Organization.
+     */
+    data: XOR<OrganizationUpdateInput, OrganizationUncheckedUpdateInput>
+    /**
+     * Choose, which Organization to update.
+     */
+    where: OrganizationWhereUniqueInput
+  }
+
+  /**
+   * Organization updateMany
+   */
+  export type OrganizationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Organizations.
+     */
+    data: XOR<OrganizationUpdateManyMutationInput, OrganizationUncheckedUpdateManyInput>
+    /**
+     * Filter which Organizations to update
+     */
+    where?: OrganizationWhereInput
+    /**
+     * Limit how many Organizations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Organization updateManyAndReturn
+   */
+  export type OrganizationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * The data used to update Organizations.
+     */
+    data: XOR<OrganizationUpdateManyMutationInput, OrganizationUncheckedUpdateManyInput>
+    /**
+     * Filter which Organizations to update
+     */
+    where?: OrganizationWhereInput
+    /**
+     * Limit how many Organizations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Organization upsert
+   */
+  export type OrganizationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Organization to update in case it exists.
+     */
+    where: OrganizationWhereUniqueInput
+    /**
+     * In case the Organization found by the `where` argument doesn't exist, create a new Organization with this data.
+     */
+    create: XOR<OrganizationCreateInput, OrganizationUncheckedCreateInput>
+    /**
+     * In case the Organization was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrganizationUpdateInput, OrganizationUncheckedUpdateInput>
+  }
+
+  /**
+   * Organization delete
+   */
+  export type OrganizationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    /**
+     * Filter which Organization to delete.
+     */
+    where: OrganizationWhereUniqueInput
+  }
+
+  /**
+   * Organization deleteMany
+   */
+  export type OrganizationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Organizations to delete
+     */
+    where?: OrganizationWhereInput
+    /**
+     * Limit how many Organizations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Organization.users
+   */
+  export type Organization$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.clinicians
+   */
+  export type Organization$cliniciansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    where?: ProviderWhereInput
+    orderBy?: ProviderOrderByWithRelationInput | ProviderOrderByWithRelationInput[]
+    cursor?: ProviderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProviderScalarFieldEnum | ProviderScalarFieldEnum[]
+  }
+
+  /**
+   * Organization without action
+   */
+  export type OrganizationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Provider
    */
 
@@ -8139,6 +9464,7 @@ export namespace Prisma {
     credentials: string | null
     specialty: string | null
     email: string | null
+    organizationId: string | null
     userId: string | null
   }
 
@@ -8149,6 +9475,7 @@ export namespace Prisma {
     credentials: string | null
     specialty: string | null
     email: string | null
+    organizationId: string | null
     userId: string | null
   }
 
@@ -8159,6 +9486,7 @@ export namespace Prisma {
     credentials: number
     specialty: number
     email: number
+    organizationId: number
     userId: number
     _all: number
   }
@@ -8171,6 +9499,7 @@ export namespace Prisma {
     credentials?: true
     specialty?: true
     email?: true
+    organizationId?: true
     userId?: true
   }
 
@@ -8181,6 +9510,7 @@ export namespace Prisma {
     credentials?: true
     specialty?: true
     email?: true
+    organizationId?: true
     userId?: true
   }
 
@@ -8191,6 +9521,7 @@ export namespace Prisma {
     credentials?: true
     specialty?: true
     email?: true
+    organizationId?: true
     userId?: true
     _all?: true
   }
@@ -8274,6 +9605,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId: string | null
     userId: string | null
     _count: ProviderCountAggregateOutputType | null
     _min: ProviderMinAggregateOutputType | null
@@ -8301,7 +9633,9 @@ export namespace Prisma {
     credentials?: boolean
     specialty?: boolean
     email?: boolean
+    organizationId?: boolean
     userId?: boolean
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
     patients?: boolean | Provider$patientsArgs<ExtArgs>
     sharesSent?: boolean | Provider$sharesSentArgs<ExtArgs>
@@ -8313,6 +9647,7 @@ export namespace Prisma {
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
+    approvedSummaries?: boolean | Provider$approvedSummariesArgs<ExtArgs>
     _count?: boolean | ProviderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["provider"]>
 
@@ -8323,7 +9658,9 @@ export namespace Prisma {
     credentials?: boolean
     specialty?: boolean
     email?: boolean
+    organizationId?: boolean
     userId?: boolean
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
   }, ExtArgs["result"]["provider"]>
 
@@ -8334,7 +9671,9 @@ export namespace Prisma {
     credentials?: boolean
     specialty?: boolean
     email?: boolean
+    organizationId?: boolean
     userId?: boolean
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
   }, ExtArgs["result"]["provider"]>
 
@@ -8345,11 +9684,13 @@ export namespace Prisma {
     credentials?: boolean
     specialty?: boolean
     email?: boolean
+    organizationId?: boolean
     userId?: boolean
   }
 
-  export type ProviderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "credentials" | "specialty" | "email" | "userId", ExtArgs["result"]["provider"]>
+  export type ProviderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "credentials" | "specialty" | "email" | "organizationId" | "userId", ExtArgs["result"]["provider"]>
   export type ProviderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
     patients?: boolean | Provider$patientsArgs<ExtArgs>
     sharesSent?: boolean | Provider$sharesSentArgs<ExtArgs>
@@ -8361,18 +9702,22 @@ export namespace Prisma {
     visits?: boolean | Provider$visitsArgs<ExtArgs>
     notes?: boolean | Provider$notesArgs<ExtArgs>
     tasks?: boolean | Provider$tasksArgs<ExtArgs>
+    approvedSummaries?: boolean | Provider$approvedSummariesArgs<ExtArgs>
     _count?: boolean | ProviderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProviderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
   }
   export type ProviderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | Provider$organizationArgs<ExtArgs>
     user?: boolean | Provider$userArgs<ExtArgs>
   }
 
   export type $ProviderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Provider"
     objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs> | null
       patients: Prisma.$PatientPayload<ExtArgs>[]
       sharesSent: Prisma.$ShareRequestPayload<ExtArgs>[]
@@ -8384,6 +9729,7 @@ export namespace Prisma {
       visits: Prisma.$VisitPayload<ExtArgs>[]
       notes: Prisma.$ClinicalNotePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
+      approvedSummaries: Prisma.$PatientSummaryRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8392,6 +9738,7 @@ export namespace Prisma {
       credentials: string
       specialty: string
       email: string
+      organizationId: string | null
       userId: string | null
     }, ExtArgs["result"]["provider"]>
     composites: {}
@@ -8787,6 +10134,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProviderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends Provider$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Provider$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends Provider$userArgs<ExtArgs> = {}>(args?: Subset<T, Provider$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     patients<T extends Provider$patientsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$patientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sharesSent<T extends Provider$sharesSentArgs<ExtArgs> = {}>(args?: Subset<T, Provider$sharesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShareRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8798,6 +10146,7 @@ export namespace Prisma {
     visits<T extends Provider$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notes<T extends Provider$notesArgs<ExtArgs> = {}>(args?: Subset<T, Provider$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Provider$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Provider$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    approvedSummaries<T extends Provider$approvedSummariesArgs<ExtArgs> = {}>(args?: Subset<T, Provider$approvedSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8833,6 +10182,7 @@ export namespace Prisma {
     readonly credentials: FieldRef<"Provider", 'String'>
     readonly specialty: FieldRef<"Provider", 'String'>
     readonly email: FieldRef<"Provider", 'String'>
+    readonly organizationId: FieldRef<"Provider", 'String'>
     readonly userId: FieldRef<"Provider", 'String'>
   }
     
@@ -9228,6 +10578,25 @@ export namespace Prisma {
   }
 
   /**
+   * Provider.organization
+   */
+  export type Provider$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    where?: OrganizationWhereInput
+  }
+
+  /**
    * Provider.user
    */
   export type Provider$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9487,6 +10856,30 @@ export namespace Prisma {
   }
 
   /**
+   * Provider.approvedSummaries
+   */
+  export type Provider$approvedSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    where?: PatientSummaryRecordWhereInput
+    orderBy?: PatientSummaryRecordOrderByWithRelationInput | PatientSummaryRecordOrderByWithRelationInput[]
+    cursor?: PatientSummaryRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientSummaryRecordScalarFieldEnum | PatientSummaryRecordScalarFieldEnum[]
+  }
+
+  /**
    * Provider without action
    */
   export type ProviderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9736,6 +11129,7 @@ export namespace Prisma {
     visits?: boolean | Patient$visitsArgs<ExtArgs>
     notes?: boolean | Patient$notesArgs<ExtArgs>
     tasks?: boolean | Patient$tasksArgs<ExtArgs>
+    summary?: boolean | Patient$summaryArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
@@ -9801,6 +11195,7 @@ export namespace Prisma {
     visits?: boolean | Patient$visitsArgs<ExtArgs>
     notes?: boolean | Patient$notesArgs<ExtArgs>
     tasks?: boolean | Patient$tasksArgs<ExtArgs>
+    summary?: boolean | Patient$summaryArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PatientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9826,6 +11221,7 @@ export namespace Prisma {
       visits: Prisma.$VisitPayload<ExtArgs>[]
       notes: Prisma.$ClinicalNotePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
+      summary: Prisma.$PatientSummaryRecordPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10245,6 +11641,7 @@ export namespace Prisma {
     visits<T extends Patient$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notes<T extends Patient$notesArgs<ExtArgs> = {}>(args?: Subset<T, Patient$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Patient$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Patient$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    summary<T extends Patient$summaryArgs<ExtArgs> = {}>(args?: Subset<T, Patient$summaryArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10907,6 +12304,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.summary
+   */
+  export type Patient$summaryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    where?: PatientSummaryRecordWhereInput
   }
 
   /**
@@ -20930,6 +22346,1148 @@ export namespace Prisma {
 
 
   /**
+   * Model PatientSummaryRecord
+   */
+
+  export type AggregatePatientSummaryRecord = {
+    _count: PatientSummaryRecordCountAggregateOutputType | null
+    _min: PatientSummaryRecordMinAggregateOutputType | null
+    _max: PatientSummaryRecordMaxAggregateOutputType | null
+  }
+
+  export type PatientSummaryRecordMinAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    approvedByProviderId: string | null
+    approvedAt: Date | null
+    overview: string | null
+    recentVisitSummary: string | null
+    diagnoses: string | null
+    currentMedications: string | null
+    discontinuedMedications: string | null
+    outstandingTasks: string | null
+    fingerprint: string | null
+  }
+
+  export type PatientSummaryRecordMaxAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    approvedByProviderId: string | null
+    approvedAt: Date | null
+    overview: string | null
+    recentVisitSummary: string | null
+    diagnoses: string | null
+    currentMedications: string | null
+    discontinuedMedications: string | null
+    outstandingTasks: string | null
+    fingerprint: string | null
+  }
+
+  export type PatientSummaryRecordCountAggregateOutputType = {
+    id: number
+    patientId: number
+    approvedByProviderId: number
+    approvedAt: number
+    overview: number
+    recentVisitSummary: number
+    diagnoses: number
+    currentMedications: number
+    discontinuedMedications: number
+    outstandingTasks: number
+    fingerprint: number
+    _all: number
+  }
+
+
+  export type PatientSummaryRecordMinAggregateInputType = {
+    id?: true
+    patientId?: true
+    approvedByProviderId?: true
+    approvedAt?: true
+    overview?: true
+    recentVisitSummary?: true
+    diagnoses?: true
+    currentMedications?: true
+    discontinuedMedications?: true
+    outstandingTasks?: true
+    fingerprint?: true
+  }
+
+  export type PatientSummaryRecordMaxAggregateInputType = {
+    id?: true
+    patientId?: true
+    approvedByProviderId?: true
+    approvedAt?: true
+    overview?: true
+    recentVisitSummary?: true
+    diagnoses?: true
+    currentMedications?: true
+    discontinuedMedications?: true
+    outstandingTasks?: true
+    fingerprint?: true
+  }
+
+  export type PatientSummaryRecordCountAggregateInputType = {
+    id?: true
+    patientId?: true
+    approvedByProviderId?: true
+    approvedAt?: true
+    overview?: true
+    recentVisitSummary?: true
+    diagnoses?: true
+    currentMedications?: true
+    discontinuedMedications?: true
+    outstandingTasks?: true
+    fingerprint?: true
+    _all?: true
+  }
+
+  export type PatientSummaryRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientSummaryRecord to aggregate.
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientSummaryRecords to fetch.
+     */
+    orderBy?: PatientSummaryRecordOrderByWithRelationInput | PatientSummaryRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientSummaryRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientSummaryRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientSummaryRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientSummaryRecords
+    **/
+    _count?: true | PatientSummaryRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientSummaryRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientSummaryRecordMaxAggregateInputType
+  }
+
+  export type GetPatientSummaryRecordAggregateType<T extends PatientSummaryRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientSummaryRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientSummaryRecord[P]>
+      : GetScalarType<T[P], AggregatePatientSummaryRecord[P]>
+  }
+
+
+
+
+  export type PatientSummaryRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientSummaryRecordWhereInput
+    orderBy?: PatientSummaryRecordOrderByWithAggregationInput | PatientSummaryRecordOrderByWithAggregationInput[]
+    by: PatientSummaryRecordScalarFieldEnum[] | PatientSummaryRecordScalarFieldEnum
+    having?: PatientSummaryRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientSummaryRecordCountAggregateInputType | true
+    _min?: PatientSummaryRecordMinAggregateInputType
+    _max?: PatientSummaryRecordMaxAggregateInputType
+  }
+
+  export type PatientSummaryRecordGroupByOutputType = {
+    id: string
+    patientId: string
+    approvedByProviderId: string
+    approvedAt: Date
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+    _count: PatientSummaryRecordCountAggregateOutputType | null
+    _min: PatientSummaryRecordMinAggregateOutputType | null
+    _max: PatientSummaryRecordMaxAggregateOutputType | null
+  }
+
+  type GetPatientSummaryRecordGroupByPayload<T extends PatientSummaryRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientSummaryRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientSummaryRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientSummaryRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientSummaryRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientSummaryRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    approvedByProviderId?: boolean
+    approvedAt?: boolean
+    overview?: boolean
+    recentVisitSummary?: boolean
+    diagnoses?: boolean
+    currentMedications?: boolean
+    discontinuedMedications?: boolean
+    outstandingTasks?: boolean
+    fingerprint?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientSummaryRecord"]>
+
+  export type PatientSummaryRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    approvedByProviderId?: boolean
+    approvedAt?: boolean
+    overview?: boolean
+    recentVisitSummary?: boolean
+    diagnoses?: boolean
+    currentMedications?: boolean
+    discontinuedMedications?: boolean
+    outstandingTasks?: boolean
+    fingerprint?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientSummaryRecord"]>
+
+  export type PatientSummaryRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    approvedByProviderId?: boolean
+    approvedAt?: boolean
+    overview?: boolean
+    recentVisitSummary?: boolean
+    diagnoses?: boolean
+    currentMedications?: boolean
+    discontinuedMedications?: boolean
+    outstandingTasks?: boolean
+    fingerprint?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientSummaryRecord"]>
+
+  export type PatientSummaryRecordSelectScalar = {
+    id?: boolean
+    patientId?: boolean
+    approvedByProviderId?: boolean
+    approvedAt?: boolean
+    overview?: boolean
+    recentVisitSummary?: boolean
+    diagnoses?: boolean
+    currentMedications?: boolean
+    discontinuedMedications?: boolean
+    outstandingTasks?: boolean
+    fingerprint?: boolean
+  }
+
+  export type PatientSummaryRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "approvedByProviderId" | "approvedAt" | "overview" | "recentVisitSummary" | "diagnoses" | "currentMedications" | "discontinuedMedications" | "outstandingTasks" | "fingerprint", ExtArgs["result"]["patientSummaryRecord"]>
+  export type PatientSummaryRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type PatientSummaryRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+  export type PatientSummaryRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+    approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
+  }
+
+  export type $PatientSummaryRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientSummaryRecord"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+      approvedBy: Prisma.$ProviderPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      patientId: string
+      approvedByProviderId: string
+      approvedAt: Date
+      overview: string
+      recentVisitSummary: string
+      diagnoses: string
+      currentMedications: string
+      discontinuedMedications: string
+      outstandingTasks: string
+      fingerprint: string
+    }, ExtArgs["result"]["patientSummaryRecord"]>
+    composites: {}
+  }
+
+  type PatientSummaryRecordGetPayload<S extends boolean | null | undefined | PatientSummaryRecordDefaultArgs> = $Result.GetResult<Prisma.$PatientSummaryRecordPayload, S>
+
+  type PatientSummaryRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PatientSummaryRecordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PatientSummaryRecordCountAggregateInputType | true
+    }
+
+  export interface PatientSummaryRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientSummaryRecord'], meta: { name: 'PatientSummaryRecord' } }
+    /**
+     * Find zero or one PatientSummaryRecord that matches the filter.
+     * @param {PatientSummaryRecordFindUniqueArgs} args - Arguments to find a PatientSummaryRecord
+     * @example
+     * // Get one PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientSummaryRecordFindUniqueArgs>(args: SelectSubset<T, PatientSummaryRecordFindUniqueArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PatientSummaryRecord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PatientSummaryRecordFindUniqueOrThrowArgs} args - Arguments to find a PatientSummaryRecord
+     * @example
+     * // Get one PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientSummaryRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientSummaryRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PatientSummaryRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordFindFirstArgs} args - Arguments to find a PatientSummaryRecord
+     * @example
+     * // Get one PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientSummaryRecordFindFirstArgs>(args?: SelectSubset<T, PatientSummaryRecordFindFirstArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PatientSummaryRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordFindFirstOrThrowArgs} args - Arguments to find a PatientSummaryRecord
+     * @example
+     * // Get one PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientSummaryRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientSummaryRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PatientSummaryRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientSummaryRecords
+     * const patientSummaryRecords = await prisma.patientSummaryRecord.findMany()
+     * 
+     * // Get first 10 PatientSummaryRecords
+     * const patientSummaryRecords = await prisma.patientSummaryRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const patientSummaryRecordWithIdOnly = await prisma.patientSummaryRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PatientSummaryRecordFindManyArgs>(args?: SelectSubset<T, PatientSummaryRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PatientSummaryRecord.
+     * @param {PatientSummaryRecordCreateArgs} args - Arguments to create a PatientSummaryRecord.
+     * @example
+     * // Create one PatientSummaryRecord
+     * const PatientSummaryRecord = await prisma.patientSummaryRecord.create({
+     *   data: {
+     *     // ... data to create a PatientSummaryRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientSummaryRecordCreateArgs>(args: SelectSubset<T, PatientSummaryRecordCreateArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PatientSummaryRecords.
+     * @param {PatientSummaryRecordCreateManyArgs} args - Arguments to create many PatientSummaryRecords.
+     * @example
+     * // Create many PatientSummaryRecords
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientSummaryRecordCreateManyArgs>(args?: SelectSubset<T, PatientSummaryRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientSummaryRecords and returns the data saved in the database.
+     * @param {PatientSummaryRecordCreateManyAndReturnArgs} args - Arguments to create many PatientSummaryRecords.
+     * @example
+     * // Create many PatientSummaryRecords
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientSummaryRecords and only return the `id`
+     * const patientSummaryRecordWithIdOnly = await prisma.patientSummaryRecord.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientSummaryRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientSummaryRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PatientSummaryRecord.
+     * @param {PatientSummaryRecordDeleteArgs} args - Arguments to delete one PatientSummaryRecord.
+     * @example
+     * // Delete one PatientSummaryRecord
+     * const PatientSummaryRecord = await prisma.patientSummaryRecord.delete({
+     *   where: {
+     *     // ... filter to delete one PatientSummaryRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientSummaryRecordDeleteArgs>(args: SelectSubset<T, PatientSummaryRecordDeleteArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PatientSummaryRecord.
+     * @param {PatientSummaryRecordUpdateArgs} args - Arguments to update one PatientSummaryRecord.
+     * @example
+     * // Update one PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientSummaryRecordUpdateArgs>(args: SelectSubset<T, PatientSummaryRecordUpdateArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PatientSummaryRecords.
+     * @param {PatientSummaryRecordDeleteManyArgs} args - Arguments to filter PatientSummaryRecords to delete.
+     * @example
+     * // Delete a few PatientSummaryRecords
+     * const { count } = await prisma.patientSummaryRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientSummaryRecordDeleteManyArgs>(args?: SelectSubset<T, PatientSummaryRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientSummaryRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientSummaryRecords
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientSummaryRecordUpdateManyArgs>(args: SelectSubset<T, PatientSummaryRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientSummaryRecords and returns the data updated in the database.
+     * @param {PatientSummaryRecordUpdateManyAndReturnArgs} args - Arguments to update many PatientSummaryRecords.
+     * @example
+     * // Update many PatientSummaryRecords
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PatientSummaryRecords and only return the `id`
+     * const patientSummaryRecordWithIdOnly = await prisma.patientSummaryRecord.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PatientSummaryRecordUpdateManyAndReturnArgs>(args: SelectSubset<T, PatientSummaryRecordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PatientSummaryRecord.
+     * @param {PatientSummaryRecordUpsertArgs} args - Arguments to update or create a PatientSummaryRecord.
+     * @example
+     * // Update or create a PatientSummaryRecord
+     * const patientSummaryRecord = await prisma.patientSummaryRecord.upsert({
+     *   create: {
+     *     // ... data to create a PatientSummaryRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientSummaryRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientSummaryRecordUpsertArgs>(args: SelectSubset<T, PatientSummaryRecordUpsertArgs<ExtArgs>>): Prisma__PatientSummaryRecordClient<$Result.GetResult<Prisma.$PatientSummaryRecordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PatientSummaryRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordCountArgs} args - Arguments to filter PatientSummaryRecords to count.
+     * @example
+     * // Count the number of PatientSummaryRecords
+     * const count = await prisma.patientSummaryRecord.count({
+     *   where: {
+     *     // ... the filter for the PatientSummaryRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientSummaryRecordCountArgs>(
+      args?: Subset<T, PatientSummaryRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientSummaryRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientSummaryRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientSummaryRecordAggregateArgs>(args: Subset<T, PatientSummaryRecordAggregateArgs>): Prisma.PrismaPromise<GetPatientSummaryRecordAggregateType<T>>
+
+    /**
+     * Group by PatientSummaryRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientSummaryRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientSummaryRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientSummaryRecordGroupByArgs['orderBy'] }
+        : { orderBy?: PatientSummaryRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientSummaryRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientSummaryRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientSummaryRecord model
+   */
+  readonly fields: PatientSummaryRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientSummaryRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientSummaryRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvedBy<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientSummaryRecord model
+   */
+  interface PatientSummaryRecordFieldRefs {
+    readonly id: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly patientId: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly approvedByProviderId: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly approvedAt: FieldRef<"PatientSummaryRecord", 'DateTime'>
+    readonly overview: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly recentVisitSummary: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly diagnoses: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly currentMedications: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly discontinuedMedications: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly outstandingTasks: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly fingerprint: FieldRef<"PatientSummaryRecord", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientSummaryRecord findUnique
+   */
+  export type PatientSummaryRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientSummaryRecord to fetch.
+     */
+    where: PatientSummaryRecordWhereUniqueInput
+  }
+
+  /**
+   * PatientSummaryRecord findUniqueOrThrow
+   */
+  export type PatientSummaryRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientSummaryRecord to fetch.
+     */
+    where: PatientSummaryRecordWhereUniqueInput
+  }
+
+  /**
+   * PatientSummaryRecord findFirst
+   */
+  export type PatientSummaryRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientSummaryRecord to fetch.
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientSummaryRecords to fetch.
+     */
+    orderBy?: PatientSummaryRecordOrderByWithRelationInput | PatientSummaryRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientSummaryRecords.
+     */
+    cursor?: PatientSummaryRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientSummaryRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientSummaryRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientSummaryRecords.
+     */
+    distinct?: PatientSummaryRecordScalarFieldEnum | PatientSummaryRecordScalarFieldEnum[]
+  }
+
+  /**
+   * PatientSummaryRecord findFirstOrThrow
+   */
+  export type PatientSummaryRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientSummaryRecord to fetch.
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientSummaryRecords to fetch.
+     */
+    orderBy?: PatientSummaryRecordOrderByWithRelationInput | PatientSummaryRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientSummaryRecords.
+     */
+    cursor?: PatientSummaryRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientSummaryRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientSummaryRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientSummaryRecords.
+     */
+    distinct?: PatientSummaryRecordScalarFieldEnum | PatientSummaryRecordScalarFieldEnum[]
+  }
+
+  /**
+   * PatientSummaryRecord findMany
+   */
+  export type PatientSummaryRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientSummaryRecords to fetch.
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientSummaryRecords to fetch.
+     */
+    orderBy?: PatientSummaryRecordOrderByWithRelationInput | PatientSummaryRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientSummaryRecords.
+     */
+    cursor?: PatientSummaryRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientSummaryRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientSummaryRecords.
+     */
+    skip?: number
+    distinct?: PatientSummaryRecordScalarFieldEnum | PatientSummaryRecordScalarFieldEnum[]
+  }
+
+  /**
+   * PatientSummaryRecord create
+   */
+  export type PatientSummaryRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PatientSummaryRecord.
+     */
+    data: XOR<PatientSummaryRecordCreateInput, PatientSummaryRecordUncheckedCreateInput>
+  }
+
+  /**
+   * PatientSummaryRecord createMany
+   */
+  export type PatientSummaryRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientSummaryRecords.
+     */
+    data: PatientSummaryRecordCreateManyInput | PatientSummaryRecordCreateManyInput[]
+  }
+
+  /**
+   * PatientSummaryRecord createManyAndReturn
+   */
+  export type PatientSummaryRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * The data used to create many PatientSummaryRecords.
+     */
+    data: PatientSummaryRecordCreateManyInput | PatientSummaryRecordCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientSummaryRecord update
+   */
+  export type PatientSummaryRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PatientSummaryRecord.
+     */
+    data: XOR<PatientSummaryRecordUpdateInput, PatientSummaryRecordUncheckedUpdateInput>
+    /**
+     * Choose, which PatientSummaryRecord to update.
+     */
+    where: PatientSummaryRecordWhereUniqueInput
+  }
+
+  /**
+   * PatientSummaryRecord updateMany
+   */
+  export type PatientSummaryRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientSummaryRecords.
+     */
+    data: XOR<PatientSummaryRecordUpdateManyMutationInput, PatientSummaryRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientSummaryRecords to update
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * Limit how many PatientSummaryRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PatientSummaryRecord updateManyAndReturn
+   */
+  export type PatientSummaryRecordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * The data used to update PatientSummaryRecords.
+     */
+    data: XOR<PatientSummaryRecordUpdateManyMutationInput, PatientSummaryRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientSummaryRecords to update
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * Limit how many PatientSummaryRecords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientSummaryRecord upsert
+   */
+  export type PatientSummaryRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PatientSummaryRecord to update in case it exists.
+     */
+    where: PatientSummaryRecordWhereUniqueInput
+    /**
+     * In case the PatientSummaryRecord found by the `where` argument doesn't exist, create a new PatientSummaryRecord with this data.
+     */
+    create: XOR<PatientSummaryRecordCreateInput, PatientSummaryRecordUncheckedCreateInput>
+    /**
+     * In case the PatientSummaryRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientSummaryRecordUpdateInput, PatientSummaryRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientSummaryRecord delete
+   */
+  export type PatientSummaryRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+    /**
+     * Filter which PatientSummaryRecord to delete.
+     */
+    where: PatientSummaryRecordWhereUniqueInput
+  }
+
+  /**
+   * PatientSummaryRecord deleteMany
+   */
+  export type PatientSummaryRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientSummaryRecords to delete
+     */
+    where?: PatientSummaryRecordWhereInput
+    /**
+     * Limit how many PatientSummaryRecords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PatientSummaryRecord without action
+   */
+  export type PatientSummaryRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientSummaryRecord
+     */
+    select?: PatientSummaryRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PatientSummaryRecord
+     */
+    omit?: PatientSummaryRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientSummaryRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Task
    */
 
@@ -22105,7 +24663,7 @@ export namespace Prisma {
     role: 'role',
     primaryInsurance: 'primaryInsurance',
     secondaryInsurance: 'secondaryInsurance',
-    organization: 'organization'
+    organizationId: 'organizationId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -22120,6 +24678,14 @@ export namespace Prisma {
   export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
 
 
+  export const OrganizationScalarFieldEnum: {
+    id: 'id',
+    name: 'name'
+  };
+
+  export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
   export const ProviderScalarFieldEnum: {
     id: 'id',
     firstName: 'firstName',
@@ -22127,6 +24693,7 @@ export namespace Prisma {
     credentials: 'credentials',
     specialty: 'specialty',
     email: 'email',
+    organizationId: 'organizationId',
     userId: 'userId'
   };
 
@@ -22269,6 +24836,23 @@ export namespace Prisma {
   };
 
   export type ClinicalNoteScalarFieldEnum = (typeof ClinicalNoteScalarFieldEnum)[keyof typeof ClinicalNoteScalarFieldEnum]
+
+
+  export const PatientSummaryRecordScalarFieldEnum: {
+    id: 'id',
+    patientId: 'patientId',
+    approvedByProviderId: 'approvedByProviderId',
+    approvedAt: 'approvedAt',
+    overview: 'overview',
+    recentVisitSummary: 'recentVisitSummary',
+    diagnoses: 'diagnoses',
+    currentMedications: 'currentMedications',
+    discontinuedMedications: 'discontinuedMedications',
+    outstandingTasks: 'outstandingTasks',
+    fingerprint: 'fingerprint'
+  };
+
+  export type PatientSummaryRecordScalarFieldEnum = (typeof PatientSummaryRecordScalarFieldEnum)[keyof typeof PatientSummaryRecordScalarFieldEnum]
 
 
   export const TaskScalarFieldEnum: {
@@ -22555,7 +25139,8 @@ export namespace Prisma {
     role?: StringNullableFilter<"User"> | string | null
     primaryInsurance?: StringNullableFilter<"User"> | string | null
     secondaryInsurance?: StringNullableFilter<"User"> | string | null
-    organization?: StringNullableFilter<"User"> | string | null
+    organizationId?: StringNullableFilter<"User"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -22572,7 +25157,8 @@ export namespace Prisma {
     role?: SortOrderInput | SortOrder
     primaryInsurance?: SortOrderInput | SortOrder
     secondaryInsurance?: SortOrderInput | SortOrder
-    organization?: SortOrderInput | SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    organization?: OrganizationOrderByWithRelationInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
@@ -22592,7 +25178,8 @@ export namespace Prisma {
     role?: StringNullableFilter<"User"> | string | null
     primaryInsurance?: StringNullableFilter<"User"> | string | null
     secondaryInsurance?: StringNullableFilter<"User"> | string | null
-    organization?: StringNullableFilter<"User"> | string | null
+    organizationId?: StringNullableFilter<"User"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -22609,7 +25196,7 @@ export namespace Prisma {
     role?: SortOrderInput | SortOrder
     primaryInsurance?: SortOrderInput | SortOrder
     secondaryInsurance?: SortOrderInput | SortOrder
-    organization?: SortOrderInput | SortOrder
+    organizationId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -22627,7 +25214,7 @@ export namespace Prisma {
     role?: StringNullableWithAggregatesFilter<"User"> | string | null
     primaryInsurance?: StringNullableWithAggregatesFilter<"User"> | string | null
     secondaryInsurance?: StringNullableWithAggregatesFilter<"User"> | string | null
-    organization?: StringNullableWithAggregatesFilter<"User"> | string | null
+    organizationId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type VerificationTokenWhereInput = {
@@ -22673,6 +25260,49 @@ export namespace Prisma {
     expires?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
   }
 
+  export type OrganizationWhereInput = {
+    AND?: OrganizationWhereInput | OrganizationWhereInput[]
+    OR?: OrganizationWhereInput[]
+    NOT?: OrganizationWhereInput | OrganizationWhereInput[]
+    id?: StringFilter<"Organization"> | string
+    name?: StringFilter<"Organization"> | string
+    users?: UserListRelationFilter
+    clinicians?: ProviderListRelationFilter
+  }
+
+  export type OrganizationOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    users?: UserOrderByRelationAggregateInput
+    clinicians?: ProviderOrderByRelationAggregateInput
+  }
+
+  export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: OrganizationWhereInput | OrganizationWhereInput[]
+    OR?: OrganizationWhereInput[]
+    NOT?: OrganizationWhereInput | OrganizationWhereInput[]
+    users?: UserListRelationFilter
+    clinicians?: ProviderListRelationFilter
+  }, "id" | "name">
+
+  export type OrganizationOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    _count?: OrganizationCountOrderByAggregateInput
+    _max?: OrganizationMaxOrderByAggregateInput
+    _min?: OrganizationMinOrderByAggregateInput
+  }
+
+  export type OrganizationScalarWhereWithAggregatesInput = {
+    AND?: OrganizationScalarWhereWithAggregatesInput | OrganizationScalarWhereWithAggregatesInput[]
+    OR?: OrganizationScalarWhereWithAggregatesInput[]
+    NOT?: OrganizationScalarWhereWithAggregatesInput | OrganizationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Organization"> | string
+    name?: StringWithAggregatesFilter<"Organization"> | string
+  }
+
   export type ProviderWhereInput = {
     AND?: ProviderWhereInput | ProviderWhereInput[]
     OR?: ProviderWhereInput[]
@@ -22683,7 +25313,9 @@ export namespace Prisma {
     credentials?: StringFilter<"Provider"> | string
     specialty?: StringFilter<"Provider"> | string
     email?: StringFilter<"Provider"> | string
+    organizationId?: StringNullableFilter<"Provider"> | string | null
     userId?: StringNullableFilter<"Provider"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     patients?: PatientListRelationFilter
     sharesSent?: ShareRequestListRelationFilter
@@ -22695,6 +25327,7 @@ export namespace Prisma {
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
+    approvedSummaries?: PatientSummaryRecordListRelationFilter
   }
 
   export type ProviderOrderByWithRelationInput = {
@@ -22704,7 +25337,9 @@ export namespace Prisma {
     credentials?: SortOrder
     specialty?: SortOrder
     email?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
+    organization?: OrganizationOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     patients?: PatientOrderByRelationAggregateInput
     sharesSent?: ShareRequestOrderByRelationAggregateInput
@@ -22716,6 +25351,7 @@ export namespace Prisma {
     visits?: VisitOrderByRelationAggregateInput
     notes?: ClinicalNoteOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
+    approvedSummaries?: PatientSummaryRecordOrderByRelationAggregateInput
   }
 
   export type ProviderWhereUniqueInput = Prisma.AtLeast<{
@@ -22729,6 +25365,8 @@ export namespace Prisma {
     lastName?: StringFilter<"Provider"> | string
     credentials?: StringFilter<"Provider"> | string
     specialty?: StringFilter<"Provider"> | string
+    organizationId?: StringNullableFilter<"Provider"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     patients?: PatientListRelationFilter
     sharesSent?: ShareRequestListRelationFilter
@@ -22740,6 +25378,7 @@ export namespace Prisma {
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
+    approvedSummaries?: PatientSummaryRecordListRelationFilter
   }, "id" | "email" | "userId">
 
   export type ProviderOrderByWithAggregationInput = {
@@ -22749,6 +25388,7 @@ export namespace Prisma {
     credentials?: SortOrder
     specialty?: SortOrder
     email?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
     _count?: ProviderCountOrderByAggregateInput
     _max?: ProviderMaxOrderByAggregateInput
@@ -22765,6 +25405,7 @@ export namespace Prisma {
     credentials?: StringWithAggregatesFilter<"Provider"> | string
     specialty?: StringWithAggregatesFilter<"Provider"> | string
     email?: StringWithAggregatesFilter<"Provider"> | string
+    organizationId?: StringNullableWithAggregatesFilter<"Provider"> | string | null
     userId?: StringNullableWithAggregatesFilter<"Provider"> | string | null
   }
 
@@ -22795,6 +25436,7 @@ export namespace Prisma {
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
+    summary?: XOR<PatientSummaryRecordNullableScalarRelationFilter, PatientSummaryRecordWhereInput> | null
   }
 
   export type PatientOrderByWithRelationInput = {
@@ -22821,6 +25463,7 @@ export namespace Prisma {
     visits?: VisitOrderByRelationAggregateInput
     notes?: ClinicalNoteOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
+    summary?: PatientSummaryRecordOrderByWithRelationInput
   }
 
   export type PatientWhereUniqueInput = Prisma.AtLeast<{
@@ -22850,6 +25493,7 @@ export namespace Prisma {
     visits?: VisitListRelationFilter
     notes?: ClinicalNoteListRelationFilter
     tasks?: TaskListRelationFilter
+    summary?: XOR<PatientSummaryRecordNullableScalarRelationFilter, PatientSummaryRecordWhereInput> | null
   }, "id" | "email" | "userId">
 
   export type PatientOrderByWithAggregationInput = {
@@ -23525,6 +26169,94 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ClinicalNote"> | Date | string
   }
 
+  export type PatientSummaryRecordWhereInput = {
+    AND?: PatientSummaryRecordWhereInput | PatientSummaryRecordWhereInput[]
+    OR?: PatientSummaryRecordWhereInput[]
+    NOT?: PatientSummaryRecordWhereInput | PatientSummaryRecordWhereInput[]
+    id?: StringFilter<"PatientSummaryRecord"> | string
+    patientId?: StringFilter<"PatientSummaryRecord"> | string
+    approvedByProviderId?: StringFilter<"PatientSummaryRecord"> | string
+    approvedAt?: DateTimeFilter<"PatientSummaryRecord"> | Date | string
+    overview?: StringFilter<"PatientSummaryRecord"> | string
+    recentVisitSummary?: StringFilter<"PatientSummaryRecord"> | string
+    diagnoses?: StringFilter<"PatientSummaryRecord"> | string
+    currentMedications?: StringFilter<"PatientSummaryRecord"> | string
+    discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
+    outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
+    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+    approvedBy?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }
+
+  export type PatientSummaryRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    approvedByProviderId?: SortOrder
+    approvedAt?: SortOrder
+    overview?: SortOrder
+    recentVisitSummary?: SortOrder
+    diagnoses?: SortOrder
+    currentMedications?: SortOrder
+    discontinuedMedications?: SortOrder
+    outstandingTasks?: SortOrder
+    fingerprint?: SortOrder
+    patient?: PatientOrderByWithRelationInput
+    approvedBy?: ProviderOrderByWithRelationInput
+  }
+
+  export type PatientSummaryRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    patientId?: string
+    AND?: PatientSummaryRecordWhereInput | PatientSummaryRecordWhereInput[]
+    OR?: PatientSummaryRecordWhereInput[]
+    NOT?: PatientSummaryRecordWhereInput | PatientSummaryRecordWhereInput[]
+    approvedByProviderId?: StringFilter<"PatientSummaryRecord"> | string
+    approvedAt?: DateTimeFilter<"PatientSummaryRecord"> | Date | string
+    overview?: StringFilter<"PatientSummaryRecord"> | string
+    recentVisitSummary?: StringFilter<"PatientSummaryRecord"> | string
+    diagnoses?: StringFilter<"PatientSummaryRecord"> | string
+    currentMedications?: StringFilter<"PatientSummaryRecord"> | string
+    discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
+    outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
+    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+    approvedBy?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+  }, "id" | "patientId">
+
+  export type PatientSummaryRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    approvedByProviderId?: SortOrder
+    approvedAt?: SortOrder
+    overview?: SortOrder
+    recentVisitSummary?: SortOrder
+    diagnoses?: SortOrder
+    currentMedications?: SortOrder
+    discontinuedMedications?: SortOrder
+    outstandingTasks?: SortOrder
+    fingerprint?: SortOrder
+    _count?: PatientSummaryRecordCountOrderByAggregateInput
+    _max?: PatientSummaryRecordMaxOrderByAggregateInput
+    _min?: PatientSummaryRecordMinOrderByAggregateInput
+  }
+
+  export type PatientSummaryRecordScalarWhereWithAggregatesInput = {
+    AND?: PatientSummaryRecordScalarWhereWithAggregatesInput | PatientSummaryRecordScalarWhereWithAggregatesInput[]
+    OR?: PatientSummaryRecordScalarWhereWithAggregatesInput[]
+    NOT?: PatientSummaryRecordScalarWhereWithAggregatesInput | PatientSummaryRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    patientId?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    approvedByProviderId?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    approvedAt?: DateTimeWithAggregatesFilter<"PatientSummaryRecord"> | Date | string
+    overview?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    recentVisitSummary?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    diagnoses?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    currentMedications?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    discontinuedMedications?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    outstandingTasks?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    fingerprint?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+  }
+
   export type TaskWhereInput = {
     AND?: TaskWhereInput | TaskWhereInput[]
     OR?: TaskWhereInput[]
@@ -23823,7 +26555,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -23840,7 +26572,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -23857,7 +26589,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -23874,7 +26606,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -23891,7 +26623,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -23903,7 +26635,6 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -23915,7 +26646,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type VerificationTokenCreateInput = {
@@ -23960,6 +26691,49 @@ export namespace Prisma {
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrganizationCreateInput = {
+    id?: string
+    name: string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    clinicians?: ProviderCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateInput = {
+    id?: string
+    name: string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    clinicians?: ProviderUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    clinicians?: ProviderUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    clinicians?: ProviderUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationCreateManyInput = {
+    id?: string
+    name: string
+  }
+
+  export type OrganizationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OrganizationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ProviderCreateInput = {
     id: string
     firstName: string
@@ -23967,6 +26741,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -23978,6 +26753,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateInput = {
@@ -23987,6 +26763,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -23998,6 +26775,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUpdateInput = {
@@ -24007,6 +26785,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -24018,6 +26797,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateInput = {
@@ -24027,6 +26807,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -24038,6 +26819,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderCreateManyInput = {
@@ -24047,6 +26829,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
   }
 
@@ -24066,6 +26849,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -24091,6 +26875,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateInput = {
@@ -24115,6 +26900,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUpdateInput = {
@@ -24139,6 +26925,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateInput = {
@@ -24163,6 +26950,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientCreateManyInput = {
@@ -24849,6 +27637,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientSummaryRecordCreateInput = {
+    id?: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+    patient: PatientCreateNestedOneWithoutSummaryInput
+    approvedBy: ProviderCreateNestedOneWithoutApprovedSummariesInput
+  }
+
+  export type PatientSummaryRecordUncheckedCreateInput = {
+    id?: string
+    patientId: string
+    approvedByProviderId: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+  }
+
+  export type PatientSummaryRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    patient?: PatientUpdateOneRequiredWithoutSummaryNestedInput
+    approvedBy?: ProviderUpdateOneRequiredWithoutApprovedSummariesNestedInput
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    approvedByProviderId?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PatientSummaryRecordCreateManyInput = {
+    id?: string
+    patientId: string
+    approvedByProviderId: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+  }
+
+  export type PatientSummaryRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    approvedByProviderId?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TaskCreateInput = {
     id?: string
     title: string
@@ -25209,6 +28093,11 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type OrganizationNullableScalarRelationFilter = {
+    is?: OrganizationWhereInput | null
+    isNot?: OrganizationWhereInput | null
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
@@ -25258,7 +28147,7 @@ export namespace Prisma {
     role?: SortOrder
     primaryInsurance?: SortOrder
     secondaryInsurance?: SortOrder
-    organization?: SortOrder
+    organizationId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -25270,7 +28159,7 @@ export namespace Prisma {
     role?: SortOrder
     primaryInsurance?: SortOrder
     secondaryInsurance?: SortOrder
-    organization?: SortOrder
+    organizationId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -25282,7 +28171,7 @@ export namespace Prisma {
     role?: SortOrder
     primaryInsurance?: SortOrder
     secondaryInsurance?: SortOrder
-    organization?: SortOrder
+    organizationId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -25320,6 +28209,41 @@ export namespace Prisma {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type ProviderListRelationFilter = {
+    every?: ProviderWhereInput
+    some?: ProviderWhereInput
+    none?: ProviderWhereInput
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProviderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrganizationCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type OrganizationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type OrganizationMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -25375,6 +28299,12 @@ export namespace Prisma {
     none?: TaskWhereInput
   }
 
+  export type PatientSummaryRecordListRelationFilter = {
+    every?: PatientSummaryRecordWhereInput
+    some?: PatientSummaryRecordWhereInput
+    none?: PatientSummaryRecordWhereInput
+  }
+
   export type PatientOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -25407,6 +28337,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PatientSummaryRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProviderCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
@@ -25414,6 +28348,7 @@ export namespace Prisma {
     credentials?: SortOrder
     specialty?: SortOrder
     email?: SortOrder
+    organizationId?: SortOrder
     userId?: SortOrder
   }
 
@@ -25424,6 +28359,7 @@ export namespace Prisma {
     credentials?: SortOrder
     specialty?: SortOrder
     email?: SortOrder
+    organizationId?: SortOrder
     userId?: SortOrder
   }
 
@@ -25434,6 +28370,7 @@ export namespace Prisma {
     credentials?: SortOrder
     specialty?: SortOrder
     email?: SortOrder
+    organizationId?: SortOrder
     userId?: SortOrder
   }
 
@@ -25457,6 +28394,11 @@ export namespace Prisma {
   export type EmergencyContactNullableScalarRelationFilter = {
     is?: EmergencyContactWhereInput | null
     isNot?: EmergencyContactWhereInput | null
+  }
+
+  export type PatientSummaryRecordNullableScalarRelationFilter = {
+    is?: PatientSummaryRecordWhereInput | null
+    isNot?: PatientSummaryRecordWhereInput | null
   }
 
   export type PatientAllergyOrderByRelationAggregateInput = {
@@ -25833,6 +28775,48 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type PatientSummaryRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    approvedByProviderId?: SortOrder
+    approvedAt?: SortOrder
+    overview?: SortOrder
+    recentVisitSummary?: SortOrder
+    diagnoses?: SortOrder
+    currentMedications?: SortOrder
+    discontinuedMedications?: SortOrder
+    outstandingTasks?: SortOrder
+    fingerprint?: SortOrder
+  }
+
+  export type PatientSummaryRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    approvedByProviderId?: SortOrder
+    approvedAt?: SortOrder
+    overview?: SortOrder
+    recentVisitSummary?: SortOrder
+    diagnoses?: SortOrder
+    currentMedications?: SortOrder
+    discontinuedMedications?: SortOrder
+    outstandingTasks?: SortOrder
+    fingerprint?: SortOrder
+  }
+
+  export type PatientSummaryRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    approvedByProviderId?: SortOrder
+    approvedAt?: SortOrder
+    overview?: SortOrder
+    recentVisitSummary?: SortOrder
+    diagnoses?: SortOrder
+    currentMedications?: SortOrder
+    discontinuedMedications?: SortOrder
+    outstandingTasks?: SortOrder
+    fingerprint?: SortOrder
+  }
+
   export type TaskCountOrderByAggregateInput = {
     id?: SortOrder
     patientId?: SortOrder
@@ -25939,6 +28923,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutUsersInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -26007,6 +28997,16 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type OrganizationUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    upsert?: OrganizationUpsertWithoutUsersInput
+    disconnect?: OrganizationWhereInput | boolean
+    delete?: OrganizationWhereInput | boolean
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsersInput, OrganizationUpdateWithoutUsersInput>, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -26133,6 +29133,96 @@ export namespace Prisma {
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutUserInput, PatientUpdateWithoutUserInput>, PatientUncheckedUpdateWithoutUserInput>
   }
 
+  export type UserCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ProviderCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput> | ProviderCreateWithoutOrganizationInput[] | ProviderUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ProviderCreateOrConnectWithoutOrganizationInput | ProviderCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ProviderCreateManyOrganizationInputEnvelope
+    connect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ProviderUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput> | ProviderCreateWithoutOrganizationInput[] | ProviderUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ProviderCreateOrConnectWithoutOrganizationInput | ProviderCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ProviderCreateManyOrganizationInputEnvelope
+    connect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+  }
+
+  export type UserUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ProviderUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput> | ProviderCreateWithoutOrganizationInput[] | ProviderUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ProviderCreateOrConnectWithoutOrganizationInput | ProviderCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ProviderUpsertWithWhereUniqueWithoutOrganizationInput | ProviderUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ProviderCreateManyOrganizationInputEnvelope
+    set?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    disconnect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    delete?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    connect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    update?: ProviderUpdateWithWhereUniqueWithoutOrganizationInput | ProviderUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ProviderUpdateManyWithWhereWithoutOrganizationInput | ProviderUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ProviderScalarWhereInput | ProviderScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ProviderUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput> | ProviderCreateWithoutOrganizationInput[] | ProviderUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ProviderCreateOrConnectWithoutOrganizationInput | ProviderCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ProviderUpsertWithWhereUniqueWithoutOrganizationInput | ProviderUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ProviderCreateManyOrganizationInputEnvelope
+    set?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    disconnect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    delete?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    connect?: ProviderWhereUniqueInput | ProviderWhereUniqueInput[]
+    update?: ProviderUpdateWithWhereUniqueWithoutOrganizationInput | ProviderUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ProviderUpdateManyWithWhereWithoutOrganizationInput | ProviderUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ProviderScalarWhereInput | ProviderScalarWhereInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutCliniciansInput = {
+    create?: XOR<OrganizationCreateWithoutCliniciansInput, OrganizationUncheckedCreateWithoutCliniciansInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCliniciansInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutProviderInput = {
     create?: XOR<UserCreateWithoutProviderInput, UserUncheckedCreateWithoutProviderInput>
     connectOrCreate?: UserCreateOrConnectWithoutProviderInput
@@ -26209,6 +29299,13 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
+  export type PatientSummaryRecordCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput> | PatientSummaryRecordCreateWithoutApprovedByInput[] | PatientSummaryRecordUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutApprovedByInput | PatientSummaryRecordCreateOrConnectWithoutApprovedByInput[]
+    createMany?: PatientSummaryRecordCreateManyApprovedByInputEnvelope
+    connect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+  }
+
   export type PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput = {
     create?: XOR<PatientCreateWithoutPrimaryProviderInput, PatientUncheckedCreateWithoutPrimaryProviderInput> | PatientCreateWithoutPrimaryProviderInput[] | PatientUncheckedCreateWithoutPrimaryProviderInput[]
     connectOrCreate?: PatientCreateOrConnectWithoutPrimaryProviderInput | PatientCreateOrConnectWithoutPrimaryProviderInput[]
@@ -26277,6 +29374,23 @@ export namespace Prisma {
     connectOrCreate?: TaskCreateOrConnectWithoutAssignedProviderInput | TaskCreateOrConnectWithoutAssignedProviderInput[]
     createMany?: TaskCreateManyAssignedProviderInputEnvelope
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput> | PatientSummaryRecordCreateWithoutApprovedByInput[] | PatientSummaryRecordUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutApprovedByInput | PatientSummaryRecordCreateOrConnectWithoutApprovedByInput[]
+    createMany?: PatientSummaryRecordCreateManyApprovedByInputEnvelope
+    connect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+  }
+
+  export type OrganizationUpdateOneWithoutCliniciansNestedInput = {
+    create?: XOR<OrganizationCreateWithoutCliniciansInput, OrganizationUncheckedCreateWithoutCliniciansInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCliniciansInput
+    upsert?: OrganizationUpsertWithoutCliniciansInput
+    disconnect?: OrganizationWhereInput | boolean
+    delete?: OrganizationWhereInput | boolean
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCliniciansInput, OrganizationUpdateWithoutCliniciansInput>, OrganizationUncheckedUpdateWithoutCliniciansInput>
   }
 
   export type UserUpdateOneWithoutProviderNestedInput = {
@@ -26429,6 +29543,20 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput> | PatientSummaryRecordCreateWithoutApprovedByInput[] | PatientSummaryRecordUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutApprovedByInput | PatientSummaryRecordCreateOrConnectWithoutApprovedByInput[]
+    upsert?: PatientSummaryRecordUpsertWithWhereUniqueWithoutApprovedByInput | PatientSummaryRecordUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: PatientSummaryRecordCreateManyApprovedByInputEnvelope
+    set?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    disconnect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    delete?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    connect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    update?: PatientSummaryRecordUpdateWithWhereUniqueWithoutApprovedByInput | PatientSummaryRecordUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: PatientSummaryRecordUpdateManyWithWhereWithoutApprovedByInput | PatientSummaryRecordUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: PatientSummaryRecordScalarWhereInput | PatientSummaryRecordScalarWhereInput[]
+  }
+
   export type PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput = {
     create?: XOR<PatientCreateWithoutPrimaryProviderInput, PatientUncheckedCreateWithoutPrimaryProviderInput> | PatientCreateWithoutPrimaryProviderInput[] | PatientUncheckedCreateWithoutPrimaryProviderInput[]
     connectOrCreate?: PatientCreateOrConnectWithoutPrimaryProviderInput | PatientCreateOrConnectWithoutPrimaryProviderInput[]
@@ -26569,6 +29697,20 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput> | PatientSummaryRecordCreateWithoutApprovedByInput[] | PatientSummaryRecordUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutApprovedByInput | PatientSummaryRecordCreateOrConnectWithoutApprovedByInput[]
+    upsert?: PatientSummaryRecordUpsertWithWhereUniqueWithoutApprovedByInput | PatientSummaryRecordUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: PatientSummaryRecordCreateManyApprovedByInputEnvelope
+    set?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    disconnect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    delete?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    connect?: PatientSummaryRecordWhereUniqueInput | PatientSummaryRecordWhereUniqueInput[]
+    update?: PatientSummaryRecordUpdateWithWhereUniqueWithoutApprovedByInput | PatientSummaryRecordUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: PatientSummaryRecordUpdateManyWithWhereWithoutApprovedByInput | PatientSummaryRecordUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: PatientSummaryRecordScalarWhereInput | PatientSummaryRecordScalarWhereInput[]
+  }
+
   export type ProviderCreateNestedOneWithoutPatientsInput = {
     create?: XOR<ProviderCreateWithoutPatientsInput, ProviderUncheckedCreateWithoutPatientsInput>
     connectOrCreate?: ProviderCreateOrConnectWithoutPatientsInput
@@ -26643,6 +29785,12 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
+  export type PatientSummaryRecordCreateNestedOneWithoutPatientInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutPatientInput
+    connect?: PatientSummaryRecordWhereUniqueInput
+  }
+
   export type PatientAllergyUncheckedCreateNestedManyWithoutPatientInput = {
     create?: XOR<PatientAllergyCreateWithoutPatientInput, PatientAllergyUncheckedCreateWithoutPatientInput> | PatientAllergyCreateWithoutPatientInput[] | PatientAllergyUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: PatientAllergyCreateOrConnectWithoutPatientInput | PatientAllergyCreateOrConnectWithoutPatientInput[]
@@ -26703,6 +29851,12 @@ export namespace Prisma {
     connectOrCreate?: TaskCreateOrConnectWithoutPatientInput | TaskCreateOrConnectWithoutPatientInput[]
     createMany?: TaskCreateManyPatientInputEnvelope
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutPatientInput
+    connect?: PatientSummaryRecordWhereUniqueInput
   }
 
   export type ProviderUpdateOneRequiredWithoutPatientsNestedInput = {
@@ -26845,6 +29999,16 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type PatientSummaryRecordUpdateOneWithoutPatientNestedInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutPatientInput
+    upsert?: PatientSummaryRecordUpsertWithoutPatientInput
+    disconnect?: PatientSummaryRecordWhereInput | boolean
+    delete?: PatientSummaryRecordWhereInput | boolean
+    connect?: PatientSummaryRecordWhereUniqueInput
+    update?: XOR<XOR<PatientSummaryRecordUpdateToOneWithWhereWithoutPatientInput, PatientSummaryRecordUpdateWithoutPatientInput>, PatientSummaryRecordUncheckedUpdateWithoutPatientInput>
+  }
+
   export type PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput = {
     create?: XOR<PatientAllergyCreateWithoutPatientInput, PatientAllergyUncheckedCreateWithoutPatientInput> | PatientAllergyCreateWithoutPatientInput[] | PatientAllergyUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: PatientAllergyCreateOrConnectWithoutPatientInput | PatientAllergyCreateOrConnectWithoutPatientInput[]
@@ -26965,6 +30129,16 @@ export namespace Prisma {
     update?: TaskUpdateWithWhereUniqueWithoutPatientInput | TaskUpdateWithWhereUniqueWithoutPatientInput[]
     updateMany?: TaskUpdateManyWithWhereWithoutPatientInput | TaskUpdateManyWithWhereWithoutPatientInput[]
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput = {
+    create?: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+    connectOrCreate?: PatientSummaryRecordCreateOrConnectWithoutPatientInput
+    upsert?: PatientSummaryRecordUpsertWithoutPatientInput
+    disconnect?: PatientSummaryRecordWhereInput | boolean
+    delete?: PatientSummaryRecordWhereInput | boolean
+    connect?: PatientSummaryRecordWhereUniqueInput
+    update?: XOR<XOR<PatientSummaryRecordUpdateToOneWithWhereWithoutPatientInput, PatientSummaryRecordUpdateWithoutPatientInput>, PatientSummaryRecordUncheckedUpdateWithoutPatientInput>
   }
 
   export type PatientCreateNestedOneWithoutAllergiesInput = {
@@ -27295,6 +30469,34 @@ export namespace Prisma {
     update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutNotesInput, ProviderUpdateWithoutNotesInput>, ProviderUncheckedUpdateWithoutNotesInput>
   }
 
+  export type PatientCreateNestedOneWithoutSummaryInput = {
+    create?: XOR<PatientCreateWithoutSummaryInput, PatientUncheckedCreateWithoutSummaryInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutSummaryInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type ProviderCreateNestedOneWithoutApprovedSummariesInput = {
+    create?: XOR<ProviderCreateWithoutApprovedSummariesInput, ProviderUncheckedCreateWithoutApprovedSummariesInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutApprovedSummariesInput
+    connect?: ProviderWhereUniqueInput
+  }
+
+  export type PatientUpdateOneRequiredWithoutSummaryNestedInput = {
+    create?: XOR<PatientCreateWithoutSummaryInput, PatientUncheckedCreateWithoutSummaryInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutSummaryInput
+    upsert?: PatientUpsertWithoutSummaryInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutSummaryInput, PatientUpdateWithoutSummaryInput>, PatientUncheckedUpdateWithoutSummaryInput>
+  }
+
+  export type ProviderUpdateOneRequiredWithoutApprovedSummariesNestedInput = {
+    create?: XOR<ProviderCreateWithoutApprovedSummariesInput, ProviderUncheckedCreateWithoutApprovedSummariesInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutApprovedSummariesInput
+    upsert?: ProviderUpsertWithoutApprovedSummariesInput
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutApprovedSummariesInput, ProviderUpdateWithoutApprovedSummariesInput>, ProviderUncheckedUpdateWithoutApprovedSummariesInput>
+  }
+
   export type PatientCreateNestedOneWithoutTasksInput = {
     create?: XOR<PatientCreateWithoutTasksInput, PatientUncheckedCreateWithoutTasksInput>
     connectOrCreate?: PatientCreateOrConnectWithoutTasksInput
@@ -27520,7 +30722,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -27536,7 +30738,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -27568,7 +30770,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -27584,7 +30786,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
@@ -27600,7 +30802,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -27616,7 +30818,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -27648,7 +30850,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -27664,7 +30866,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
@@ -27680,7 +30882,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     provider?: ProviderCreateNestedOneWithoutUserInput
@@ -27696,7 +30898,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
@@ -27728,7 +30930,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUpdateOneWithoutUserNestedInput
@@ -27744,11 +30946,28 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
     patient?: PatientUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type OrganizationCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    clinicians?: ProviderCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    clinicians?: ProviderUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutUsersInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -27840,6 +31059,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
@@ -27850,6 +31070,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutUserInput = {
@@ -27859,6 +31080,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
@@ -27869,6 +31091,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutUserInput = {
@@ -27897,6 +31120,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutUserInput = {
@@ -27920,11 +31144,35 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutUserInput = {
     where: PatientWhereUniqueInput
     create: XOR<PatientCreateWithoutUserInput, PatientUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrganizationUpsertWithoutUsersInput = {
+    update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutUsersInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type OrganizationUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    clinicians?: ProviderUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    clinicians?: ProviderUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -28033,6 +31281,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
@@ -28043,6 +31292,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutUserInput = {
@@ -28052,6 +31302,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
@@ -28062,6 +31313,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type PatientUpsertWithoutUserInput = {
@@ -28096,6 +31348,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutUserInput = {
@@ -28119,6 +31372,177 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
+  }
+
+  export type UserCreateWithoutOrganizationInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutCreatedByInput
+    provider?: ProviderCreateNestedOneWithoutUserInput
+    patient?: PatientCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
+    provider?: ProviderUncheckedCreateNestedOneWithoutUserInput
+    patient?: PatientUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UserCreateManyOrganizationInputEnvelope = {
+    data: UserCreateManyOrganizationInput | UserCreateManyOrganizationInput[]
+  }
+
+  export type ProviderCreateWithoutOrganizationInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type ProviderUncheckedCreateWithoutOrganizationInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type ProviderCreateOrConnectWithoutOrganizationInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ProviderCreateManyOrganizationInputEnvelope = {
+    data: ProviderCreateManyOrganizationInput | ProviderCreateManyOrganizationInput[]
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutOrganizationInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    name?: StringNullableFilter<"User"> | string | null
+    email?: StringNullableFilter<"User"> | string | null
+    emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
+    image?: StringNullableFilter<"User"> | string | null
+    role?: StringNullableFilter<"User"> | string | null
+    primaryInsurance?: StringNullableFilter<"User"> | string | null
+    secondaryInsurance?: StringNullableFilter<"User"> | string | null
+    organizationId?: StringNullableFilter<"User"> | string | null
+  }
+
+  export type ProviderUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: ProviderWhereUniqueInput
+    update: XOR<ProviderUpdateWithoutOrganizationInput, ProviderUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<ProviderCreateWithoutOrganizationInput, ProviderUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ProviderUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: ProviderWhereUniqueInput
+    data: XOR<ProviderUpdateWithoutOrganizationInput, ProviderUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type ProviderUpdateManyWithWhereWithoutOrganizationInput = {
+    where: ProviderScalarWhereInput
+    data: XOR<ProviderUpdateManyMutationInput, ProviderUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type ProviderScalarWhereInput = {
+    AND?: ProviderScalarWhereInput | ProviderScalarWhereInput[]
+    OR?: ProviderScalarWhereInput[]
+    NOT?: ProviderScalarWhereInput | ProviderScalarWhereInput[]
+    id?: StringFilter<"Provider"> | string
+    firstName?: StringFilter<"Provider"> | string
+    lastName?: StringFilter<"Provider"> | string
+    credentials?: StringFilter<"Provider"> | string
+    specialty?: StringFilter<"Provider"> | string
+    email?: StringFilter<"Provider"> | string
+    organizationId?: StringNullableFilter<"Provider"> | string | null
+    userId?: StringNullableFilter<"Provider"> | string | null
+  }
+
+  export type OrganizationCreateWithoutCliniciansInput = {
+    id?: string
+    name: string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutCliniciansInput = {
+    id?: string
+    name: string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutCliniciansInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutCliniciansInput, OrganizationUncheckedCreateWithoutCliniciansInput>
   }
 
   export type UserCreateWithoutProviderInput = {
@@ -28130,7 +31554,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -28146,7 +31570,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -28179,6 +31603,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutPrimaryProviderInput = {
@@ -28202,6 +31627,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutPrimaryProviderInput = {
@@ -28500,6 +31926,64 @@ export namespace Prisma {
     data: TaskCreateManyAssignedProviderInput | TaskCreateManyAssignedProviderInput[]
   }
 
+  export type PatientSummaryRecordCreateWithoutApprovedByInput = {
+    id?: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+    patient: PatientCreateNestedOneWithoutSummaryInput
+  }
+
+  export type PatientSummaryRecordUncheckedCreateWithoutApprovedByInput = {
+    id?: string
+    patientId: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+  }
+
+  export type PatientSummaryRecordCreateOrConnectWithoutApprovedByInput = {
+    where: PatientSummaryRecordWhereUniqueInput
+    create: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type PatientSummaryRecordCreateManyApprovedByInputEnvelope = {
+    data: PatientSummaryRecordCreateManyApprovedByInput | PatientSummaryRecordCreateManyApprovedByInput[]
+  }
+
+  export type OrganizationUpsertWithoutCliniciansInput = {
+    update: XOR<OrganizationUpdateWithoutCliniciansInput, OrganizationUncheckedUpdateWithoutCliniciansInput>
+    create: XOR<OrganizationCreateWithoutCliniciansInput, OrganizationUncheckedCreateWithoutCliniciansInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutCliniciansInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutCliniciansInput, OrganizationUncheckedUpdateWithoutCliniciansInput>
+  }
+
+  export type OrganizationUpdateWithoutCliniciansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutCliniciansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
   export type UserUpsertWithoutProviderInput = {
     update: XOR<UserUpdateWithoutProviderInput, UserUncheckedUpdateWithoutProviderInput>
     create: XOR<UserCreateWithoutProviderInput, UserUncheckedCreateWithoutProviderInput>
@@ -28520,7 +32004,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -28536,7 +32020,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -28827,6 +32311,39 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Task"> | Date | string
   }
 
+  export type PatientSummaryRecordUpsertWithWhereUniqueWithoutApprovedByInput = {
+    where: PatientSummaryRecordWhereUniqueInput
+    update: XOR<PatientSummaryRecordUpdateWithoutApprovedByInput, PatientSummaryRecordUncheckedUpdateWithoutApprovedByInput>
+    create: XOR<PatientSummaryRecordCreateWithoutApprovedByInput, PatientSummaryRecordUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type PatientSummaryRecordUpdateWithWhereUniqueWithoutApprovedByInput = {
+    where: PatientSummaryRecordWhereUniqueInput
+    data: XOR<PatientSummaryRecordUpdateWithoutApprovedByInput, PatientSummaryRecordUncheckedUpdateWithoutApprovedByInput>
+  }
+
+  export type PatientSummaryRecordUpdateManyWithWhereWithoutApprovedByInput = {
+    where: PatientSummaryRecordScalarWhereInput
+    data: XOR<PatientSummaryRecordUpdateManyMutationInput, PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type PatientSummaryRecordScalarWhereInput = {
+    AND?: PatientSummaryRecordScalarWhereInput | PatientSummaryRecordScalarWhereInput[]
+    OR?: PatientSummaryRecordScalarWhereInput[]
+    NOT?: PatientSummaryRecordScalarWhereInput | PatientSummaryRecordScalarWhereInput[]
+    id?: StringFilter<"PatientSummaryRecord"> | string
+    patientId?: StringFilter<"PatientSummaryRecord"> | string
+    approvedByProviderId?: StringFilter<"PatientSummaryRecord"> | string
+    approvedAt?: DateTimeFilter<"PatientSummaryRecord"> | Date | string
+    overview?: StringFilter<"PatientSummaryRecord"> | string
+    recentVisitSummary?: StringFilter<"PatientSummaryRecord"> | string
+    diagnoses?: StringFilter<"PatientSummaryRecord"> | string
+    currentMedications?: StringFilter<"PatientSummaryRecord"> | string
+    discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
+    outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
+    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+  }
+
   export type ProviderCreateWithoutPatientsInput = {
     id: string
     firstName: string
@@ -28834,6 +32351,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
@@ -28844,6 +32362,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutPatientsInput = {
@@ -28853,6 +32372,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
@@ -28863,6 +32383,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutPatientsInput = {
@@ -28879,7 +32400,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -28895,7 +32416,7 @@ export namespace Prisma {
     role?: string | null
     primaryInsurance?: string | null
     secondaryInsurance?: string | null
-    organization?: string | null
+    organizationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -29160,6 +32681,37 @@ export namespace Prisma {
     data: TaskCreateManyPatientInput | TaskCreateManyPatientInput[]
   }
 
+  export type PatientSummaryRecordCreateWithoutPatientInput = {
+    id?: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+    approvedBy: ProviderCreateNestedOneWithoutApprovedSummariesInput
+  }
+
+  export type PatientSummaryRecordUncheckedCreateWithoutPatientInput = {
+    id?: string
+    approvedByProviderId: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+  }
+
+  export type PatientSummaryRecordCreateOrConnectWithoutPatientInput = {
+    where: PatientSummaryRecordWhereUniqueInput
+    create: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+  }
+
   export type ProviderUpsertWithoutPatientsInput = {
     update: XOR<ProviderUpdateWithoutPatientsInput, ProviderUncheckedUpdateWithoutPatientsInput>
     create: XOR<ProviderCreateWithoutPatientsInput, ProviderUncheckedCreateWithoutPatientsInput>
@@ -29178,6 +32730,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
@@ -29188,6 +32741,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutPatientsInput = {
@@ -29197,6 +32751,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
@@ -29207,6 +32762,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUpsertWithoutPatientInput = {
@@ -29229,7 +32785,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -29245,7 +32801,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
     secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
-    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -29423,6 +32979,43 @@ export namespace Prisma {
     data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutPatientInput>
   }
 
+  export type PatientSummaryRecordUpsertWithoutPatientInput = {
+    update: XOR<PatientSummaryRecordUpdateWithoutPatientInput, PatientSummaryRecordUncheckedUpdateWithoutPatientInput>
+    create: XOR<PatientSummaryRecordCreateWithoutPatientInput, PatientSummaryRecordUncheckedCreateWithoutPatientInput>
+    where?: PatientSummaryRecordWhereInput
+  }
+
+  export type PatientSummaryRecordUpdateToOneWithWhereWithoutPatientInput = {
+    where?: PatientSummaryRecordWhereInput
+    data: XOR<PatientSummaryRecordUpdateWithoutPatientInput, PatientSummaryRecordUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type PatientSummaryRecordUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    approvedBy?: ProviderUpdateOneRequiredWithoutApprovedSummariesNestedInput
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    approvedByProviderId?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+  }
+
   export type PatientCreateWithoutAllergiesInput = {
     id: string
     firstName: string
@@ -29444,6 +33037,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutAllergiesInput = {
@@ -29467,6 +33061,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutAllergiesInput = {
@@ -29506,6 +33101,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAllergiesInput = {
@@ -29529,6 +33125,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutConditionsInput = {
@@ -29552,6 +33149,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutConditionsInput = {
@@ -29575,6 +33173,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutConditionsInput = {
@@ -29614,6 +33213,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutConditionsInput = {
@@ -29637,6 +33237,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutEmergencyContactInput = {
@@ -29660,6 +33261,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutEmergencyContactInput = {
@@ -29683,6 +33285,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutEmergencyContactInput = {
@@ -29722,6 +33325,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutEmergencyContactInput = {
@@ -29745,6 +33349,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutShareRequestsInput = {
@@ -29768,6 +33373,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutShareRequestsInput = {
@@ -29791,6 +33397,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutShareRequestsInput = {
@@ -29805,6 +33412,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
@@ -29815,6 +33423,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutSharesSentInput = {
@@ -29824,6 +33433,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
@@ -29834,6 +33444,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutSharesSentInput = {
@@ -29848,6 +33459,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -29858,6 +33470,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutSharesReceivedInput = {
@@ -29867,6 +33480,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -29877,6 +33491,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutSharesReceivedInput = {
@@ -29916,6 +33531,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutShareRequestsInput = {
@@ -29939,6 +33555,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutSharesSentInput = {
@@ -29959,6 +33576,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
@@ -29969,6 +33587,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutSharesSentInput = {
@@ -29978,6 +33597,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
@@ -29988,6 +33608,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUpsertWithoutSharesReceivedInput = {
@@ -30008,6 +33629,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30018,6 +33640,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutSharesReceivedInput = {
@@ -30027,6 +33650,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30037,6 +33661,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type PatientCreateWithoutMedicationsInput = {
@@ -30060,6 +33685,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutMedicationsInput = {
@@ -30083,6 +33709,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutMedicationsInput = {
@@ -30097,6 +33724,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -30107,6 +33735,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutMedicationsInput = {
@@ -30116,6 +33745,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -30126,6 +33756,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutMedicationsInput = {
@@ -30165,6 +33796,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutMedicationsInput = {
@@ -30188,6 +33820,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutMedicationsInput = {
@@ -30208,6 +33841,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30218,6 +33852,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutMedicationsInput = {
@@ -30227,6 +33862,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30237,6 +33873,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderCreateWithoutScheduleBlocksInput = {
@@ -30246,6 +33883,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -30256,6 +33894,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutScheduleBlocksInput = {
@@ -30265,6 +33904,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -30275,6 +33915,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutScheduleBlocksInput = {
@@ -30300,6 +33941,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30310,6 +33952,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutScheduleBlocksInput = {
@@ -30319,6 +33962,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30329,6 +33973,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type PatientCreateWithoutAppointmentsInput = {
@@ -30352,6 +33997,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
@@ -30375,6 +34021,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutAppointmentsInput = {
@@ -30389,6 +34036,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -30399,6 +34047,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutAppointmentsInput = {
@@ -30408,6 +34057,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -30418,6 +34068,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutAppointmentsInput = {
@@ -30432,6 +34083,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -30442,6 +34094,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutNurseAppointmentsInput = {
@@ -30451,6 +34104,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -30461,6 +34115,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutNurseAppointmentsInput = {
@@ -30529,6 +34184,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
@@ -30552,6 +34208,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutAppointmentsInput = {
@@ -30572,6 +34229,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30582,6 +34240,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutAppointmentsInput = {
@@ -30591,6 +34250,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30601,6 +34261,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUpsertWithoutNurseAppointmentsInput = {
@@ -30621,6 +34282,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30631,6 +34293,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutNurseAppointmentsInput = {
@@ -30640,6 +34303,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30650,6 +34314,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type VisitUpsertWithoutAppointmentInput = {
@@ -30743,6 +34408,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutVisitsInput = {
@@ -30766,6 +34432,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutVisitsInput = {
@@ -30780,6 +34447,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -30790,6 +34458,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutVisitsInput = {
@@ -30799,6 +34468,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -30809,6 +34479,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutVisitsInput = {
@@ -30920,6 +34591,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutVisitsInput = {
@@ -30943,6 +34615,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutVisitsInput = {
@@ -30963,6 +34636,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -30973,6 +34647,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutVisitsInput = {
@@ -30982,6 +34657,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -30992,6 +34668,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ClinicalNoteUpsertWithWhereUniqueWithoutVisitInput = {
@@ -31060,6 +34737,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
     tasks?: TaskCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutNotesInput = {
@@ -31083,6 +34761,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutNotesInput = {
@@ -31097,6 +34776,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -31107,6 +34787,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutNotesInput = {
@@ -31116,6 +34797,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -31126,6 +34808,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutNotesInput = {
@@ -31200,6 +34883,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutNotesInput = {
@@ -31223,6 +34907,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutNotesInput = {
@@ -31243,6 +34928,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -31253,6 +34939,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutNotesInput = {
@@ -31262,6 +34949,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -31271,6 +34959,219 @@ export namespace Prisma {
     nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
     scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type PatientCreateWithoutSummaryInput = {
+    id: string
+    firstName: string
+    lastName: string
+    dateOfBirth: Date | string
+    gender: string
+    email: string
+    phone: string
+    psychiatricHistory: string
+    createdAt: Date | string
+    updatedAt: Date | string
+    primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
+    user?: UserCreateNestedOneWithoutPatientInput
+    allergies?: PatientAllergyCreateNestedManyWithoutPatientInput
+    conditions?: PatientConditionCreateNestedManyWithoutPatientInput
+    emergencyContact?: EmergencyContactCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestCreateNestedManyWithoutPatientInput
+    medications?: MedicationCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    visits?: VisitCreateNestedManyWithoutPatientInput
+    notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
+    tasks?: TaskCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutSummaryInput = {
+    id: string
+    firstName: string
+    lastName: string
+    dateOfBirth: Date | string
+    gender: string
+    email: string
+    phone: string
+    psychiatricHistory: string
+    primaryProviderId: string
+    userId?: string | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
+    conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
+    emergencyContact?: EmergencyContactUncheckedCreateNestedOneWithoutPatientInput
+    shareRequests?: ShareRequestUncheckedCreateNestedManyWithoutPatientInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutSummaryInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutSummaryInput, PatientUncheckedCreateWithoutSummaryInput>
+  }
+
+  export type ProviderCreateWithoutApprovedSummariesInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
+    user?: UserCreateNestedOneWithoutProviderInput
+    patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestCreateNestedManyWithoutToProviderInput
+    medications?: MedicationCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
+    visits?: VisitCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    tasks?: TaskCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderUncheckedCreateWithoutApprovedSummariesInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    organizationId?: string | null
+    userId?: string | null
+    patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
+    sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
+    sharesReceived?: ShareRequestUncheckedCreateNestedManyWithoutToProviderInput
+    medications?: MedicationUncheckedCreateNestedManyWithoutPrescribingProviderInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProviderInput
+    nurseAppointments?: AppointmentUncheckedCreateNestedManyWithoutNurseInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
+    visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
+    notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutAssignedProviderInput
+  }
+
+  export type ProviderCreateOrConnectWithoutApprovedSummariesInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutApprovedSummariesInput, ProviderUncheckedCreateWithoutApprovedSummariesInput>
+  }
+
+  export type PatientUpsertWithoutSummaryInput = {
+    update: XOR<PatientUpdateWithoutSummaryInput, PatientUncheckedUpdateWithoutSummaryInput>
+    create: XOR<PatientCreateWithoutSummaryInput, PatientUncheckedCreateWithoutSummaryInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutSummaryInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutSummaryInput, PatientUncheckedUpdateWithoutSummaryInput>
+  }
+
+  export type PatientUpdateWithoutSummaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
+    user?: UserUpdateOneWithoutPatientNestedInput
+    allergies?: PatientAllergyUpdateManyWithoutPatientNestedInput
+    conditions?: PatientConditionUpdateManyWithoutPatientNestedInput
+    emergencyContact?: EmergencyContactUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUpdateManyWithoutPatientNestedInput
+    medications?: MedicationUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    visits?: VisitUpdateManyWithoutPatientNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
+    tasks?: TaskUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutSummaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    primaryProviderId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
+    conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
+    emergencyContact?: EmergencyContactUncheckedUpdateOneWithoutPatientNestedInput
+    shareRequests?: ShareRequestUncheckedUpdateManyWithoutPatientNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type ProviderUpsertWithoutApprovedSummariesInput = {
+    update: XOR<ProviderUpdateWithoutApprovedSummariesInput, ProviderUncheckedUpdateWithoutApprovedSummariesInput>
+    create: XOR<ProviderCreateWithoutApprovedSummariesInput, ProviderUncheckedCreateWithoutApprovedSummariesInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutApprovedSummariesInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutApprovedSummariesInput, ProviderUncheckedUpdateWithoutApprovedSummariesInput>
+  }
+
+  export type ProviderUpdateWithoutApprovedSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutApprovedSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
   }
 
@@ -31295,6 +35196,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     visits?: VisitCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordCreateNestedOneWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutTasksInput = {
@@ -31318,6 +35220,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     visits?: VisitUncheckedCreateNestedManyWithoutPatientInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutPatientInput
+    summary?: PatientSummaryRecordUncheckedCreateNestedOneWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutTasksInput = {
@@ -31332,6 +35235,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organization?: OrganizationCreateNestedOneWithoutCliniciansInput
     user?: UserCreateNestedOneWithoutProviderInput
     patients?: PatientCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestCreateNestedManyWithoutFromProviderInput
@@ -31342,6 +35246,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockCreateNestedManyWithoutProviderInput
     visits?: VisitCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteCreateNestedManyWithoutProviderInput
+    approvedSummaries?: PatientSummaryRecordCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderUncheckedCreateWithoutTasksInput = {
@@ -31351,6 +35256,7 @@ export namespace Prisma {
     credentials: string
     specialty: string
     email: string
+    organizationId?: string | null
     userId?: string | null
     patients?: PatientUncheckedCreateNestedManyWithoutPrimaryProviderInput
     sharesSent?: ShareRequestUncheckedCreateNestedManyWithoutFromProviderInput
@@ -31361,6 +35267,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUncheckedCreateNestedManyWithoutProviderInput
     visits?: VisitUncheckedCreateNestedManyWithoutProviderInput
     notes?: ClinicalNoteUncheckedCreateNestedManyWithoutProviderInput
+    approvedSummaries?: PatientSummaryRecordUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type ProviderCreateOrConnectWithoutTasksInput = {
@@ -31400,6 +35307,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutTasksInput = {
@@ -31423,6 +35331,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type ProviderUpsertWithoutTasksInput = {
@@ -31443,6 +35352,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutCliniciansNestedInput
     user?: UserUpdateOneWithoutProviderNestedInput
     patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
@@ -31453,6 +35363,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
     visits?: VisitUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProviderUncheckedUpdateWithoutTasksInput = {
@@ -31462,6 +35373,7 @@ export namespace Prisma {
     credentials?: StringFieldUpdateOperationsInput | string
     specialty?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
     sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
@@ -31472,6 +35384,7 @@ export namespace Prisma {
     scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
     visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -31583,6 +35496,122 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateManyOrganizationInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string | null
+    primaryInsurance?: string | null
+    secondaryInsurance?: string | null
+  }
+
+  export type ProviderCreateManyOrganizationInput = {
+    id: string
+    firstName: string
+    lastName: string
+    credentials: string
+    specialty: string
+    email: string
+    userId?: string | null
+  }
+
+  export type UserUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutCreatedByNestedInput
+    provider?: ProviderUpdateOneWithoutUserNestedInput
+    patient?: PatientUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
+    provider?: ProviderUncheckedUpdateOneWithoutUserNestedInput
+    patient?: PatientUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryInsurance?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProviderUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutProviderNestedInput
+    patients?: PatientUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUpdateManyWithoutProviderNestedInput
+    visits?: VisitUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    patients?: PatientUncheckedUpdateManyWithoutPrimaryProviderNestedInput
+    sharesSent?: ShareRequestUncheckedUpdateManyWithoutFromProviderNestedInput
+    sharesReceived?: ShareRequestUncheckedUpdateManyWithoutToProviderNestedInput
+    medications?: MedicationUncheckedUpdateManyWithoutPrescribingProviderNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProviderNestedInput
+    nurseAppointments?: AppointmentUncheckedUpdateManyWithoutNurseNestedInput
+    scheduleBlocks?: ProviderScheduleBlockUncheckedUpdateManyWithoutProviderNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutProviderNestedInput
+    notes?: ClinicalNoteUncheckedUpdateManyWithoutProviderNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutAssignedProviderNestedInput
+    approvedSummaries?: PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type ProviderUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    credentials?: StringFieldUpdateOperationsInput | string
+    specialty?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PatientCreateManyPrimaryProviderInput = {
@@ -31699,6 +35728,19 @@ export namespace Prisma {
     createdAt: Date | string
   }
 
+  export type PatientSummaryRecordCreateManyApprovedByInput = {
+    id?: string
+    patientId: string
+    approvedAt: Date | string
+    overview: string
+    recentVisitSummary: string
+    diagnoses: string
+    currentMedications: string
+    discontinuedMedications: string
+    outstandingTasks: string
+    fingerprint: string
+  }
+
   export type PatientUpdateWithoutPrimaryProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -31720,6 +35762,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUpdateManyWithoutPatientNestedInput
     tasks?: TaskUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutPrimaryProviderInput = {
@@ -31743,6 +35786,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutPatientNestedInput
     notes?: ClinicalNoteUncheckedUpdateManyWithoutPatientNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutPatientNestedInput
+    summary?: PatientSummaryRecordUncheckedUpdateOneWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateManyWithoutPrimaryProviderInput = {
@@ -32063,6 +36107,45 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientSummaryRecordUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    patient?: PatientUpdateOneRequiredWithoutSummaryNestedInput
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    approvedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    overview?: StringFieldUpdateOperationsInput | string
+    recentVisitSummary?: StringFieldUpdateOperationsInput | string
+    diagnoses?: StringFieldUpdateOperationsInput | string
+    currentMedications?: StringFieldUpdateOperationsInput | string
+    discontinuedMedications?: StringFieldUpdateOperationsInput | string
+    outstandingTasks?: StringFieldUpdateOperationsInput | string
+    fingerprint?: StringFieldUpdateOperationsInput | string
   }
 
   export type PatientAllergyCreateManyPatientInput = {
