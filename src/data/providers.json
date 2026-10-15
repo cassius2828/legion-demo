@@ -1,0 +1,26 @@
+[
+  {
+    "id": "prv_01",
+    "firstName": "Elena",
+    "lastName": "Vasquez",
+    "credentials": "MD",
+    "specialty": "Psychiatry",
+    "email": "elena.vasquez@example.com"
+  },
+  {
+    "id": "prv_02",
+    "firstName": "Jordan",
+    "lastName": "Hale",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "jordan.hale@example.com"
+  },
+  {
+    "id": "prv_03",
+    "firstName": "Marcus",
+    "lastName": "Okonkwo",
+    "credentials": "DO",
+    "specialty": "Psychiatry",
+    "email": "marcus.okonkwo@example.com"
+  }
+]
