@@ -5,6 +5,7 @@ import type { Prisma } from "../../generated/prisma";
 import { providerLabel } from "~/lib/chart";
 import { CLINIC_TIME_ZONE, zonedParts } from "~/lib/clinic-time";
 import type { UpcomingVisit } from "~/lib/booking";
+import { bookingRefusal } from "~/server/booking-choice";
 import { db } from "~/server/db";
 
 type Database = Prisma.TransactionClient | typeof db;
@@ -49,17 +50,12 @@ export function bookingBlock(
   moving: boolean,
   now = new Date(),
 ) {
-  if (!moving && visits.some((visit) => visit.scheduledAt.getTime() >= now.getTime())) {
-    return "upcoming" as const;
-  }
-  const day = clinicDayKey(start);
-  if (visits.some((visit) => clinicDayKey(visit.scheduledAt) === day)) {
-    return "same-day" as const;
-  }
-  return null;
+  return bookingRefusal(visits, start, moving, now);
 }
 
-export async function loadUpcomingVisit(patientId: string): Promise<UpcomingVisit | null> {
+export async function loadUpcomingVisit(
+  patientId: string,
+): Promise<UpcomingVisit | null> {
   const row = await db.appointment.findFirst({
     where: {
       patientId,
@@ -68,7 +64,9 @@ export async function loadUpcomingVisit(patientId: string): Promise<UpcomingVisi
     },
     orderBy: { scheduledAt: "asc" },
     include: {
-      provider: { select: { firstName: true, lastName: true, credentials: true } },
+      provider: {
+        select: { firstName: true, lastName: true, credentials: true },
+      },
     },
   });
   if (!row) return null;

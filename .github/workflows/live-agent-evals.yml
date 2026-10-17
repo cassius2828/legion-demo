@@ -1,0 +1,39 @@
+name: Live agent evals
+
+on:
+  workflow_dispatch:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.3
+        env:
+          POSTGRES_USER: legion
+          POSTGRES_PASSWORD: legion
+          POSTGRES_DB: legion
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U legion -d legion"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TZ: America/Los_Angeles
+      DATABASE_URL: postgresql://legion:legion@localhost:5432/legion
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GOOGLE_CLIENT_ID: ci-eval
+      GOOGLE_CLIENT_SECRET: ci-eval
+      AUTH_SECRET: ci-eval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - run: node scripts/seed-clinical.mjs
+      - run: npm run eval:live
