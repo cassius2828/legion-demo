@@ -18,6 +18,7 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
+    "test": "node --experimental-strip-types --test src/server/summary-assembly.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,0 +1,14 @@
+---
+description: Run Prettier on code files after creating or editing them
+alwaysApply: true
+---
+
+# Format new code with Prettier
+
+After creating or editing code, format those files with Prettier before finishing.
+
+- Run Prettier on the files you just created or changed, not the whole repository.
+- Use the project script when the change is broad: `npm run format:write`.
+- For a few files, run `npx prettier --write` with those paths.
+- Format `ts`, `tsx`, `js`, `jsx`, and `mdx` files. Skip files Prettier does not cover.
+- If Prettier fails, fix the reported file and run it again.

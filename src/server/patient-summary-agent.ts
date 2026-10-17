@@ -5,48 +5,43 @@ import { z } from "zod";
 
 import { env } from "~/env";
 import { formatDate } from "~/lib/chart";
-import { patientSummarySchema, type PatientSummary } from "~/lib/patient-summary";
+import {
+  patientSummarySchema,
+  type PatientSummary,
+} from "~/lib/patient-summary";
 import { canViewPatient } from "~/server/access";
 import { db } from "~/server/db";
+import {
+  assembleSummary,
+  diagnosisLines,
+  medicationFacts,
+  RETRIEVAL_FAILED,
+  taskLine,
+  toolPatientMatches,
+  type SummaryRetrieval,
+} from "~/server/summary-assembly";
 
 setTracingDisabled(true);
 
-const RETRIEVAL_FAILED = "Retrieval failed.";
 const patientIdSchema = z.object({
   patientId: z.string().describe("The patient id from the request."),
 });
 
 const summarySchema = patientSummarySchema;
 
-type MedicationFacts = {
-  active: string[];
-  discontinued: string[];
-};
-
-type VisitFacts = {
-  diagnoses: string[];
-  latestClinicalSummary: string | null;
-  visitCount: number;
-};
-
-type Retrieval<T> = { state: "missing" } | { state: "failed" } | { state: "ok"; value: T };
-
-type SummaryContext = {
+type SummaryContext = SummaryRetrieval & {
   patientId: string;
   providerId: string;
   role: string;
-  medications: Retrieval<MedicationFacts>;
-  visits: Retrieval<VisitFacts>;
-  tasks: Retrieval<string[]>;
 };
 
 export type PatientSummaryResult =
-  | { ok: true; summary: PatientSummary }
-  | { ok: false; error: string };
+  { ok: true; summary: PatientSummary } | { ok: false; error: string };
 
 function readContext(context: { context: unknown } | undefined) {
   const value = context?.context;
-  if (!value || typeof value !== "object" || !("patientId" in value)) return null;
+  if (!value || typeof value !== "object" || !("patientId" in value))
+    return null;
   return value as SummaryContext;
 }
 
@@ -55,26 +50,24 @@ function logToolFailure(toolName: string, error: unknown) {
   console.error(toolName, name);
 }
 
-function medicationLine(row: { medicationName: string; dosage: string }) {
-  return `${row.medicationName}, ${row.dosage}`;
-}
-
 async function authorize(booking: SummaryContext | null, patientId: string) {
-  if (!booking || patientId !== booking.patientId) {
+  if (!booking || !toolPatientMatches(booking.patientId, patientId)) {
     return { ok: false as const, error: "Not authorized for that patient." };
   }
   const patient = await db.patient.findUnique({
     where: { id: booking.patientId },
     select: { id: true, primaryProviderId: true },
   });
-  if (!patient) return { ok: false as const, error: "Not authorized for that patient." };
+  if (!patient)
+    return { ok: false as const, error: "Not authorized for that patient." };
   const allowed = canViewPatient({
     role: booking.role,
     ownPatientId: null,
     ownProviderId: booking.providerId,
     patient,
   });
-  if (!allowed) return { ok: false as const, error: "Not authorized for that patient." };
+  if (!allowed)
+    return { ok: false as const, error: "Not authorized for that patient." };
   return { ok: true as const };
 }
 
@@ -86,7 +79,8 @@ const getPatientMedications = tool({
   execute: async (input, runContext) => {
     const summary = readContext(runContext);
     const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary) return { error: access.ok ? RETRIEVAL_FAILED : access.error };
+    if (!access.ok || !summary)
+      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
 
     try {
       const rows = await db.medication.findMany({
@@ -96,11 +90,10 @@ const getPatientMedications = tool({
       });
       const active = rows.filter((row) => row.status === "active");
       const discontinued = rows.filter((row) => row.status === "discontinued");
-      const other = rows.filter((row) => row.status !== "active" && row.status !== "discontinued");
-      const facts = {
-        active: active.map(medicationLine),
-        discontinued: discontinued.map(medicationLine),
-      };
+      const other = rows.filter(
+        (row) => row.status !== "active" && row.status !== "discontinued",
+      );
+      const facts = medicationFacts(rows);
       summary.medications = { state: "ok", value: facts };
       return {
         active: active.map((row) => ({
@@ -135,7 +128,8 @@ const getPreviousVisits = tool({
   execute: async (input, runContext) => {
     const summary = readContext(runContext);
     const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary) return { error: access.ok ? RETRIEVAL_FAILED : access.error };
+    if (!access.ok || !summary)
+      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
 
     try {
       const [chart, visits] = await Promise.all([
@@ -143,7 +137,10 @@ const getPreviousVisits = tool({
           where: { id: summary.patientId },
           select: {
             psychiatricHistory: true,
-            conditions: { orderBy: { description: "asc" }, select: { description: true } },
+            conditions: {
+              orderBy: { description: "asc" },
+              select: { description: true },
+            },
           },
         }),
         db.visit.findMany({
@@ -161,9 +158,7 @@ const getPreviousVisits = tool({
         return { error: RETRIEVAL_FAILED };
       }
 
-      const diagnoses = chart.conditions.map((condition) => condition.description);
-      const history = chart.psychiatricHistory.trim();
-      if (history) diagnoses.push(history);
+      const diagnoses = diagnosisLines(chart);
 
       summary.visits = {
         state: "ok",
@@ -204,7 +199,8 @@ const getOutstandingTasks = tool({
   execute: async (input, runContext) => {
     const summary = readContext(runContext);
     const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary) return { error: access.ok ? RETRIEVAL_FAILED : access.error };
+    if (!access.ok || !summary)
+      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
 
     try {
       const rows = await db.task.findMany({
@@ -218,9 +214,13 @@ const getOutstandingTasks = tool({
           dueDate: true,
         },
       });
-      const lines = rows.map(
-        (row) =>
-          `${row.title} (${row.priority}, due ${formatDate(row.dueDate)}): ${row.description}`,
+      const lines = rows.map((row) =>
+        taskLine({
+          title: row.title,
+          description: row.description,
+          priority: row.priority,
+          dueDateLabel: formatDate(row.dueDate),
+        }),
       );
       summary.tasks = { state: "ok", value: lines };
       return {
@@ -247,22 +247,17 @@ const summaryAgent = new Agent<SummaryContext, typeof summarySchema>({
 Call getPatientMedications, getPreviousVisits, and getOutstandingTasks before you answer.
 Use only those results. Do not invent medications, diagnoses, visits, or tasks.
 Active and discontinued medications are already separated. Do not move a drug from one list to the other.
-Write recentVisitSummary from the visit marked latest.
+The server replaces recentVisitSummary and every list from the tools. Write overview only.
 If a tool returns an error, say the information could not be retrieved.
 overview is a short review for the provider. Do not add facts that the tools did not return.`,
   tools: [getPatientMedications, getPreviousVisits, getOutstandingTasks],
   outputType: summarySchema,
 });
 
-function readText(output: unknown, key: "overview" | "recentVisitSummary") {
+function readOverview(output: unknown) {
   if (!output || typeof output !== "object") return "";
-  const value = (output as Record<string, unknown>)[key];
-  return typeof value === "string" ? value.trim().slice(0, 1200) : "";
-}
-
-function listFrom<T>(retrieval: Retrieval<T>, lines: (value: T) => string[]) {
-  if (retrieval.state === "ok") return lines(retrieval.value);
-  return [RETRIEVAL_FAILED];
+  const value = (output as Record<string, unknown>).overview;
+  return typeof value === "string" ? value : "";
 }
 
 export async function summarizePatient(input: {
@@ -285,51 +280,27 @@ export async function summarizePatient(input: {
   };
 
   let overview = "";
-  let recentVisitSummary = "";
   const prompt = input.correction
     ? `Prepare a summary for patient ${input.patientId}.
-The provider corrected the current draft. Apply this correction to the wording of overview and recentVisitSummary: ${input.correction.note}
+The provider corrected the current draft. Apply this correction only to the wording of overview: ${input.correction.note}
 Current overview: ${input.correction.draft.overview}
-Current last visit: ${input.correction.draft.recentVisitSummary}
-Do not add or remove medications, diagnoses, or tasks. Those lists come from the tools.`
+Do not add or remove medications, diagnoses, or tasks. Those lists come from the tools. Do not rewrite the last visit.`
     : `Prepare a summary for patient ${input.patientId}.`;
   try {
     const result = await run(summaryAgent, prompt, {
       context,
       maxTurns: 8,
     });
-    overview = readText(result.finalOutput, "overview");
-    recentVisitSummary = readText(result.finalOutput, "recentVisitSummary");
+    overview = readOverview(result.finalOutput);
   } catch (error) {
     logToolFailure("patientSummary", error);
-    const anyFacts =
-      context.medications.state === "ok" ||
-      context.visits.state === "ok" ||
-      context.tasks.state === "ok";
-    if (!anyFacts) {
-      return { ok: false, error: "A summary could not be prepared." };
-    }
   }
 
-  const latest =
-    context.visits.state === "ok" ? context.visits.value.latestClinicalSummary : null;
-  const visitCount = context.visits.state === "ok" ? context.visits.value.visitCount : 0;
-
-  return {
-    ok: true,
-    summary: {
-      patientId: context.patientId,
-      overview: overview || "Review the lists below before approving this draft.",
-      diagnoses: listFrom(context.visits, (value) => value.diagnoses),
-      currentMedications: listFrom(context.medications, (value) => value.active),
-      discontinuedMedications: listFrom(context.medications, (value) => value.discontinued),
-      recentVisitSummary:
-        context.visits.state === "ok"
-          ? recentVisitSummary ||
-            latest ||
-            (visitCount === 0 ? "No completed visits recorded." : RETRIEVAL_FAILED)
-          : RETRIEVAL_FAILED,
-      outstandingTasks: listFrom(context.tasks, (value) => value),
-    },
-  };
+  const assembled = assembleSummary({
+    patientId: context.patientId,
+    overview,
+    retrieval: context,
+  });
+  if (!assembled.approvable) return { ok: false, error: assembled.error };
+  return { ok: true, summary: assembled.summary };
 }

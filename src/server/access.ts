@@ -20,15 +20,7 @@ export async function viewerRecord(userId: string, role: string) {
   return { role: "provider" as const, patient: null, provider };
 }
 
-export function canViewPatient(input: {
-  role: string;
-  ownPatientId: string | null;
-  ownProviderId: string | null;
-  patient: { id: string; primaryProviderId: string };
-}) {
-  if (input.role === "patient") return input.patient.id === input.ownPatientId;
-  if (input.role === "psychiatrist" || input.role === "nurse") {
-    return input.ownProviderId !== null && input.patient.primaryProviderId === input.ownProviderId;
-  }
-  return false;
-}
+export {
+  canViewPatient,
+  providerMayPrepareSummary,
+} from "~/server/chart-access";

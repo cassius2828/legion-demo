@@ -2,7 +2,10 @@
 
 import { useEffect, useState, useTransition, type ReactNode } from "react";
 
-import { approvePatientSummary, preparePatientSummary } from "~/app/patients/[id]/actions";
+import {
+  approvePatientSummary,
+  preparePatientSummary,
+} from "~/app/patients/[id]/actions";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -12,7 +15,10 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import type { PatientSummary, SavedPatientSummary } from "~/lib/patient-summary";
+import type {
+  PatientSummary,
+  SavedPatientSummary,
+} from "~/lib/patient-summary";
 
 export function SummaryPanel({
   patientId,
@@ -22,7 +28,10 @@ export function SummaryPanel({
   saved: SavedPatientSummary | null;
 }) {
   const [stored, setStored] = useState(saved);
-  const [draft, setDraft] = useState<PatientSummary | null>(null);
+  const [draft, setDraft] = useState<{
+    summary: PatientSummary;
+    fingerprint: string;
+  } | null>(null);
   const [correcting, setCorrecting] = useState(false);
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +51,7 @@ export function SummaryPanel({
       }
       setCorrecting(false);
       setNote("");
-      setDraft(result.summary);
+      setDraft({ summary: result.summary, fingerprint: result.fingerprint });
     });
   }
 
@@ -50,7 +59,10 @@ export function SummaryPanel({
     if (!draft) return;
     setError(null);
     startTransition(async () => {
-      const result = await approvePatientSummary(draft);
+      const result = await approvePatientSummary(
+        draft.summary,
+        draft.fingerprint,
+      );
       if (!result.ok) {
         setError(result.error);
         return;
@@ -66,12 +78,15 @@ export function SummaryPanel({
     if (!draft) return;
     setError(null);
     startTransition(async () => {
-      const result = await preparePatientSummary(patientId, { note, draft });
+      const result = await preparePatientSummary(patientId, {
+        note,
+        draft: draft.summary,
+      });
       if (!result.ok) {
         setError(result.error);
         return;
       }
-      setDraft(result.summary);
+      setDraft({ summary: result.summary, fingerprint: result.fingerprint });
       setCorrecting(false);
       setNote("");
     });
@@ -88,7 +103,7 @@ export function SummaryPanel({
       {error ? <p className="text-destructive">{error}</p> : null}
       {draft ? (
         <SummaryCard title="Summary draft" action={prepareButton}>
-          <SummaryBody summary={draft} />
+          <SummaryBody summary={draft.summary} />
           {correcting ? (
             <label className="mt-4 grid gap-1 text-sm">
               What should change?
@@ -97,7 +112,7 @@ export function SummaryPanel({
                 onChange={(event) => setNote(event.target.value)}
                 maxLength={2000}
                 rows={3}
-                className="rounded-lg border bg-background px-3 py-2"
+                className="bg-background rounded-lg border px-3 py-2"
               />
             </label>
           ) : null}
@@ -190,11 +205,17 @@ function SummaryBody({ summary }: { summary: PatientSummary }) {
     <div className="grid gap-4 xl:grid-cols-2">
       <p className="leading-6 xl:col-span-2">{summary.overview}</p>
       <FactList title="Diagnoses" items={summary.diagnoses} />
-      <FactList title="Current medications" items={summary.currentMedications} />
-      <FactList title="Discontinued medications" items={summary.discontinuedMedications} />
+      <FactList
+        title="Current medications"
+        items={summary.currentMedications}
+      />
+      <FactList
+        title="Discontinued medications"
+        items={summary.discontinuedMedications}
+      />
       <FactList title="Outstanding tasks" items={summary.outstandingTasks} />
       <div className="xl:col-span-2">
-        <h3 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+        <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Last visit
         </h3>
         <p className="mt-1 leading-6">{summary.recentVisitSummary}</p>
@@ -206,11 +227,11 @@ function SummaryBody({ summary }: { summary: PatientSummary }) {
 function FactList({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+      <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
         {title}
       </h3>
       {items.length === 0 ? (
-        <p className="mt-1 text-muted-foreground">None recorded</p>
+        <p className="text-muted-foreground mt-1">None recorded</p>
       ) : (
         <ul className="mt-1 list-disc pl-5 leading-6">
           {items.map((item) => (
