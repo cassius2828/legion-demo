@@ -11,7 +11,10 @@ export type ZonedParts = {
   weekday: number;
 };
 
-export function zonedParts(date: Date, timeZone = CLINIC_TIME_ZONE): ZonedParts {
+export function zonedParts(
+  date: Date,
+  timeZone = CLINIC_TIME_ZONE,
+): ZonedParts {
   const formatted = new Intl.DateTimeFormat("en-US", {
     timeZone,
     year: "numeric",
@@ -23,7 +26,9 @@ export function zonedParts(date: Date, timeZone = CLINIC_TIME_ZONE): ZonedParts 
     hourCycle: "h23",
   }).formatToParts(date);
   const bag = Object.fromEntries(
-    formatted.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]),
+    formatted
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
   );
   const hour = Number(bag.hour);
   return {
@@ -40,13 +45,37 @@ export function weekdayOf(year: number, month: number, day: number) {
   return new Date(Date.UTC(year, month - 1, day)).getUTCDay();
 }
 
-export function addCalendarDays(year: number, month: number, day: number, days: number) {
+export function addCalendarDays(
+  year: number,
+  month: number,
+  day: number,
+  days: number,
+) {
   const next = new Date(Date.UTC(year, month - 1, day + days));
   return {
     year: next.getUTCFullYear(),
     month: next.getUTCMonth() + 1,
     day: next.getUTCDate(),
   };
+}
+
+export function clinicDayBounds(now = new Date(), timeZone = CLINIC_TIME_ZONE) {
+  const parts = zonedParts(now, timeZone);
+  const start = zonedTimeToUtc(parts.year, parts.month, parts.day, 0, timeZone);
+  const next = addCalendarDays(parts.year, parts.month, parts.day, 1);
+  const end = zonedTimeToUtc(next.year, next.month, next.day, 0, timeZone);
+  return { start, end };
+}
+
+export function formatClinicWhen(date: Date, timeZone = CLINIC_TIME_ZONE) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
 }
 
 export function zonedTimeToUtc(
@@ -61,7 +90,13 @@ export function zonedTimeToUtc(
   let utc = Date.UTC(year, month - 1, day, hour, minute);
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const parts = zonedParts(new Date(utc), timeZone);
-    const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
+    const asUtc = Date.UTC(
+      parts.year,
+      parts.month - 1,
+      parts.day,
+      parts.hour,
+      parts.minute,
+    );
     const desired = Date.UTC(year, month - 1, day, hour, minute);
     const delta = desired - asUtc;
     if (delta === 0) break;

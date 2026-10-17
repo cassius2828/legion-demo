@@ -121,7 +121,7 @@ export function SummaryPanel({
                 onClick={() => setCorrecting(true)}
                 disabled={isPending}
               >
-                Correct
+                Modify
               </Button>
             )}
             <Button

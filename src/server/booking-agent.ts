@@ -1,12 +1,17 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
+
 import { Agent, run, setTracingDisabled, tool } from "@openai/agents";
 import { z } from "zod";
+
+import type { Prisma } from "../../generated/prisma";
 
 import { env } from "~/env";
 import { CLINIC_TIME_ZONE } from "~/lib/clinic-time";
 import { listOpenFollowUpSlots } from "~/server/availability";
 import { db } from "~/server/db";
+import { bookingBlock, otherScheduledVisits } from "~/server/follow-up";
 
 setTracingDisabled(true);
 
@@ -42,7 +47,9 @@ const weekdayFormat = new Intl.DateTimeFormat("en-US", {
 const summarySchema = z.object({
   summary: z
     .string()
-    .describe("One sentence on why this weekday and time fits the patient's usual visits."),
+    .describe(
+      "One sentence on why this weekday and time fits the patient's usual visits.",
+    ),
 });
 
 type BookedSlot = {
@@ -72,7 +79,9 @@ export type AgentBookingResult =
   | { ok: false; error: string };
 
 function minuteLabel(minute: number) {
-  const clock = new Date(Date.UTC(2026, 0, 1, Math.floor(minute / 60), minute % 60));
+  const clock = new Date(
+    Date.UTC(2026, 0, 1, Math.floor(minute / 60), minute % 60),
+  );
   return new Intl.DateTimeFormat("en-US", {
     timeZone: "UTC",
     hour: "numeric",
@@ -83,12 +92,15 @@ function minuteLabel(minute: number) {
 function sameInstant(left: string | null, right: Date) {
   if (!left) return false;
   const parsed = new Date(left);
-  return !Number.isNaN(parsed.getTime()) && parsed.getTime() === right.getTime();
+  return (
+    !Number.isNaN(parsed.getTime()) && parsed.getTime() === right.getTime()
+  );
 }
 
 function readContext(context: { context: unknown } | undefined) {
   const value = context?.context;
-  if (!value || typeof value !== "object" || !("patientId" in value)) return null;
+  if (!value || typeof value !== "object" || !("patientId" in value))
+    return null;
   return value as BookingContext;
 }
 
@@ -102,6 +114,8 @@ function logAgentFailure(error: unknown) {
   console.error(name, message.slice(0, 300));
 }
 
+type FollowUpDb = Prisma.TransactionClient;
+
 export async function commitFollowUp(input: {
   patientId: string;
   providerId: string;
@@ -110,55 +124,82 @@ export async function commitFollowUp(input: {
   start: Date;
   movingAppointmentId?: string | null;
 }) {
-  return db.$transaction(async (tx) => {
-    const open = await listOpenFollowUpSlots({
-      providerId: input.providerId,
-      patientId: input.patientId,
-      database: tx,
-      ignoreAppointmentId: input.movingAppointmentId ?? undefined,
-    });
-    const match = open.find((slot) => slot.start.getTime() === input.start.getTime());
-    if (!match) return null;
+  return db.$transaction((tx) => commitFollowUpIn(tx, input));
+}
 
-    const titleTime = timeFormat.format(input.start);
-    const durationMinutes = Math.round((match.end.getTime() - match.start.getTime()) / 60000);
-    const title = `${input.patientName}, ${titleTime}`;
+export async function commitFollowUpIn(
+  tx: FollowUpDb,
+  input: {
+    patientId: string;
+    providerId: string;
+    patientName: string;
+    reason: string;
+    start: Date;
+    movingAppointmentId?: string | null;
+  },
+) {
+  const moving = Boolean(input.movingAppointmentId);
+  const others = await otherScheduledVisits(
+    tx,
+    input.patientId,
+    input.movingAppointmentId,
+  );
+  const blocked = bookingBlock(others, input.start, moving);
+  if (blocked) return { ok: false as const, error: blocked };
 
-    if (input.movingAppointmentId) {
-      const existing = await tx.appointment.findFirst({
-        where: {
-          id: input.movingAppointmentId,
-          patientId: input.patientId,
-          status: "scheduled",
-        },
-      });
-      if (!existing) return null;
-      const moved = await tx.appointment.update({
-        where: { id: existing.id },
-        data: { scheduledAt: input.start, durationMinutes, title },
-      });
-      await tx.visit.updateMany({
-        where: { appointmentId: existing.id },
-        data: { visitDate: input.start },
-      });
-      return moved;
-    }
+  const open = await listOpenFollowUpSlots({
+    providerId: input.providerId,
+    patientId: input.patientId,
+    database: tx,
+    ignoreAppointmentId: input.movingAppointmentId ?? undefined,
+  });
+  const match = open.find(
+    (slot) => slot.start.getTime() === input.start.getTime(),
+  );
+  if (!match) return { ok: false as const, error: "taken" as const };
 
-    return tx.appointment.create({
-      data: {
+  const titleTime = timeFormat.format(input.start);
+  const durationMinutes = Math.round(
+    (match.end.getTime() - match.start.getTime()) / 60000,
+  );
+  const title = `${input.patientName}, ${titleTime}`;
+
+  if (input.movingAppointmentId) {
+    const existing = await tx.appointment.findFirst({
+      where: {
+        id: input.movingAppointmentId,
         patientId: input.patientId,
-        providerId: input.providerId,
-        scheduledAt: input.start,
-        durationMinutes,
-        appointmentType: "Follow-up",
         status: "scheduled",
-        title,
-        description: `Upcoming follow-up for ${input.patientName}. ${input.reason}`,
-        reasonForVisit: input.reason,
-        createdAt: new Date(),
       },
     });
+    if (!existing) return { ok: false as const, error: "taken" as const };
+    const moved = await tx.appointment.update({
+      where: { id: existing.id },
+      data: { scheduledAt: input.start, durationMinutes, title },
+    });
+    await tx.visit.updateMany({
+      where: { appointmentId: existing.id },
+      data: { visitDate: input.start },
+    });
+    return { ok: true as const, appointment: moved };
+  }
+
+  const created = await tx.appointment.create({
+    data: {
+      patientId: input.patientId,
+      providerId: input.providerId,
+      scheduledAt: input.start,
+      durationMinutes,
+      appointmentType: "Follow-up",
+      status: "scheduled",
+      title,
+      description: `Upcoming follow-up for ${input.patientName}. ${input.reason}`,
+      reasonForVisit: input.reason,
+      joinToken: randomUUID(),
+      createdAt: new Date(),
+    },
   });
+  return { ok: true as const, appointment: created };
 }
 
 const checkProviderSchedule = tool({
@@ -229,16 +270,24 @@ const checkPatientHistory = tool({
       status: row.status,
     }));
 
-    const counts = new Map<string, { weekday: string; time: string; count: number }>();
+    const counts = new Map<
+      string,
+      { weekday: string; time: string; count: number }
+    >();
     for (const visit of visits) {
       if (visit.status !== "completed") continue;
       const key = `${visit.weekday} ${visit.time}`;
-      const current = counts.get(key) ?? { weekday: visit.weekday, time: visit.time, count: 0 };
+      const current = counts.get(key) ?? {
+        weekday: visit.weekday,
+        time: visit.time,
+        count: 0,
+      };
       current.count += 1;
       counts.set(key, current);
     }
     const usualWeekdayAndTime =
-      [...counts.values()].sort((left, right) => right.count - left.count)[0] ?? null;
+      [...counts.values()].sort((left, right) => right.count - left.count)[0] ??
+      null;
 
     return { timeZone: CLINIC_TIME_ZONE, usualWeekdayAndTime, visits };
   },
@@ -249,7 +298,11 @@ const bookCompatibleTime = tool({
   description:
     "Book one open start for this patient, or move the appointment already being rescheduled. Call this once.",
   parameters: z.object({
-    start: z.string().describe("ISO-8601 start copied from check_provider_schedule.openSlots."),
+    start: z
+      .string()
+      .describe(
+        "ISO-8601 start copied from check_provider_schedule.openSlots.",
+      ),
   }),
   execute: async (input, runContext) => {
     const booking = readContext(runContext);
@@ -274,17 +327,20 @@ const bookCompatibleTime = tool({
       start,
       movingAppointmentId: booking.movingAppointmentId,
     });
-    if (!saved) {
-      return {
-        booked: false,
-        error: "That start is not open. Pick another start from check_provider_schedule.",
-      };
+    if (!saved.ok) {
+      const error =
+        saved.error === "same-day"
+          ? "That day already has an appointment. Pick another day."
+          : saved.error === "upcoming"
+            ? "This patient already has an upcoming appointment."
+            : "That start is not open. Pick another start from check_provider_schedule.";
+      return { booked: false, error };
     }
 
     booking.booked = {
-      appointmentId: saved.id,
-      dateLabel: dateFormat.format(saved.scheduledAt),
-      timeLabel: timeFormat.format(saved.scheduledAt),
+      appointmentId: saved.appointment.id,
+      dateLabel: dateFormat.format(saved.appointment.scheduledAt),
+      timeLabel: timeFormat.format(saved.appointment.scheduledAt),
     };
     return { booked: true, ...booking.booked };
   },
@@ -366,7 +422,8 @@ export async function scheduleWithAgent(input: {
       return {
         ok: true,
         ...context.booked,
-        summary: "This time is open and fits the days and times you usually come in.",
+        summary:
+          "This time is open and fits the days and times you usually come in.",
       };
     }
     return {

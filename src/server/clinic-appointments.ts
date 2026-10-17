@@ -1,16 +1,9 @@
 import "server-only";
 
 import type { CalendarEvent } from "~/lib/calendar-dates";
+import { commitFollowUp } from "~/server/booking-agent";
 import { db } from "~/server/db";
 import { viewerRecord } from "~/server/access";
-
-function titleFor(patient: { firstName: string; lastName: string }, when: Date) {
-  const time = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(when);
-  return `${patient.firstName} ${patient.lastName}, ${time}`;
-}
 
 export async function listClinicEvents(
   userId: string,
@@ -68,6 +61,21 @@ function staffName(person: { firstName: string; lastName: string; credentials: s
   return `${person.firstName} ${person.lastName}, ${person.credentials}`;
 }
 
+function canEditAppointment(
+  viewer: Awaited<ReturnType<typeof viewerRecord>>,
+  appointment: { patientId: string; providerId: string; nurseId: string | null },
+) {
+  return (
+    viewer.patient?.id === appointment.patientId ||
+    viewer.provider?.id === appointment.providerId ||
+    (appointment.nurseId !== null && viewer.provider?.id === appointment.nurseId)
+  );
+}
+
+function isUpcoming(appointment: { status: string; scheduledAt: Date }, now = new Date()) {
+  return appointment.status === "scheduled" && appointment.scheduledAt.getTime() >= now.getTime();
+}
+
 export async function moveClinicAppointment(
   userId: string,
   role: string,
@@ -78,26 +86,49 @@ export async function moveClinicAppointment(
     where: { id: input.id },
     include: { patient: true },
   });
-  if (!appointment) return { ok: false as const, error: "Could not move that appointment." };
-
-  const ownsPatient = viewer.patient?.id === appointment.patientId;
-  const ownsProvider = viewer.provider?.id === appointment.providerId;
-  const ownsNurse = viewer.provider?.id === appointment.nurseId;
-  if (!ownsPatient && !ownsProvider && !ownsNurse) {
+  if (!appointment || !isUpcoming(appointment) || !canEditAppointment(viewer, appointment)) {
     return { ok: false as const, error: "Could not move that appointment." };
   }
 
-  const start = input.start;
+  const saved = await commitFollowUp({
+    patientId: appointment.patientId,
+    providerId: appointment.providerId,
+    patientName: `${appointment.patient.firstName} ${appointment.patient.lastName}`,
+    reason: appointment.reasonForVisit,
+    start: input.start,
+    movingAppointmentId: appointment.id,
+  });
+  if (!saved.ok) {
+    return {
+      ok: false as const,
+      error:
+        saved.error === "same-day"
+          ? "That day already has an appointment."
+          : "That time is not open.",
+    };
+  }
+  return { ok: true as const };
+}
+
+export async function cancelClinicAppointment(
+  userId: string,
+  role: string,
+  input: { id: string; reason: string },
+) {
+  const reason = input.reason.trim();
+  if (reason.length === 0 || reason.length > 1000) {
+    return { ok: false as const, error: "Explain why you are cancelling." };
+  }
+
+  const viewer = await viewerRecord(userId, role);
+  const appointment = await db.appointment.findUnique({ where: { id: input.id } });
+  if (!appointment || !isUpcoming(appointment) || !canEditAppointment(viewer, appointment)) {
+    return { ok: false as const, error: "That appointment is no longer scheduled." };
+  }
+
   await db.appointment.update({
     where: { id: appointment.id },
-    data: {
-      scheduledAt: start,
-      title: titleFor(appointment.patient, start),
-    },
-  });
-  await db.visit.updateMany({
-    where: { appointmentId: appointment.id },
-    data: { visitDate: start },
+    data: { status: "cancelled", cancellationReason: reason },
   });
   return { ok: true as const };
 }

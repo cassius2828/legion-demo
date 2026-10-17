@@ -2,17 +2,17 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { ClinicalHistory, PastVisitNotes } from "~/app/_components/clinical-history";
+import {
+  ClinicalHistory,
+  MedicationScanTable,
+  PastVisitNotes,
+} from "~/app/_components/clinical-history";
 import { SummaryPanel } from "~/app/patients/[id]/summary-panel";
 import { Badge } from "~/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { ageInYears, formatDate, fullName } from "~/lib/chart";
+import { ageInYears, formatDate, fullName, providerLabel } from "~/lib/chart";
+import { formatClinicWhen } from "~/lib/clinic-time";
 import type { SavedPatientSummary } from "~/lib/patient-summary";
 import { canViewPatient, viewerRecord } from "~/server/access";
 import { auth } from "~/server/auth";
@@ -33,6 +33,19 @@ const chartInclude = {
     include: { appointment: { select: { appointmentType: true } } },
   },
   medications: { orderBy: { startDate: "desc" } },
+  appointments: {
+    where: { status: "scheduled" },
+    orderBy: { scheduledAt: "asc" },
+  },
+  tasks: {
+    where: { status: "open" },
+    orderBy: { dueDate: "asc" },
+    include: {
+      assignedProvider: {
+        select: { firstName: true, lastName: true, credentials: true },
+      },
+    },
+  },
 } satisfies Prisma.PatientInclude;
 
 type Chart = Prisma.PatientGetPayload<{ include: typeof chartInclude }>;
@@ -84,17 +97,20 @@ function PlainChart({
       <header className="mt-3 flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
         <div>
           <h1 className="text-xl font-semibold">{fullName(patient)}</h1>
-          <p className="mt-1 text-muted-foreground">
-            {ageInYears(patient.dateOfBirth)} years · Born {formatDate(patient.dateOfBirth)}
+          <p className="text-muted-foreground mt-1">
+            {ageInYears(patient.dateOfBirth)} years · Born{" "}
+            {formatDate(patient.dateOfBirth)}
           </p>
         </div>
         <p className="text-muted-foreground">
           {patient.phone} · {patient.email}
           <span className="mt-1 block">
-            {fullName(patient.primaryProvider)}, {patient.primaryProvider.credentials}
+            {fullName(patient.primaryProvider)},{" "}
+            {patient.primaryProvider.credentials}
           </span>
         </p>
       </header>
+      <ChartGlance patient={patient} />
       <div className="mt-5 grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-[16rem_minmax(0,1.25fr)_minmax(18rem,0.9fr)]">
         <div className="min-w-0 xl:col-start-2">
           <SummaryPanel patientId={patient.id} saved={saved} />
@@ -107,6 +123,96 @@ function PlainChart({
         </aside>
       </div>
     </main>
+  );
+}
+
+function ChartGlance({ patient }: { patient: Chart }) {
+  const nextVisit = patient.appointments.find(
+    (appointment) => appointment.scheduledAt.getTime() >= Date.now(),
+  );
+  const lastVisit = patient.visits[0];
+
+  return (
+    <section className="mt-5 grid gap-3">
+      <div
+        className={
+          patient.allergies.length > 0
+            ? "border-destructive/40 bg-destructive/10 rounded-lg border px-3 py-2"
+            : "text-muted-foreground rounded-lg border px-3 py-2"
+        }
+      >
+        Allergies:{" "}
+        {patient.allergies.length > 0
+          ? patient.allergies.map((allergy) => allergy.substance).join(", ")
+          : "none recorded"}
+      </div>
+      <div className="rounded-lg border px-3 py-3">
+        <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Medications
+        </h2>
+        <div className="mt-2">
+          <MedicationScanTable medications={patient.medications} />
+        </div>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border px-3 py-3">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            Next visit
+          </h2>
+          {nextVisit ? (
+            <p className="mt-2 leading-6">
+              {formatClinicWhen(nextVisit.scheduledAt)} ·{" "}
+              {nextVisit.appointmentType}
+              <span className="mt-1 block">{nextVisit.reasonForVisit}</span>
+              <Link
+                href={`/visits/${nextVisit.id}`}
+                className="text-primary mt-2 inline-block font-medium"
+              >
+                Open visit
+              </Link>
+            </p>
+          ) : (
+            <p className="text-muted-foreground mt-2">No visit scheduled.</p>
+          )}
+        </div>
+        <div className="rounded-lg border px-3 py-3">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            Last plan
+          </h2>
+          {lastVisit ? (
+            <p className="mt-2 leading-6">
+              {formatDate(lastVisit.visitDate)} ·{" "}
+              {lastVisit.followUpInstructions}
+            </p>
+          ) : (
+            <p className="text-muted-foreground mt-2">
+              No completed visit yet.
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="rounded-lg border px-3 py-3">
+        <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Open tasks
+        </h2>
+        {patient.tasks.length === 0 ? (
+          <p className="text-muted-foreground mt-2">No open tasks.</p>
+        ) : (
+          <ul className="mt-2 grid gap-2">
+            {patient.tasks.map((task) => (
+              <li key={task.id} className="leading-6">
+                {task.title}
+                <span className="text-muted-foreground">
+                  {" "}
+                  · due {formatDate(task.dueDate)} ·{" "}
+                  {providerLabel(task.assignedProvider)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -146,7 +252,8 @@ function ChartFacts({ patient }: { patient: Chart }) {
             {patient.emergencyContact.name}
             <span className="text-muted-foreground">
               {" "}
-              · {patient.emergencyContact.relationship} · {patient.emergencyContact.phone}
+              · {patient.emergencyContact.relationship} ·{" "}
+              {patient.emergencyContact.phone}
             </span>
           </p>
         ) : (
@@ -171,24 +278,29 @@ function FactCard({ title, children }: { title: string; children: ReactNode }) {
 function SleekChart({ patient }: { patient: Chart }) {
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href="/"
+        className="text-muted-foreground hover:text-foreground text-sm"
+      >
         All charts
       </Link>
       <header className="mt-6">
-        <p className="text-sm font-medium tracking-wide text-primary uppercase">
+        <p className="text-primary text-sm font-medium tracking-wide uppercase">
           Chart
         </p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">
           {fullName(patient)}
         </h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          {ageInYears(patient.dateOfBirth)} years · Born {formatDate(patient.dateOfBirth)}
+        <p className="text-muted-foreground mt-3 text-lg">
+          {ageInYears(patient.dateOfBirth)} years · Born{" "}
+          {formatDate(patient.dateOfBirth)}
         </p>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           {patient.phone} · {patient.email}
         </p>
         <p className="mt-4 text-sm">
-          Provider {fullName(patient.primaryProvider)}, {patient.primaryProvider.credentials}
+          Provider {fullName(patient.primaryProvider)},{" "}
+          {patient.primaryProvider.credentials}
         </p>
       </header>
       <Separator className="my-8" />
@@ -231,7 +343,10 @@ function SleekChart({ patient }: { patient: Chart }) {
             )}
           </CardContent>
         </Card>
-        <ClinicalHistory visits={patient.visits} medications={patient.medications} />
+        <ClinicalHistory
+          visits={patient.visits}
+          medications={patient.medications}
+        />
         <Card>
           <CardHeader>
             <CardTitle>Emergency contact</CardTitle>
@@ -242,7 +357,8 @@ function SleekChart({ patient }: { patient: Chart }) {
                 {patient.emergencyContact.name}
                 <span className="text-muted-foreground">
                   {" "}
-                  · {patient.emergencyContact.relationship} · {patient.emergencyContact.phone}
+                  · {patient.emergencyContact.relationship} ·{" "}
+                  {patient.emergencyContact.phone}
                 </span>
               </p>
             ) : (

@@ -36,7 +36,15 @@ async function linkClinicalLogin(
 ) {
   const [providers, patients] = await Promise.all([
     db.provider.findMany({
-      select: { id: true, firstName: true, lastName: true, email: true, userId: true, credentials: true },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        userId: true,
+        credentials: true,
+        organizationId: true,
+      },
     }),
     db.patient.findMany({
       select: { id: true, firstName: true, lastName: true, email: true, userId: true },
@@ -46,7 +54,7 @@ async function linkClinicalLogin(
   const patient = patients.find((item) => item.email.toLowerCase() === email);
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, email: true, role: true },
+    select: { id: true, name: true, email: true, role: true, organizationId: true },
   });
   if (!user) return null;
 
@@ -55,6 +63,13 @@ async function linkClinicalLogin(
   }
   if (patient?.userId === null) {
     await db.patient.update({ where: { id: patient.id }, data: { userId } });
+  }
+
+  if (provider?.organizationId && !user.organizationId) {
+    await db.user.update({
+      where: { id: userId },
+      data: { organizationId: provider.organizationId },
+    });
   }
 
   const chart = provider ?? patient;

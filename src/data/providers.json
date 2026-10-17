@@ -5,7 +5,8 @@
     "lastName": "Vasquez",
     "credentials": "MD",
     "specialty": "Psychiatry",
-    "email": "elena.vasquez@example.com"
+    "email": "elena.vasquez@example.com",
+    "organization": "Sutter Health"
   },
   {
     "id": "prv_02",
@@ -13,7 +14,8 @@
     "lastName": "Hale",
     "credentials": "PMHNP",
     "specialty": "Psychiatric mental health",
-    "email": "jordan.hale@example.com"
+    "email": "jordan.hale@example.com",
+    "organization": "Kaiser Permanente"
   },
   {
     "id": "prv_03",
@@ -21,7 +23,8 @@
     "lastName": "Okonkwo",
     "credentials": "DO",
     "specialty": "Psychiatry",
-    "email": "marcus.okonkwo@example.com"
+    "email": "marcus.okonkwo@example.com",
+    "organization": "Cleveland Clinic"
   },
   {
     "id": "prv_04",
@@ -29,6 +32,124 @@
     "lastName": "Ali",
     "credentials": "MD",
     "specialty": "Psychiatry",
-    "email": "cassius2828@gmail.com"
+    "email": "cassius2828@gmail.com",
+    "organization": "Kaiser Permanente"
+  },
+  {
+    "id": "prv_05",
+    "firstName": "Samuel",
+    "lastName": "Adeyemi",
+    "credentials": "MD",
+    "specialty": "Psychiatry",
+    "email": "samuel.adeyemi@example.com",
+    "organization": "Mayo Clinic"
+  },
+  {
+    "id": "prv_06",
+    "firstName": "Amina",
+    "lastName": "Yusuf",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "amina.yusuf@example.com",
+    "organization": "Kaiser Permanente"
+  },
+  {
+    "id": "prv_07",
+    "firstName": "Priya",
+    "lastName": "Nair",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "priya.nair@example.com",
+    "organization": "Kaiser Permanente"
+  },
+  {
+    "id": "prv_08",
+    "firstName": "Lena",
+    "lastName": "Okada",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "lena.okada@example.com",
+    "organization": "Sutter Health"
+  },
+  {
+    "id": "prv_09",
+    "firstName": "Carmen",
+    "lastName": "Diaz",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "carmen.diaz@example.com",
+    "organization": "Sutter Health"
+  },
+  {
+    "id": "prv_10",
+    "firstName": "Owen",
+    "lastName": "Blake",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "owen.blake@example.com",
+    "organization": "Cleveland Clinic"
+  },
+  {
+    "id": "prv_11",
+    "firstName": "Fatima",
+    "lastName": "Qureshi",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "fatima.qureshi@example.com",
+    "organization": "Cleveland Clinic"
+  },
+  {
+    "id": "prv_12",
+    "firstName": "Jules",
+    "lastName": "Navarro",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "jules.navarro@example.com",
+    "organization": "Mayo Clinic"
+  },
+  {
+    "id": "prv_13",
+    "firstName": "Harper",
+    "lastName": "Quinn",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "harper.quinn@example.com",
+    "organization": "Mayo Clinic"
+  },
+  {
+    "id": "prv_14",
+    "firstName": "Mateo",
+    "lastName": "Ruiz",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "mateo.ruiz@example.com",
+    "organization": "HCA Healthcare"
+  },
+  {
+    "id": "prv_15",
+    "firstName": "Greta",
+    "lastName": "Berg",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "greta.berg@example.com",
+    "organization": "HCA Healthcare"
+  },
+  {
+    "id": "prv_16",
+    "firstName": "Cole",
+    "lastName": "Brennan",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "cole.brennan@example.com",
+    "organization": "LifeStance Health"
+  },
+  {
+    "id": "prv_17",
+    "firstName": "Nina",
+    "lastName": "Kowalski",
+    "credentials": "PMHNP",
+    "specialty": "Psychiatric mental health",
+    "email": "nina.kowalski@example.com",
+    "organization": "LifeStance Health"
   }
 ]

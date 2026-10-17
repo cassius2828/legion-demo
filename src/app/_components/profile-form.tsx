@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 
 import { Button } from "~/components/ui/button";
-import { ROLES, type Role } from "~/lib/profile";
+import { INSURANCES, ROLES, type Role } from "~/lib/profile";
 
 const inputClass = "h-9 rounded-lg border bg-background px-3";
 
@@ -27,6 +27,12 @@ export function ProfileForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
   const [role, setRole] = useState<Role | "">(defaults.role ?? "");
+  const [primaryInsurance, setPrimaryInsurance] = useState(defaults.primaryInsurance);
+  const [secondaryInsurance, setSecondaryInsurance] = useState(defaults.secondaryInsurance);
+  const primaryChoices = insuranceChoices(defaults.primaryInsurance);
+  const secondaryChoices = insuranceChoices(defaults.secondaryInsurance).filter(
+    (item) => item !== primaryInsurance,
+  );
   const knownOrganization = organizations.find((item) => item === defaults.organization);
   const [organizationChoice, setOrganizationChoice] = useState(
     knownOrganization ?? (defaults.organization ? "other" : ""),
@@ -77,22 +83,40 @@ export function ProfileForm({
         <>
           <label className="grid gap-1 text-sm">
             Primary insurance
-            <input
+            <select
               name="primaryInsurance"
-              required
-              defaultValue={defaults.primaryInsurance}
-              maxLength={120}
+              value={primaryInsurance}
+              onChange={(event) => {
+                const value = event.target.value;
+                setPrimaryInsurance(value);
+                if (!value || value === secondaryInsurance) setSecondaryInsurance("");
+              }}
               className={inputClass}
-            />
+            >
+              <option value="">No insurance</option>
+              {primaryChoices.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
           </label>
           <label className="grid gap-1 text-sm">
             Secondary insurance
-            <input
+            <select
               name="secondaryInsurance"
-              defaultValue={defaults.secondaryInsurance}
-              maxLength={120}
+              value={primaryInsurance ? secondaryInsurance : ""}
+              disabled={!primaryInsurance}
+              onChange={(event) => setSecondaryInsurance(event.target.value)}
               className={inputClass}
-            />
+            >
+              <option value="">None</option>
+              {secondaryChoices.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
           </label>
         </>
       ) : null}
@@ -138,4 +162,9 @@ export function ProfileForm({
       </Button>
     </form>
   );
+}
+
+function insuranceChoices(current: string) {
+  if (!current || (INSURANCES as readonly string[]).includes(current)) return INSURANCES;
+  return [current, ...INSURANCES];
 }

@@ -409,6 +409,7 @@ function recordsFor(patient) {
       title: appointmentTitle(patient, when),
       description,
       reasonForVisit: focusLine,
+      joinToken: status === "scheduled" ? `join_${id}` : null,
       createdAt: createdAt < new Date(patient.createdAt) ? new Date(patient.createdAt) : createdAt,
     });
 
@@ -576,6 +577,10 @@ export async function seedMedications(db, patients) {
 
 export async function seedClinicHistory(db, patients) {
   const ids = patients.map((patient) => patient.id);
+  await db.clinicalEvent.deleteMany({ where: { patientId: { in: ids } } });
+  await db.reminder.deleteMany({ where: { patientId: { in: ids } } });
+  await db.prescriptionOrder.deleteMany({ where: { patientId: { in: ids } } });
+  await db.intake.deleteMany({ where: { patientId: { in: ids } } });
   await db.clinicalNote.deleteMany({ where: { patientId: { in: ids } } });
   await db.visit.deleteMany({ where: { patientId: { in: ids } } });
   await db.appointment.deleteMany({ where: { patientId: { in: ids } } });

@@ -71,6 +71,8 @@ model User {
     posts         Post[]
     provider      Provider?
     patient       Patient?
+    messages      ClinicMessage[]
+    clinicalEvents ClinicalEvent[]
 }
 
 model VerificationToken {
@@ -110,6 +112,8 @@ model Provider {
     notes        ClinicalNote[]
     tasks        Task[]
     approvedSummaries PatientSummaryRecord[]
+    messages     ClinicMessage[]
+    orders       PrescriptionOrder[]
 }
 
 model Patient {
@@ -121,9 +125,11 @@ model Patient {
     email              String             @unique
     phone              String
     psychiatricHistory String
-    primaryProviderId  String
-    primaryProvider    Provider           @relation("ProviderPanel", fields: [primaryProviderId], references: [id])
-    userId             String?            @unique
+    primaryProviderId   String
+    primaryProvider     Provider           @relation("ProviderPanel", fields: [primaryProviderId], references: [id])
+    preferredPharmacyId String?
+    preferredPharmacy   Pharmacy?          @relation(fields: [preferredPharmacyId], references: [id], onDelete: SetNull)
+    userId              String?            @unique
     user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
     createdAt          DateTime
     updatedAt          DateTime
@@ -137,8 +143,14 @@ model Patient {
     notes              ClinicalNote[]
     tasks              Task[]
     summary            PatientSummaryRecord?
+    messages           ClinicMessage[]
+    intakes            Intake[]
+    orders             PrescriptionOrder[]
+    events             ClinicalEvent[]
+    reminders          Reminder[]
 
     @@index([primaryProviderId])
+    @@index([preferredPharmacyId])
 }
 
 model PatientAllergy {
@@ -230,14 +242,34 @@ model Appointment {
     status          String
     title           String
     description     String
-    reasonForVisit  String
-    createdAt       DateTime
-    visit           Visit?
+    reasonForVisit     String
+    cancellationReason String?
+    joinToken          String?   @unique
+    createdAt          DateTime
+    visit              Visit?
+    intake             Intake?
+    orders             PrescriptionOrder[]
+    events             ClinicalEvent[]
+    reminders          Reminder[]
 
     @@index([patientId])
     @@index([providerId])
     @@index([nurseId])
     @@index([scheduledAt])
+}
+
+model ClinicMessage {
+    id           String   @id @default(cuid())
+    patientId    String
+    patient      Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    providerId   String
+    provider     Provider @relation(fields: [providerId], references: [id])
+    authorUserId String
+    author       User     @relation(fields: [authorUserId], references: [id])
+    body         String
+    createdAt    DateTime @default(now())
+
+    @@index([patientId, createdAt])
 }
 
 model Visit {
@@ -254,6 +286,8 @@ model Visit {
     followUpInstructions String
     status               String
     notes                ClinicalNote[]
+    orders               PrescriptionOrder[]
+    events               ClinicalEvent[]
 
     @@index([patientId])
 }
@@ -306,4 +340,110 @@ model Task {
 
     @@index([patientId])
     @@index([assignedProviderId])
+}
+
+model Pharmacy {
+    id        String              @id
+    name      String
+    street    String
+    city      String
+    state     String
+    phone     String
+    ncpdpId   String              @unique
+    patients  Patient[]
+    intakes   Intake[]
+    orders    PrescriptionOrder[]
+}
+
+model Intake {
+    id                     String      @id @default(cuid())
+    appointmentId          String      @unique
+    appointment            Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+    patientId              String
+    patient                Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    phq9Score              Int
+    gad7Score              Int
+    safetyConcern          Boolean
+    safetyNote             String?
+    medicationChangesNote  String?
+    pharmacyId             String
+    pharmacy               Pharmacy    @relation(fields: [pharmacyId], references: [id])
+    completedAt            DateTime
+
+    @@index([patientId])
+    @@index([pharmacyId])
+}
+
+model PrescriptionOrder {
+    id                    String      @id @default(cuid())
+    visitId               String?
+    visit                 Visit?      @relation(fields: [visitId], references: [id], onDelete: SetNull)
+    appointmentId         String?
+    appointment           Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+    patientId             String
+    patient               Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    prescribingProviderId String
+    prescribingProvider   Provider    @relation(fields: [prescribingProviderId], references: [id])
+    pharmacyId            String
+    pharmacy              Pharmacy    @relation(fields: [pharmacyId], references: [id])
+    medicationName        String
+    genericName           String
+    dosage                String
+    route                 String
+    frequency             String
+    quantity              Int
+    refills               Int
+    sig                   String
+    action                String
+    status                String
+    statusDetail          String
+    allergyOverrideReason String?
+    medicationId          String?
+    createdAt             DateTime    @default(now())
+    updatedAt             DateTime    @updatedAt
+    events                ClinicalEvent[]
+
+    @@index([patientId])
+    @@index([visitId])
+    @@index([appointmentId])
+    @@index([pharmacyId])
+}
+
+model ClinicalEvent {
+    id            String             @id @default(cuid())
+    patientId     String
+    patient       Patient            @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    actorUserId   String
+    actor         User               @relation(fields: [actorUserId], references: [id])
+    type          String
+    payload       String
+    visitId       String?
+    visit         Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
+    appointmentId String?
+    appointment   Appointment?       @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+    orderId       String?
+    order         PrescriptionOrder? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+    createdAt     DateTime           @default(now())
+
+    @@index([patientId, createdAt])
+    @@index([appointmentId])
+    @@index([orderId])
+}
+
+model Reminder {
+    id            String      @id @default(cuid())
+    appointmentId String
+    appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+    patientId     String
+    patient       Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    dueAt         DateTime
+    channel       String
+    kind          String
+    status        String
+    body          String
+    sentAt        DateTime?
+
+    @@index([patientId])
+    @@index([appointmentId])
+    @@index([status, dueAt])
 }

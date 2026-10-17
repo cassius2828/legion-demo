@@ -22,7 +22,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { rescheduleAppointment, scheduleAppointment } from "~/app/calendar/actions";
+import { cancelCalendarAppointment, listMoveSlots, rescheduleAppointment, scheduleAppointment } from "~/app/calendar/actions";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
@@ -93,6 +93,13 @@ export function CalendarBoard({
         ? slotStart(overId)
         : null;
     if (!nextStart || nextStart.getTime() === start.getTime()) return;
+    if (
+      item.appointment &&
+      (item.appointment.status !== "scheduled" || start.getTime() < Date.now())
+    ) {
+      setError("Only an upcoming appointment can be moved.");
+      return;
+    }
 
     startTransition(async () => {
       const result = await rescheduleAppointment({
@@ -520,8 +527,20 @@ function TimedEventChip({
 }
 
 function AppointmentModal({ event, onClose }: { event: CalendarEvent; onClose: () => void }) {
+  const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
   const details = event.appointment;
+  const editable =
+    Boolean(details) &&
+    details?.status === "scheduled" &&
+    new Date(event.start).getTime() >= Date.now();
+  const [groups, setGroups] = useState<{ dayKey: string; label: string; slots: { start: string; label: string }[] }[]>([]);
+  const [reason, setReason] = useState("");
+  const [cancelling, setCancelling] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loadingSlots, setLoadingSlots] = useState(editable);
+  const [openDay, setOpenDay] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     panelRef.current?.focus();
@@ -531,6 +550,57 @@ function AppointmentModal({ event, onClose }: { event: CalendarEvent; onClose: (
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  useEffect(() => {
+    if (!editable) return;
+    let ignore = false;
+    setLoadingSlots(true);
+    void listMoveSlots(event.id).then((result) => {
+      if (ignore) return;
+      if (result.ok) setGroups(result.groups);
+      setLoadingSlots(false);
+    });
+    return () => {
+      ignore = true;
+    };
+  }, [editable, event.id]);
+
+  function moveTo(start: string) {
+    const current = new Date(event.start);
+    const next = new Date(start);
+    const duration = Math.max(new Date(event.end).getTime() - current.getTime(), 30 * 60 * 1000);
+    setError(null);
+    startTransition(async () => {
+      const result = await rescheduleAppointment({
+        id: event.id,
+        start,
+        end: new Date(next.getTime() + duration).toISOString(),
+      });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      onClose();
+      router.refresh();
+    });
+  }
+
+  function cancelVisit() {
+    if (reason.trim().length === 0) {
+      setError("Explain why you are cancelling.");
+      return;
+    }
+    setError(null);
+    startTransition(async () => {
+      const result = await cancelCalendarAppointment({ id: event.id, reason });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      onClose();
+      router.refresh();
+    });
+  }
 
   return (
     <div
@@ -543,7 +613,7 @@ function AppointmentModal({ event, onClose }: { event: CalendarEvent; onClose: (
         aria-modal="true"
         aria-labelledby="appointment-dialog-title"
         tabIndex={-1}
-        className="max-h-[min(32rem,calc(100vh-2rem))] w-full max-w-md outline-none"
+        className="max-h-[min(40rem,calc(100vh-2rem))] w-full max-w-md outline-none"
         onClick={(clickEvent) => clickEvent.stopPropagation()}
       >
         <CardHeader>
@@ -571,6 +641,79 @@ function AppointmentModal({ event, onClose }: { event: CalendarEvent; onClose: (
               {details.reasonForVisit ? <Detail label="Reason">{details.reasonForVisit}</Detail> : null}
               {details.description ? <Detail label="Notes">{details.description}</Detail> : null}
             </dl>
+          ) : null}
+          {editable ? (
+            <div className="grid gap-3 border-t pt-4">
+              <h3 className="text-sm font-medium">Reschedule</h3>
+              {groups.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  {loadingSlots
+                    ? "Loading openings..."
+                    : "No other openings in the next three weeks."}
+                </p>
+              ) : (
+                groups.map((group) => {
+                  const open = openDay === group.dayKey;
+                  return (
+                    <section key={group.dayKey}>
+                      <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1 py-1.5 text-left text-sm font-medium hover:bg-muted"
+                        aria-expanded={open}
+                        onClick={() => setOpenDay(open ? null : group.dayKey)}
+                      >
+                        <span
+                          aria-hidden
+                          className={`text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}
+                        >
+                          ›
+                        </span>
+                        {group.label}
+                      </button>
+                      {open ? (
+                        <div className="mt-2 flex flex-wrap gap-2 pl-5">
+                          {group.slots.map((slot) => (
+                            <Button
+                              key={slot.start}
+                              type="button"
+                              variant="outline"
+                              disabled={pending}
+                              onClick={() => moveTo(slot.start)}
+                            >
+                              {slot.label}
+                            </Button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </section>
+                  );
+                })
+              )}
+              {cancelling ? (
+                <label className="grid gap-1 text-sm">
+                  Why are you cancelling?
+                  <textarea
+                    value={reason}
+                    onChange={(change) => setReason(change.target.value)}
+                    maxLength={1000}
+                    rows={3}
+                    className="rounded-lg border bg-background px-3 py-2"
+                  />
+                </label>
+              ) : null}
+              {error ? <p className="text-sm text-destructive">{error}</p> : null}
+              <div className="flex flex-wrap gap-2">
+                {cancelling ? (
+                  <Button type="button" variant="destructive" disabled={pending} onClick={cancelVisit}>
+                    Confirm cancel
+                  </Button>
+                ) : (
+                  <Button type="button" variant="destructive" disabled={pending} onClick={() => setCancelling(true)}>
+                    Cancel appointment
+                  </Button>
+                )}
+              </div>
+            </div>
           ) : null}
         </CardContent>
       </Card>

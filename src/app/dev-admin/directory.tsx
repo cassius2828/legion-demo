@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus, Stethoscope, User } from "lucide-react";
+import { Stethoscope, User } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -23,6 +23,32 @@ export type DirectoryProvider = {
   id: string;
   name: string;
 };
+
+function HospitalPlus({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
+      <path d="M9 2.5h6a1 1 0 0 1 1 1V8h4.5a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H16v4.5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V16H3.5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1H8V3.5a1 1 0 0 1 1-1Z" />
+    </svg>
+  );
+}
+
+const ROLE_ICON = {
+  psychiatrist: Stethoscope,
+  patient: User,
+} as const;
+
+function RoleMark({ kind }: { kind: DirectoryKind }) {
+  const Icon = kind === "nurse" ? null : ROLE_ICON[kind];
+  return (
+    <span
+      title={roleLabel(kind)}
+      className="inline-flex size-7 items-center justify-center rounded-full bg-muted text-foreground"
+    >
+      {Icon ? <Icon className="size-4" aria-hidden /> : <HospitalPlus className="size-5" />}
+      <span className="sr-only">{roleLabel(kind)}</span>
+    </span>
+  );
+}
 
 const FILTERS: { id: "all" | DirectoryKind; label: string }[] = [
   { id: "all", label: "All" },
@@ -106,6 +132,9 @@ export function AdminDirectory({
               <Card size="sm" className="h-full">
                 <CardHeader>
                   <CardTitle>{person.name}</CardTitle>
+                  <CardAction>
+                    <RoleMark kind={person.kind} />
+                  </CardAction>
                 </CardHeader>
                 <CardContent className="text-sm">
                   <p>{person.email}</p>
@@ -165,4 +194,10 @@ export function AdminDirectory({
                   </li>
                 );
               })}
-            </u
+            </ul>
+          )}
+        </section>
+      )}
+    </div>
+  );
+}

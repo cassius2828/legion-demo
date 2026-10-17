@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { isRole, type Role } from "~/lib/profile";
+import { isInsurance, isRole, type Role } from "~/lib/profile";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
@@ -82,14 +82,20 @@ async function saveProfileFields(
   const secondaryInsurance = readText(formData, "secondaryInsurance");
   const organization = organizationName(formData);
 
-  if (patient && (primaryInsurance.length === 0 || primaryInsurance.length > 120)) {
-    return { error: "Enter a primary insurance." };
+  if (patient && primaryInsurance && !isInsurance(primaryInsurance)) {
+    return { error: "Choose a primary insurance." };
+  }
+  if (patient && secondaryInsurance && !isInsurance(secondaryInsurance)) {
+    return { error: "Choose a secondary insurance." };
+  }
+  if (patient && secondaryInsurance && !primaryInsurance) {
+    return { error: "Choose a primary insurance before a secondary." };
+  }
+  if (patient && secondaryInsurance && secondaryInsurance === primaryInsurance) {
+    return { error: "Choose a different secondary insurance." };
   }
   if (!patient && (organization.length === 0 || organization.length > 120)) {
     return { error: "Choose a provider." };
-  }
-  if (secondaryInsurance.length > 120) {
-    return { error: "Secondary insurance is too long." };
   }
 
   const organizationId = patient ? null : await organizationIdFor(organization);
@@ -97,8 +103,8 @@ async function saveProfileFields(
     name,
     email,
     role,
-    primaryInsurance: patient ? primaryInsurance : null,
-    secondaryInsurance: patient && secondaryInsurance.length > 0 ? secondaryInsurance : null,
+    primaryInsurance: patient && primaryInsurance ? primaryInsurance : null,
+    secondaryInsurance: patient && primaryInsurance && secondaryInsurance ? secondaryInsurance : null,
     organizationId,
   };
   const existingId = await findUserIdByEmail(email);

@@ -25,6 +25,13 @@ export async function AppNav() {
                   Book
                 </Link>
               ) : null}
+              {session.user.role === "patient" ||
+              session.user.role === "psychiatrist" ||
+              session.user.role === "nurse" ? (
+                <Link href="/messages" className="text-sm font-medium hover:text-primary">
+                  Messages
+                </Link>
+              ) : null}
               {session.user.role === "psychiatrist" || session.user.role === "nurse" ? (
                 <Link href="/transfers" className="inline-flex items-center gap-1 text-sm font-medium hover:text-primary">
                   <ShareIcon />

@@ -193,6 +193,7 @@ exports.Prisma.PatientScalarFieldEnum = {
   phone: 'phone',
   psychiatricHistory: 'psychiatricHistory',
   primaryProviderId: 'primaryProviderId',
+  preferredPharmacyId: 'preferredPharmacyId',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -264,6 +265,17 @@ exports.Prisma.AppointmentScalarFieldEnum = {
   title: 'title',
   description: 'description',
   reasonForVisit: 'reasonForVisit',
+  cancellationReason: 'cancellationReason',
+  joinToken: 'joinToken',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ClinicMessageScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  providerId: 'providerId',
+  authorUserId: 'authorUserId',
+  body: 'body',
   createdAt: 'createdAt'
 };
 
@@ -317,6 +329,77 @@ exports.Prisma.TaskScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PharmacyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  phone: 'phone',
+  ncpdpId: 'ncpdpId'
+};
+
+exports.Prisma.IntakeScalarFieldEnum = {
+  id: 'id',
+  appointmentId: 'appointmentId',
+  patientId: 'patientId',
+  phq9Score: 'phq9Score',
+  gad7Score: 'gad7Score',
+  safetyConcern: 'safetyConcern',
+  safetyNote: 'safetyNote',
+  medicationChangesNote: 'medicationChangesNote',
+  pharmacyId: 'pharmacyId',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.PrescriptionOrderScalarFieldEnum = {
+  id: 'id',
+  visitId: 'visitId',
+  appointmentId: 'appointmentId',
+  patientId: 'patientId',
+  prescribingProviderId: 'prescribingProviderId',
+  pharmacyId: 'pharmacyId',
+  medicationName: 'medicationName',
+  genericName: 'genericName',
+  dosage: 'dosage',
+  route: 'route',
+  frequency: 'frequency',
+  quantity: 'quantity',
+  refills: 'refills',
+  sig: 'sig',
+  action: 'action',
+  status: 'status',
+  statusDetail: 'statusDetail',
+  allergyOverrideReason: 'allergyOverrideReason',
+  medicationId: 'medicationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClinicalEventScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  actorUserId: 'actorUserId',
+  type: 'type',
+  payload: 'payload',
+  visitId: 'visitId',
+  appointmentId: 'appointmentId',
+  orderId: 'orderId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ReminderScalarFieldEnum = {
+  id: 'id',
+  appointmentId: 'appointmentId',
+  patientId: 'patientId',
+  dueAt: 'dueAt',
+  channel: 'channel',
+  kind: 'kind',
+  status: 'status',
+  body: 'body',
+  sentAt: 'sentAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -344,10 +427,16 @@ exports.Prisma.ModelName = {
   Medication: 'Medication',
   ProviderScheduleBlock: 'ProviderScheduleBlock',
   Appointment: 'Appointment',
+  ClinicMessage: 'ClinicMessage',
   Visit: 'Visit',
   ClinicalNote: 'ClinicalNote',
   PatientSummaryRecord: 'PatientSummaryRecord',
-  Task: 'Task'
+  Task: 'Task',
+  Pharmacy: 'Pharmacy',
+  Intake: 'Intake',
+  PrescriptionOrder: 'PrescriptionOrder',
+  ClinicalEvent: 'ClinicalEvent',
+  Reminder: 'Reminder'
 };
 
 /**

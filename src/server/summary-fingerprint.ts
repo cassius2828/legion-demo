@@ -3,7 +3,10 @@ import "server-only";
 import { createHash } from "node:crypto";
 
 import { CLINIC_TIME_ZONE } from "~/lib/clinic-time";
-import type { PatientSummary, SavedPatientSummary } from "~/lib/patient-summary";
+import type {
+  PatientSummary,
+  SavedPatientSummary,
+} from "~/lib/patient-summary";
 import { db } from "~/server/db";
 
 const approvedDate = new Intl.DateTimeFormat("en-US", {
@@ -14,12 +17,15 @@ const approvedDate = new Intl.DateTimeFormat("en-US", {
 });
 
 export async function chartFingerprint(patientId: string) {
-  const [patient, visit, medications, tasks] = await Promise.all([
+  const [patient, visit, medications, tasks, orders] = await Promise.all([
     db.patient.findUnique({
       where: { id: patientId },
       select: {
         psychiatricHistory: true,
-        conditions: { orderBy: { description: "asc" }, select: { description: true } },
+        conditions: {
+          orderBy: { description: "asc" },
+          select: { description: true },
+        },
       },
     }),
     db.visit.findFirst({
@@ -29,7 +35,11 @@ export async function chartFingerprint(patientId: string) {
     }),
     db.medication.findMany({
       where: { patientId },
-      orderBy: [{ medicationName: "asc" }, { dosage: "asc" }, { status: "asc" }],
+      orderBy: [
+        { medicationName: "asc" },
+        { dosage: "asc" },
+        { status: "asc" },
+      ],
       select: { medicationName: true, dosage: true, status: true },
     }),
     db.task.findMany({
@@ -37,14 +47,23 @@ export async function chartFingerprint(patientId: string) {
       orderBy: [{ dueDate: "asc" }, { title: "asc" }],
       select: { title: true, description: true, priority: true, dueDate: true },
     }),
+    db.prescriptionOrder.findMany({
+      where: { patientId },
+      orderBy: { updatedAt: "desc" },
+      take: 8,
+      select: { id: true, status: true, medicationName: true, dosage: true },
+    }),
   ]);
 
-  const diagnoses = patient?.conditions.map((condition) => condition.description) ?? [];
+  const diagnoses =
+    patient?.conditions.map((condition) => condition.description) ?? [];
   const history = patient?.psychiatricHistory.trim();
   if (history) diagnoses.push(history);
 
   const payload = {
-    visit: visit ? { id: visit.id, clinicalSummary: visit.clinicalSummary } : null,
+    visit: visit
+      ? { id: visit.id, clinicalSummary: visit.clinicalSummary }
+      : null,
     medications,
     diagnoses,
     tasks: tasks.map((task) => ({
@@ -53,6 +72,7 @@ export async function chartFingerprint(patientId: string) {
       priority: task.priority,
       dueDate: task.dueDate.toISOString(),
     })),
+    orders,
   };
 
   return createHash("sha256").update(JSON.stringify(payload)).digest("hex");
@@ -68,8 +88,12 @@ function readList(value: string) {
   }
 }
 
-export async function loadSavedSummary(patientId: string): Promise<SavedPatientSummary | null> {
-  const record = await db.patientSummaryRecord.findUnique({ where: { patientId } });
+export async function loadSavedSummary(
+  patientId: string,
+): Promise<SavedPatientSummary | null> {
+  const record = await db.patientSummaryRecord.findUnique({
+    where: { patientId },
+  });
   if (!record) return null;
   const current = await chartFingerprint(patientId);
   const summary: PatientSummary = {

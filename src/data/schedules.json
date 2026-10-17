@@ -31,5 +31,11 @@
   { "providerId": "prv_04", "dayOfWeek": 3, "startMinute": 480, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
   { "providerId": "prv_04", "dayOfWeek": 4, "startMinute": 780, "endMinute": 1080, "slotMinutes": 30, "kind": "follow-up" },
   { "providerId": "prv_04", "dayOfWeek": 5, "startMinute": 480, "endMinute": 600, "slotMinutes": 60, "kind": "intake" },
-  { "providerId": "prv_04", "dayOfWeek": 5, "startMinute": 600, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" }
+  { "providerId": "prv_04", "dayOfWeek": 5, "startMinute": 600, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+
+  { "providerId": "prv_05", "dayOfWeek": 2, "startMinute": 540, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_05", "dayOfWeek": 2, "startMinute": 780, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_05", "dayOfWeek": 4, "startMinute": 540, "endMinute": 660, "slotMinutes": 60, "kind": "intake" },
+  { "providerId": "prv_05", "dayOfWeek": 4, "startMinute": 660, "endMinute": 720, "slotMinutes": 30, "kind": "follow-up" },
+  { "providerId": "prv_05", "dayOfWeek": 4, "startMinute": 780, "endMinute": 1020, "slotMinutes": 30, "kind": "follow-up" }
 ]
