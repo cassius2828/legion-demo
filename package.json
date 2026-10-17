@@ -18,7 +18,7 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "test": "node --experimental-strip-types --test src/server/summary-assembly.test.ts src/server/booking-choice.test.ts",
+    "test": "npm run typecheck && node --experimental-strip-types --test src/server/summary-assembly.test.ts src/server/booking-choice.test.ts",
     "eval:live": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/eval-live-agents.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -60,7 +60,7 @@
     "prisma": "^6.6.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
-    "typescript": "^5.8.2",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.71.2"
   },
   "ct3aMetadata": {
