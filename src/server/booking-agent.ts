@@ -10,6 +10,11 @@ import type { Prisma } from "../../generated/prisma";
 import { env } from "~/env";
 import { CLINIC_TIME_ZONE } from "~/lib/clinic-time";
 import { listOpenFollowUpSlots } from "~/server/availability";
+import {
+  SAME_DAY_APPOINTMENT_ERROR,
+  UPCOMING_APPOINTMENT_ERROR,
+  usualWeekdayAndTime,
+} from "~/server/booking-choice";
 import { db } from "~/server/db";
 import { bookingBlock, otherScheduledVisits } from "~/server/follow-up";
 
@@ -66,6 +71,7 @@ type BookingContext = {
   movingAppointmentId: string | null;
   excludeStart: string | null;
   booked: BookedSlot | null;
+  refusal: string | null;
 };
 
 export type AgentBookingResult =
@@ -270,26 +276,11 @@ const checkPatientHistory = tool({
       status: row.status,
     }));
 
-    const counts = new Map<
-      string,
-      { weekday: string; time: string; count: number }
-    >();
-    for (const visit of visits) {
-      if (visit.status !== "completed") continue;
-      const key = `${visit.weekday} ${visit.time}`;
-      const current = counts.get(key) ?? {
-        weekday: visit.weekday,
-        time: visit.time,
-        count: 0,
-      };
-      current.count += 1;
-      counts.set(key, current);
-    }
-    const usualWeekdayAndTime =
-      [...counts.values()].sort((left, right) => right.count - left.count)[0] ??
-      null;
-
-    return { timeZone: CLINIC_TIME_ZONE, usualWeekdayAndTime, visits };
+    return {
+      timeZone: CLINIC_TIME_ZONE,
+      usualWeekdayAndTime: usualWeekdayAndTime(visits),
+      visits,
+    };
   },
 });
 
@@ -330,10 +321,13 @@ const bookCompatibleTime = tool({
     if (!saved.ok) {
       const error =
         saved.error === "same-day"
-          ? "That day already has an appointment. Pick another day."
+          ? SAME_DAY_APPOINTMENT_ERROR
           : saved.error === "upcoming"
-            ? "This patient already has an upcoming appointment."
+            ? UPCOMING_APPOINTMENT_ERROR
             : "That start is not open. Pick another start from check_provider_schedule.";
+      if (saved.error === "same-day" || saved.error === "upcoming") {
+        booking.refusal = error;
+      }
       return { booked: false, error };
     }
 
@@ -395,6 +389,7 @@ export async function scheduleWithAgent(input: {
     movingAppointmentId: input.movingAppointmentId ?? null,
     excludeStart: input.excludeStart ?? null,
     booked: null,
+    refusal: null,
   };
 
   const prompt = input.movingAppointmentId
@@ -406,7 +401,9 @@ export async function scheduleWithAgent(input: {
     if (!context.booked) {
       return {
         ok: false,
-        error: "A time could not be booked automatically. Choose a time below.",
+        error:
+          context.refusal ??
+          "A time could not be booked automatically. Choose a time below.",
       };
     }
     return {
@@ -428,7 +425,9 @@ export async function scheduleWithAgent(input: {
     }
     return {
       ok: false,
-      error: "A time could not be booked automatically. Choose a time below.",
+      error:
+        context.refusal ??
+        "A time could not be booked automatically. Choose a time below.",
     };
   }
 }

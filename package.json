@@ -18,7 +18,8 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "test": "node --experimental-strip-types --test src/server/summary-assembly.test.ts",
+    "test": "node --experimental-strip-types --test src/server/summary-assembly.test.ts src/server/booking-choice.test.ts",
+    "eval:live": "node --env-file-if-exists=.env --conditions=react-server --import tsx scripts/eval-live-agents.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -58,6 +59,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^6.6.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.71.2"
   },
