@@ -1,7 +1,8 @@
 import "server-only";
 
-import { getGoogleAccessToken } from "~/server/auth/google-account";
+import { CLINIC_TIME_ZONE } from "~/lib/clinic-time";
 import type { CalendarEvent } from "~/lib/calendar-dates";
+import { getGoogleAccessToken } from "~/server/auth/google-account";
 
 type GoogleEvent = {
   id?: string;
@@ -10,8 +11,6 @@ type GoogleEvent = {
   start?: { dateTime?: string; date?: string };
   end?: { dateTime?: string; date?: string };
 };
-
-const timeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 async function calendarFetch(userId: string, url: string, init?: RequestInit) {
   const first = await getGoogleAccessToken(userId);
@@ -107,8 +106,8 @@ export async function createCalendarEvent(
       method: "POST",
       body: JSON.stringify({
         summary: input.title,
-        start: { dateTime: input.start.toISOString(), timeZone: timeZone() },
-        end: { dateTime: input.end.toISOString(), timeZone: timeZone() },
+        start: { dateTime: input.start.toISOString(), timeZone: CLINIC_TIME_ZONE },
+        end: { dateTime: input.end.toISOString(), timeZone: CLINIC_TIME_ZONE },
       }),
     },
   );
@@ -129,8 +128,8 @@ export async function moveCalendarEvent(
     {
       method: "PATCH",
       body: JSON.stringify({
-        start: { dateTime: input.start.toISOString(), timeZone: timeZone() },
-        end: { dateTime: input.end.toISOString(), timeZone: timeZone() },
+        start: { dateTime: input.start.toISOString(), timeZone: CLINIC_TIME_ZONE },
+        end: { dateTime: input.end.toISOString(), timeZone: CLINIC_TIME_ZONE },
       }),
     },
   );

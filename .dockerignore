@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+generated
+.env
+.env*.local
+prisma/db.sqlite
+prisma/db.sqlite-journal
+db.sqlite
+coverage

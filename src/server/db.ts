@@ -3,8 +3,7 @@ import { PrismaClient } from "../../generated/prisma";
 
 const createPrismaClient = () =>
   new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    log: ["error"],
   });
 
 const globalForPrisma = globalThis as unknown as {

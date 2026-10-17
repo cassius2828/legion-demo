@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:18.3
+    environment:
+      POSTGRES_USER: legion
+      POSTGRES_PASSWORD: legion
+      POSTGRES_DB: legion
+      TZ: America/Los_Angeles
+      PGTZ: America/Los_Angeles
+    command: ["postgres", "-c", "timezone=America/Los_Angeles"]
+    ports:
+      - "15432:5432"
+    volumes:
+      - legion_pg:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U legion -d legion"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://legion:legion@postgres:5432/legion
+      TZ: America/Los_Angeles
+      NODE_ENV: production
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_TRUST_HOST: "true"
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+volumes:
+  legion_pg:

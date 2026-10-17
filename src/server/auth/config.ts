@@ -1,10 +1,8 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
-import { DEV_PASSWORD, userForDevSignIn } from "~/server/auth/dev-sign-in";
 import { saveGoogleOAuthTokens } from "~/server/auth/google-account";
 import { db } from "~/server/db";
 
@@ -37,6 +35,7 @@ export const authConfig = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
       authorization: {
         params: {
           access_type: "offline",
@@ -48,18 +47,6 @@ export const authConfig = {
             "https://www.googleapis.com/auth/calendar.events",
           ].join(" "),
         },
-      },
-    }),
-    Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const email = typeof credentials?.email === "string" ? credentials.email.trim() : "";
-        const password = typeof credentials?.password === "string" ? credentials.password : "";
-        if (password !== DEV_PASSWORD) return null;
-        return userForDevSignIn(email);
       },
     }),
   ],
