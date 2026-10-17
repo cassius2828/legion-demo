@@ -1,3 +1,8 @@
+import {
+  startLocalTraces,
+  writeEvalRun,
+  type EvalCheck,
+} from "./eval-run-log";
 import { formatDate, fullName } from "~/lib/chart";
 import { CLINIC_TIME_ZONE } from "~/lib/clinic-time";
 import { listOpenFollowUpSlots } from "~/server/availability";
@@ -40,9 +45,34 @@ const timeFormat = new Intl.DateTimeFormat("en-US", {
 });
 
 const failures: string[] = [];
+const checks: EvalCheck[] = [];
+const log: string[] = [];
+const startedAt = new Date();
+const traces = startLocalTraces();
 
 function note(check: string) {
   failures.push(check);
+}
+
+function logLine(message: string) {
+  log.push(`${new Date().toISOString()} ${message}`);
+}
+
+async function runCase(name: string, body: () => Promise<void>) {
+  const before = failures.length;
+  logLine(`${name} started`);
+  await body();
+  const caseFailures = failures.slice(before);
+  checks.push({
+    name,
+    passed: caseFailures.length === 0,
+    failures: caseFailures,
+  });
+  logLine(
+    caseFailures.length === 0
+      ? `${name} passed`
+      : `${name} failed: ${caseFailures.join("; ")}`,
+  );
 }
 
 function sameLists(left: SummaryLists, right: SummaryLists) {
@@ -368,26 +398,52 @@ async function evaluateMove(patientName: string) {
   }
 }
 
-const patient = await db.patient.findUnique({
-  where: { id: PATIENT_ID },
-  select: {
-    id: true,
-    firstName: true,
-    lastName: true,
-    primaryProviderId: true,
-  },
-});
-
-if (!patient || patient.primaryProviderId !== PROVIDER_ID) {
-  note("seeded chart is not available");
-} else {
-  const patientName = fullName(patient);
-  await evaluateSummary();
-  await evaluateNewBooking(patientName);
-  await evaluateMove(patientName);
+try {
+  const patient = await db.patient.findUnique({
+    where: { id: PATIENT_ID },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      primaryProviderId: true,
+    },
+  });
+  if (!patient || patient.primaryProviderId !== PROVIDER_ID) {
+    note("seeded chart is not available");
+    checks.push({
+      name: "seeded-chart",
+      passed: false,
+      failures: ["seeded chart is not available"],
+    });
+    logLine("seeded chart is not available");
+  } else {
+    const patientName = fullName(patient);
+    await runCase("summary", () => evaluateSummary());
+    await runCase("new-booking", () => evaluateNewBooking(patientName));
+    await runCase("move", () => evaluateMove(patientName));
+  }
+} catch {
+  note("live-agents: run failed");
+  checks.push({
+    name: "live-agents",
+    passed: false,
+    failures: ["live-agents: run failed"],
+  });
+  logLine("live-agents failed");
+} finally {
+  await db.$disconnect();
+  const files = await writeEvalRun({
+    purpose: "live-agents",
+    startedAt,
+    finishedAt: new Date(),
+    checks,
+    log,
+    traces,
+  });
+  console.log(`Results: ${files.results}`);
+  console.log(`Log: ${files.log}`);
+  console.log(`Traces: ${files.traces}`);
 }
-
-await db.$disconnect();
 
 if (failures.length > 0) {
   console.error(failures.join("\n"));
