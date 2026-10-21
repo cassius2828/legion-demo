@@ -130,11 +130,11 @@ describe("assembleSummary", () => {
 describe("approvalDecision", () => {
   const current = retrieved;
 
-  it("rejects a fingerprint from before the chart changed", () => {
+  it("rejects a version from before the chart changed", () => {
     const result = approvalDecision({
       summary: draft(),
-      draftFingerprint: "generation",
-      currentFingerprint: "later-chart",
+      draftVersion: 1,
+      currentVersion: 2,
       current,
     });
     assert.deepEqual(result, {
@@ -146,8 +146,8 @@ describe("approvalDecision", () => {
   it("rejects lists that were not retrieved", () => {
     const result = approvalDecision({
       summary: draft({ currentMedications: ["Poisonol, 99 mg"] }),
-      draftFingerprint: "same",
-      currentFingerprint: "same",
+      draftVersion: 4,
+      currentVersion: 4,
       current,
     });
     assert.deepEqual(result, {
@@ -159,8 +159,8 @@ describe("approvalDecision", () => {
   it("rejects a draft that still says retrieval failed", () => {
     const result = approvalDecision({
       summary: draft({ outstandingTasks: [RETRIEVAL_FAILED] }),
-      draftFingerprint: "same",
-      currentFingerprint: "same",
+      draftVersion: 4,
+      currentVersion: 4,
       current: { ...current, outstandingTasks: [RETRIEVAL_FAILED] },
     });
     assert.deepEqual(result, {
@@ -169,11 +169,11 @@ describe("approvalDecision", () => {
     });
   });
 
-  it("accepts a draft whose fingerprint and lists still match", () => {
+  it("accepts a draft whose version and lists still match", () => {
     const result = approvalDecision({
       summary: draft(),
-      draftFingerprint: "same",
-      currentFingerprint: "same",
+      draftVersion: 4,
+      currentVersion: 4,
       current,
     });
     assert.deepEqual(result, { ok: true });

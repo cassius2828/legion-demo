@@ -1,3 +1,5 @@
+import { bumpChartVersions } from "./chart-version.mjs";
+
 const HOUR_MS = 60 * 60 * 1000;
 
 export async function seedCareLoop(db) {
@@ -122,5 +124,6 @@ export async function seedCareLoop(db) {
     }
   }
 
+  await bumpChartVersions(db, [patient.id]);
   return { orders: 1 };
 }

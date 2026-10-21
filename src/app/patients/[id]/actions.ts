@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 
+import type { Prisma } from "../../../../generated/prisma";
+
 import { formatDate } from "~/lib/chart";
 import {
   patientSummarySchema,
@@ -16,10 +18,7 @@ import {
 } from "~/server/access";
 import { db } from "~/server/db";
 import { summarizePatient } from "~/server/patient-summary-agent";
-import {
-  chartFingerprint,
-  loadSavedSummary,
-} from "~/server/summary-fingerprint";
+import { loadSavedSummary } from "~/server/chart-version";
 import {
   approvalDecision,
   diagnosisLines,
@@ -29,7 +28,7 @@ import {
 } from "~/server/summary-assembly";
 
 export type SummaryActionResult =
-  | { ok: true; summary: PatientSummary; fingerprint: string }
+  | { ok: true; summary: PatientSummary; chartVersion: number }
   | { ok: false; error: string };
 
 async function authorizedPatient(patientId: string) {
@@ -90,13 +89,24 @@ export async function preparePatientSummary(
   });
   if (!prepared.ok) return prepared;
 
-  const fingerprint = await chartFingerprint(access.patientId);
-  return { ok: true, summary: prepared.summary, fingerprint };
+  const chart = await db.patient.findUnique({
+    where: { id: access.patientId },
+    select: { chartVersion: true },
+  });
+  if (!chart) return { ok: false, error: "That chart is not available." };
+  return {
+    ok: true,
+    summary: prepared.summary,
+    chartVersion: chart.chartVersion,
+  };
 }
 
-async function currentSummaryLists(patientId: string) {
+async function currentSummaryLists(
+  patientId: string,
+  database: Prisma.TransactionClient,
+) {
   const [chart, visits, medications, tasks] = await Promise.all([
-    db.patient.findUnique({
+    database.patient.findUnique({
       where: { id: patientId },
       select: {
         psychiatricHistory: true,
@@ -106,18 +116,18 @@ async function currentSummaryLists(patientId: string) {
         },
       },
     }),
-    db.visit.findMany({
+    database.visit.findMany({
       where: { patientId, status: "completed" },
       orderBy: { visitDate: "desc" },
       take: 5,
       select: { clinicalSummary: true },
     }),
-    db.medication.findMany({
+    database.medication.findMany({
       where: { patientId },
       orderBy: { medicationName: "asc" },
       select: { medicationName: true, dosage: true, status: true },
     }),
-    db.task.findMany({
+    database.task.findMany({
       where: { patientId, status: "open" },
       orderBy: { dueDate: "asc" },
       select: { title: true, description: true, priority: true, dueDate: true },
@@ -151,7 +161,7 @@ async function currentSummaryLists(patientId: string) {
 
 export async function approvePatientSummary(
   summary: PatientSummary,
-  draftFingerprint: string,
+  draftVersion: number,
 ): Promise<
   { ok: true; saved: SavedPatientSummary } | { ok: false; error: string }
 > {
@@ -162,39 +172,51 @@ export async function approvePatientSummary(
   const access = await authorizedPatient(parsed.data.patientId);
   if (!access.ok) return access;
 
-  const [fingerprint, current] = await Promise.all([
-    chartFingerprint(access.patientId),
-    currentSummaryLists(access.patientId),
-  ]);
-  if (!current)
-    return { ok: false, error: "That summary does not match the chart." };
+  const decision = await db.$transaction(async (tx) => {
+    const patient = await tx.patient.findUnique({
+      where: { id: access.patientId },
+      select: { chartVersion: true },
+    });
+    const current = patient
+      ? await currentSummaryLists(access.patientId, tx)
+      : null;
+    if (!patient || !current) {
+      return {
+        ok: false as const,
+        error: "That summary does not match the chart.",
+      };
+    }
 
-  const decision = approvalDecision({
-    summary: parsed.data,
-    draftFingerprint,
-    currentFingerprint: fingerprint,
-    current,
+    const verdict = approvalDecision({
+      summary: parsed.data,
+      draftVersion,
+      currentVersion: patient.chartVersion,
+      current,
+    });
+    if (!verdict.ok) return verdict;
+
+    const data = {
+      approvedByProviderId: access.providerId,
+      approvedAt: new Date(),
+      overview: parsed.data.overview,
+      recentVisitSummary: parsed.data.recentVisitSummary,
+      diagnoses: JSON.stringify(parsed.data.diagnoses),
+      currentMedications: JSON.stringify(parsed.data.currentMedications),
+      discontinuedMedications: JSON.stringify(
+        parsed.data.discontinuedMedications,
+      ),
+      outstandingTasks: JSON.stringify(parsed.data.outstandingTasks),
+      chartVersion: patient.chartVersion,
+    };
+    await tx.patientSummaryRecord.upsert({
+      where: { patientId: access.patientId },
+      update: data,
+      create: { patientId: access.patientId, ...data },
+    });
+    return { ok: true as const };
   });
   if (!decision.ok) return decision;
 
-  const data = {
-    approvedByProviderId: access.providerId,
-    approvedAt: new Date(),
-    overview: parsed.data.overview,
-    recentVisitSummary: parsed.data.recentVisitSummary,
-    diagnoses: JSON.stringify(parsed.data.diagnoses),
-    currentMedications: JSON.stringify(parsed.data.currentMedications),
-    discontinuedMedications: JSON.stringify(
-      parsed.data.discontinuedMedications,
-    ),
-    outstandingTasks: JSON.stringify(parsed.data.outstandingTasks),
-    fingerprint,
-  };
-  await db.patientSummaryRecord.upsert({
-    where: { patientId: access.patientId },
-    update: data,
-    create: { patientId: access.patientId, ...data },
-  });
   revalidatePath(`/patients/${access.patientId}`);
   const saved = await loadSavedSummary(access.patientId);
   if (!saved) return { ok: false, error: "That summary could not be saved." };

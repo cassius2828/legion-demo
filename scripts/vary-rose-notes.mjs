@@ -1,3 +1,5 @@
+import { bumpChartVersions } from "./chart-version.mjs";
+
 export async function applyRoseVisitNotes(db) {
   const notes = {
   vis_pat_16_01: {
@@ -126,7 +128,8 @@ export async function applyRoseVisitNotes(db) {
       },
     });
   }
-}
+  }
+  await bumpChartVersions(db, ["pat_16"]);
   return Object.keys(notes).length;
 }
 

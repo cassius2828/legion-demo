@@ -30,7 +30,7 @@ export function SummaryPanel({
   const [stored, setStored] = useState(saved);
   const [draft, setDraft] = useState<{
     summary: PatientSummary;
-    fingerprint: string;
+    chartVersion: number;
   } | null>(null);
   const [correcting, setCorrecting] = useState(false);
   const [note, setNote] = useState("");
@@ -51,7 +51,7 @@ export function SummaryPanel({
       }
       setCorrecting(false);
       setNote("");
-      setDraft({ summary: result.summary, fingerprint: result.fingerprint });
+      setDraft({ summary: result.summary, chartVersion: result.chartVersion });
     });
   }
 
@@ -61,7 +61,7 @@ export function SummaryPanel({
     startTransition(async () => {
       const result = await approvePatientSummary(
         draft.summary,
-        draft.fingerprint,
+        draft.chartVersion,
       );
       if (!result.ok) {
         setError(result.error);
@@ -86,7 +86,7 @@ export function SummaryPanel({
         setError(result.error);
         return;
       }
-      setDraft({ summary: result.summary, fingerprint: result.fingerprint });
+      setDraft({ summary: result.summary, chartVersion: result.chartVersion });
       setCorrecting(false);
       setNote("");
     });

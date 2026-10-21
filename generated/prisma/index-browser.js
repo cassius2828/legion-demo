@@ -198,6 +198,7 @@ exports.Prisma.PatientScalarFieldEnum = {
   primaryProviderId: 'primaryProviderId',
   preferredPharmacyId: 'preferredPharmacyId',
   userId: 'userId',
+  chartVersion: 'chartVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -317,7 +318,7 @@ exports.Prisma.PatientSummaryRecordScalarFieldEnum = {
   currentMedications: 'currentMedications',
   discontinuedMedications: 'discontinuedMedications',
   outstandingTasks: 'outstandingTasks',
-  fingerprint: 'fingerprint'
+  chartVersion: 'chartVersion'
 };
 
 exports.Prisma.TaskScalarFieldEnum = {

@@ -17,7 +17,7 @@ import type { SavedPatientSummary } from "~/lib/patient-summary";
 import { canViewPatient, viewerRecord } from "~/server/access";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
-import { loadSavedSummary } from "~/server/summary-fingerprint";
+import { loadSavedSummary } from "~/server/chart-version";
 import type { Prisma } from "../../../../generated/prisma";
 
 export const maxDuration = 60;

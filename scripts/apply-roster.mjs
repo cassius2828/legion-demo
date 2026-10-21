@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "../generated/prisma/index.js";
+import { bumpChartVersions } from "./chart-version.mjs";
 import { coverageFor } from "./coverage.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -126,6 +127,7 @@ for (const patient of newPatients) {
       phone: patient.emergencyContact.phone,
     },
   });
+  await bumpChartVersions(db, [patient.id]);
 }
 
 await db.providerScheduleBlock.deleteMany({ where: { providerId: "prv_05" } });

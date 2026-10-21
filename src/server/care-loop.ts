@@ -17,6 +17,7 @@ import { formatClinicWhen } from "~/lib/clinic-time";
 import { canViewPatient, viewerRecord } from "~/server/access";
 import { auth } from "~/server/auth";
 import { commitFollowUpIn } from "~/server/booking-agent";
+import { bumpChartVersion } from "~/server/chart-version";
 import { db } from "~/server/db";
 import { listOpenFollowUpSlots } from "~/server/availability";
 import {
@@ -490,6 +491,7 @@ export async function signVisitNote(input: {
       visitId: visit.id,
       payload: { noteId: note.id },
     });
+    await bumpChartVersion(tx, appointment.patientId);
     return { ok: true as const, patientId: appointment.patientId };
   });
 
@@ -609,6 +611,7 @@ export async function transmitOrder(input: {
     });
     const transmitted = await transmitRecord(tx, created.id, access.userId);
     if (!transmitted.ok) return transmitted;
+    await bumpChartVersion(tx, appointment.patientId);
     return {
       ok: true as const,
       patientId: appointment.patientId,
@@ -650,6 +653,7 @@ export async function closeVisit(appointmentId: string) {
       where: { appointmentId, status: "draft" },
       select: { id: true },
     });
+    const ordersChanged = drafts.length > 0;
     for (const draft of drafts) {
       const transmitted = await transmitRecord(tx, draft.id, access.userId);
       if (!transmitted.ok) return transmitted;
@@ -719,6 +723,7 @@ export async function closeVisit(appointmentId: string) {
         });
       }
       await deliverDueReminders(appointment.providerId, tx);
+      await bumpChartVersion(tx, appointment.patientId);
       return {
         ok: true as const,
         patientId: appointment.patientId,
@@ -763,6 +768,7 @@ export async function closeVisit(appointmentId: string) {
       },
     });
     await deliverDueReminders(appointment.providerId, tx);
+    if (ordersChanged) await bumpChartVersion(tx, appointment.patientId);
     return {
       ok: true as const,
       patientId: appointment.patientId,

@@ -1,3 +1,5 @@
+import { bumpChartVersions } from "./chart-version.mjs";
+
 export const TASKS = [
   {
     id: "tsk_pat_16_eval",
@@ -74,6 +76,10 @@ export async function seedTasks(db) {
       create: { id: task.id, ...data },
     });
   }
+  await bumpChartVersions(
+    db,
+    TASKS.map((task) => task.patientId),
+  );
   return TASKS.length;
 }
 

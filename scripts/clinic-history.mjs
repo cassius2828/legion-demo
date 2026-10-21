@@ -1,3 +1,5 @@
+import { bumpChartVersions } from "./chart-version.mjs";
+
 const CLINIC_TODAY = new Date(2026, 9, 15, 12, 0, 0, 0);
 const NURSE_ID = "prv_02";
 const HOURS = [8, 9, 9, 10, 11, 13, 14, 15, 16];
@@ -572,6 +574,10 @@ export async function seedMedications(db, patients) {
     });
   }
   await createChunked(rows, (data) => db.medication.createMany({ data }));
+  await bumpChartVersions(
+    db,
+    patients.map((patient) => patient.id),
+  );
   return rows.length;
 }
 
@@ -600,6 +606,7 @@ export async function seedClinicHistory(db, patients) {
   await createChunked(notes, (data) => db.clinicalNote.createMany({ data }));
   const { applyRoseVisitNotes } = await import("./vary-rose-notes.mjs");
   await applyRoseVisitNotes(db);
+  await bumpChartVersions(db, ids);
 
   return {
     appointments: appointments.length,

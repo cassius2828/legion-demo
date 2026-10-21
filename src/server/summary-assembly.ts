@@ -152,14 +152,18 @@ export function assembleSummary(input: {
 
 export function approvalDecision(input: {
   summary: AssembledSummary;
-  draftFingerprint: string;
-  currentFingerprint: string;
+  draftVersion: number;
+  currentVersion: number;
   current: SummaryLists;
 }): { ok: true } | { ok: false; error: string } {
-  if (!input.draftFingerprint || containsRetrievalFailure(input.summary)) {
+  if (
+    !Number.isInteger(input.draftVersion) ||
+    input.draftVersion < 0 ||
+    containsRetrievalFailure(input.summary)
+  ) {
     return { ok: false, error: "A summary could not be prepared." };
   }
-  if (input.draftFingerprint !== input.currentFingerprint) {
+  if (input.draftVersion !== input.currentVersion) {
     return {
       ok: false,
       error: "The chart changed. Prepare the summary again.",

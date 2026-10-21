@@ -11804,8 +11804,18 @@ export namespace Prisma {
 
   export type AggregatePatient = {
     _count: PatientCountAggregateOutputType | null
+    _avg: PatientAvgAggregateOutputType | null
+    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
+  }
+
+  export type PatientAvgAggregateOutputType = {
+    chartVersion: number | null
+  }
+
+  export type PatientSumAggregateOutputType = {
+    chartVersion: number | null
   }
 
   export type PatientMinAggregateOutputType = {
@@ -11820,6 +11830,7 @@ export namespace Prisma {
     primaryProviderId: string | null
     preferredPharmacyId: string | null
     userId: string | null
+    chartVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11836,6 +11847,7 @@ export namespace Prisma {
     primaryProviderId: string | null
     preferredPharmacyId: string | null
     userId: string | null
+    chartVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11852,11 +11864,20 @@ export namespace Prisma {
     primaryProviderId: number
     preferredPharmacyId: number
     userId: number
+    chartVersion: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type PatientAvgAggregateInputType = {
+    chartVersion?: true
+  }
+
+  export type PatientSumAggregateInputType = {
+    chartVersion?: true
+  }
 
   export type PatientMinAggregateInputType = {
     id?: true
@@ -11870,6 +11891,7 @@ export namespace Prisma {
     primaryProviderId?: true
     preferredPharmacyId?: true
     userId?: true
+    chartVersion?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11886,6 +11908,7 @@ export namespace Prisma {
     primaryProviderId?: true
     preferredPharmacyId?: true
     userId?: true
+    chartVersion?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11902,6 +11925,7 @@ export namespace Prisma {
     primaryProviderId?: true
     preferredPharmacyId?: true
     userId?: true
+    chartVersion?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11945,6 +11969,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PatientAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PatientMinAggregateInputType
@@ -11975,6 +12011,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PatientCountAggregateInputType | true
+    _avg?: PatientAvgAggregateInputType
+    _sum?: PatientSumAggregateInputType
     _min?: PatientMinAggregateInputType
     _max?: PatientMaxAggregateInputType
   }
@@ -11991,9 +12029,12 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId: string | null
     userId: string | null
+    chartVersion: number
     createdAt: Date
     updatedAt: Date
     _count: PatientCountAggregateOutputType | null
+    _avg: PatientAvgAggregateOutputType | null
+    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
   }
@@ -12024,6 +12065,7 @@ export namespace Prisma {
     primaryProviderId?: boolean
     preferredPharmacyId?: boolean
     userId?: boolean
+    chartVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     primaryProvider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -12059,6 +12101,7 @@ export namespace Prisma {
     primaryProviderId?: boolean
     preferredPharmacyId?: boolean
     userId?: boolean
+    chartVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     primaryProvider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -12078,6 +12121,7 @@ export namespace Prisma {
     primaryProviderId?: boolean
     preferredPharmacyId?: boolean
     userId?: boolean
+    chartVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     primaryProvider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -12097,11 +12141,12 @@ export namespace Prisma {
     primaryProviderId?: boolean
     preferredPharmacyId?: boolean
     userId?: boolean
+    chartVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "gender" | "email" | "phone" | "psychiatricHistory" | "primaryProviderId" | "preferredPharmacyId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["patient"]>
+  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "gender" | "email" | "phone" | "psychiatricHistory" | "primaryProviderId" | "preferredPharmacyId" | "userId" | "chartVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["patient"]>
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     primaryProvider?: boolean | ProviderDefaultArgs<ExtArgs>
     preferredPharmacy?: boolean | Patient$preferredPharmacyArgs<ExtArgs>
@@ -12168,6 +12213,7 @@ export namespace Prisma {
       primaryProviderId: string
       preferredPharmacyId: string | null
       userId: string | null
+      chartVersion: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["patient"]>
@@ -12622,6 +12668,7 @@ export namespace Prisma {
     readonly primaryProviderId: FieldRef<"Patient", 'String'>
     readonly preferredPharmacyId: FieldRef<"Patient", 'String'>
     readonly userId: FieldRef<"Patient", 'String'>
+    readonly chartVersion: FieldRef<"Patient", 'Int'>
     readonly createdAt: FieldRef<"Patient", 'DateTime'>
     readonly updatedAt: FieldRef<"Patient", 'DateTime'>
   }
@@ -24729,8 +24776,18 @@ export namespace Prisma {
 
   export type AggregatePatientSummaryRecord = {
     _count: PatientSummaryRecordCountAggregateOutputType | null
+    _avg: PatientSummaryRecordAvgAggregateOutputType | null
+    _sum: PatientSummaryRecordSumAggregateOutputType | null
     _min: PatientSummaryRecordMinAggregateOutputType | null
     _max: PatientSummaryRecordMaxAggregateOutputType | null
+  }
+
+  export type PatientSummaryRecordAvgAggregateOutputType = {
+    chartVersion: number | null
+  }
+
+  export type PatientSummaryRecordSumAggregateOutputType = {
+    chartVersion: number | null
   }
 
   export type PatientSummaryRecordMinAggregateOutputType = {
@@ -24744,7 +24801,7 @@ export namespace Prisma {
     currentMedications: string | null
     discontinuedMedications: string | null
     outstandingTasks: string | null
-    fingerprint: string | null
+    chartVersion: number | null
   }
 
   export type PatientSummaryRecordMaxAggregateOutputType = {
@@ -24758,7 +24815,7 @@ export namespace Prisma {
     currentMedications: string | null
     discontinuedMedications: string | null
     outstandingTasks: string | null
-    fingerprint: string | null
+    chartVersion: number | null
   }
 
   export type PatientSummaryRecordCountAggregateOutputType = {
@@ -24772,10 +24829,18 @@ export namespace Prisma {
     currentMedications: number
     discontinuedMedications: number
     outstandingTasks: number
-    fingerprint: number
+    chartVersion: number
     _all: number
   }
 
+
+  export type PatientSummaryRecordAvgAggregateInputType = {
+    chartVersion?: true
+  }
+
+  export type PatientSummaryRecordSumAggregateInputType = {
+    chartVersion?: true
+  }
 
   export type PatientSummaryRecordMinAggregateInputType = {
     id?: true
@@ -24788,7 +24853,7 @@ export namespace Prisma {
     currentMedications?: true
     discontinuedMedications?: true
     outstandingTasks?: true
-    fingerprint?: true
+    chartVersion?: true
   }
 
   export type PatientSummaryRecordMaxAggregateInputType = {
@@ -24802,7 +24867,7 @@ export namespace Prisma {
     currentMedications?: true
     discontinuedMedications?: true
     outstandingTasks?: true
-    fingerprint?: true
+    chartVersion?: true
   }
 
   export type PatientSummaryRecordCountAggregateInputType = {
@@ -24816,7 +24881,7 @@ export namespace Prisma {
     currentMedications?: true
     discontinuedMedications?: true
     outstandingTasks?: true
-    fingerprint?: true
+    chartVersion?: true
     _all?: true
   }
 
@@ -24858,6 +24923,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PatientSummaryRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientSummaryRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PatientSummaryRecordMinAggregateInputType
@@ -24888,6 +24965,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PatientSummaryRecordCountAggregateInputType | true
+    _avg?: PatientSummaryRecordAvgAggregateInputType
+    _sum?: PatientSummaryRecordSumAggregateInputType
     _min?: PatientSummaryRecordMinAggregateInputType
     _max?: PatientSummaryRecordMaxAggregateInputType
   }
@@ -24903,8 +24982,10 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion: number
     _count: PatientSummaryRecordCountAggregateOutputType | null
+    _avg: PatientSummaryRecordAvgAggregateOutputType | null
+    _sum: PatientSummaryRecordSumAggregateOutputType | null
     _min: PatientSummaryRecordMinAggregateOutputType | null
     _max: PatientSummaryRecordMaxAggregateOutputType | null
   }
@@ -24934,7 +25015,7 @@ export namespace Prisma {
     currentMedications?: boolean
     discontinuedMedications?: boolean
     outstandingTasks?: boolean
-    fingerprint?: boolean
+    chartVersion?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patientSummaryRecord"]>
@@ -24950,7 +25031,7 @@ export namespace Prisma {
     currentMedications?: boolean
     discontinuedMedications?: boolean
     outstandingTasks?: boolean
-    fingerprint?: boolean
+    chartVersion?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patientSummaryRecord"]>
@@ -24966,7 +25047,7 @@ export namespace Prisma {
     currentMedications?: boolean
     discontinuedMedications?: boolean
     outstandingTasks?: boolean
-    fingerprint?: boolean
+    chartVersion?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patientSummaryRecord"]>
@@ -24982,10 +25063,10 @@ export namespace Prisma {
     currentMedications?: boolean
     discontinuedMedications?: boolean
     outstandingTasks?: boolean
-    fingerprint?: boolean
+    chartVersion?: boolean
   }
 
-  export type PatientSummaryRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "approvedByProviderId" | "approvedAt" | "overview" | "recentVisitSummary" | "diagnoses" | "currentMedications" | "discontinuedMedications" | "outstandingTasks" | "fingerprint", ExtArgs["result"]["patientSummaryRecord"]>
+  export type PatientSummaryRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "approvedByProviderId" | "approvedAt" | "overview" | "recentVisitSummary" | "diagnoses" | "currentMedications" | "discontinuedMedications" | "outstandingTasks" | "chartVersion", ExtArgs["result"]["patientSummaryRecord"]>
   export type PatientSummaryRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     approvedBy?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -25016,7 +25097,7 @@ export namespace Prisma {
       currentMedications: string
       discontinuedMedications: string
       outstandingTasks: string
-      fingerprint: string
+      chartVersion: number
     }, ExtArgs["result"]["patientSummaryRecord"]>
     composites: {}
   }
@@ -25452,7 +25533,7 @@ export namespace Prisma {
     readonly currentMedications: FieldRef<"PatientSummaryRecord", 'String'>
     readonly discontinuedMedications: FieldRef<"PatientSummaryRecord", 'String'>
     readonly outstandingTasks: FieldRef<"PatientSummaryRecord", 'String'>
-    readonly fingerprint: FieldRef<"PatientSummaryRecord", 'String'>
+    readonly chartVersion: FieldRef<"PatientSummaryRecord", 'Int'>
   }
     
 
@@ -33147,6 +33228,7 @@ export namespace Prisma {
     primaryProviderId: 'primaryProviderId',
     preferredPharmacyId: 'preferredPharmacyId',
     userId: 'userId',
+    chartVersion: 'chartVersion',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -33299,7 +33381,7 @@ export namespace Prisma {
     currentMedications: 'currentMedications',
     discontinuedMedications: 'discontinuedMedications',
     outstandingTasks: 'outstandingTasks',
-    fingerprint: 'fingerprint'
+    chartVersion: 'chartVersion'
   };
 
   export type PatientSummaryRecordScalarFieldEnum = (typeof PatientSummaryRecordScalarFieldEnum)[keyof typeof PatientSummaryRecordScalarFieldEnum]
@@ -34015,6 +34097,7 @@ export namespace Prisma {
     primaryProviderId?: StringFilter<"Patient"> | string
     preferredPharmacyId?: StringNullableFilter<"Patient"> | string | null
     userId?: StringNullableFilter<"Patient"> | string | null
+    chartVersion?: IntFilter<"Patient"> | number
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     primaryProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
@@ -34049,6 +34132,7 @@ export namespace Prisma {
     primaryProviderId?: SortOrder
     preferredPharmacyId?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
+    chartVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     primaryProvider?: ProviderOrderByWithRelationInput
@@ -34086,6 +34170,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFilter<"Patient"> | string
     primaryProviderId?: StringFilter<"Patient"> | string
     preferredPharmacyId?: StringNullableFilter<"Patient"> | string | null
+    chartVersion?: IntFilter<"Patient"> | number
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     primaryProvider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
@@ -34120,11 +34205,14 @@ export namespace Prisma {
     primaryProviderId?: SortOrder
     preferredPharmacyId?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
+    chartVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PatientCountOrderByAggregateInput
+    _avg?: PatientAvgOrderByAggregateInput
     _max?: PatientMaxOrderByAggregateInput
     _min?: PatientMinOrderByAggregateInput
+    _sum?: PatientSumOrderByAggregateInput
   }
 
   export type PatientScalarWhereWithAggregatesInput = {
@@ -34142,6 +34230,7 @@ export namespace Prisma {
     primaryProviderId?: StringWithAggregatesFilter<"Patient"> | string
     preferredPharmacyId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     userId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    chartVersion?: IntWithAggregatesFilter<"Patient"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
   }
@@ -34891,7 +34980,7 @@ export namespace Prisma {
     currentMedications?: StringFilter<"PatientSummaryRecord"> | string
     discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
     outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
-    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+    chartVersion?: IntFilter<"PatientSummaryRecord"> | number
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
     approvedBy?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
   }
@@ -34907,7 +34996,7 @@ export namespace Prisma {
     currentMedications?: SortOrder
     discontinuedMedications?: SortOrder
     outstandingTasks?: SortOrder
-    fingerprint?: SortOrder
+    chartVersion?: SortOrder
     patient?: PatientOrderByWithRelationInput
     approvedBy?: ProviderOrderByWithRelationInput
   }
@@ -34926,7 +35015,7 @@ export namespace Prisma {
     currentMedications?: StringFilter<"PatientSummaryRecord"> | string
     discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
     outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
-    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+    chartVersion?: IntFilter<"PatientSummaryRecord"> | number
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
     approvedBy?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
   }, "id" | "patientId">
@@ -34942,10 +35031,12 @@ export namespace Prisma {
     currentMedications?: SortOrder
     discontinuedMedications?: SortOrder
     outstandingTasks?: SortOrder
-    fingerprint?: SortOrder
+    chartVersion?: SortOrder
     _count?: PatientSummaryRecordCountOrderByAggregateInput
+    _avg?: PatientSummaryRecordAvgOrderByAggregateInput
     _max?: PatientSummaryRecordMaxOrderByAggregateInput
     _min?: PatientSummaryRecordMinOrderByAggregateInput
+    _sum?: PatientSummaryRecordSumOrderByAggregateInput
   }
 
   export type PatientSummaryRecordScalarWhereWithAggregatesInput = {
@@ -34962,7 +35053,7 @@ export namespace Prisma {
     currentMedications?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
     discontinuedMedications?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
     outstandingTasks?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
-    fingerprint?: StringWithAggregatesFilter<"PatientSummaryRecord"> | string
+    chartVersion?: IntWithAggregatesFilter<"PatientSummaryRecord"> | number
   }
 
   export type TaskWhereInput = {
@@ -36062,6 +36153,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -36096,6 +36188,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -36124,6 +36217,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -36158,6 +36252,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -36189,6 +36284,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
   }
@@ -36202,6 +36298,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36218,6 +36315,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36970,7 +37068,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
     patient: PatientCreateNestedOneWithoutSummaryInput
     approvedBy: ProviderCreateNestedOneWithoutApprovedSummariesInput
   }
@@ -36986,7 +37084,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
   }
 
   export type PatientSummaryRecordUpdateInput = {
@@ -36998,7 +37096,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     patient?: PatientUpdateOneRequiredWithoutSummaryNestedInput
     approvedBy?: ProviderUpdateOneRequiredWithoutApprovedSummariesNestedInput
   }
@@ -37014,7 +37112,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type PatientSummaryRecordCreateManyInput = {
@@ -37028,7 +37126,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
   }
 
   export type PatientSummaryRecordUpdateManyMutationInput = {
@@ -37040,7 +37138,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type PatientSummaryRecordUncheckedUpdateManyInput = {
@@ -37054,7 +37152,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskCreateInput = {
@@ -38302,8 +38400,13 @@ export namespace Prisma {
     primaryProviderId?: SortOrder
     preferredPharmacyId?: SortOrder
     userId?: SortOrder
+    chartVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type PatientAvgOrderByAggregateInput = {
+    chartVersion?: SortOrder
   }
 
   export type PatientMaxOrderByAggregateInput = {
@@ -38318,6 +38421,7 @@ export namespace Prisma {
     primaryProviderId?: SortOrder
     preferredPharmacyId?: SortOrder
     userId?: SortOrder
+    chartVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -38334,8 +38438,13 @@ export namespace Prisma {
     primaryProviderId?: SortOrder
     preferredPharmacyId?: SortOrder
     userId?: SortOrder
+    chartVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type PatientSumOrderByAggregateInput = {
+    chartVersion?: SortOrder
   }
 
   export type PatientScalarRelationFilter = {
@@ -38708,7 +38817,11 @@ export namespace Prisma {
     currentMedications?: SortOrder
     discontinuedMedications?: SortOrder
     outstandingTasks?: SortOrder
-    fingerprint?: SortOrder
+    chartVersion?: SortOrder
+  }
+
+  export type PatientSummaryRecordAvgOrderByAggregateInput = {
+    chartVersion?: SortOrder
   }
 
   export type PatientSummaryRecordMaxOrderByAggregateInput = {
@@ -38722,7 +38835,7 @@ export namespace Prisma {
     currentMedications?: SortOrder
     discontinuedMedications?: SortOrder
     outstandingTasks?: SortOrder
-    fingerprint?: SortOrder
+    chartVersion?: SortOrder
   }
 
   export type PatientSummaryRecordMinOrderByAggregateInput = {
@@ -38736,7 +38849,11 @@ export namespace Prisma {
     currentMedications?: SortOrder
     discontinuedMedications?: SortOrder
     outstandingTasks?: SortOrder
-    fingerprint?: SortOrder
+    chartVersion?: SortOrder
+  }
+
+  export type PatientSummaryRecordSumOrderByAggregateInput = {
+    chartVersion?: SortOrder
   }
 
   export type TaskCountOrderByAggregateInput = {
@@ -42405,6 +42522,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -42437,6 +42555,7 @@ export namespace Prisma {
     psychiatricHistory: string
     primaryProviderId: string
     preferredPharmacyId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -42707,6 +42826,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -42739,6 +42859,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -43047,6 +43168,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     preferredPharmacy?: PharmacyCreateNestedOneWithoutPatientsInput
@@ -43079,6 +43201,7 @@ export namespace Prisma {
     psychiatricHistory: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -43441,7 +43564,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
     patient: PatientCreateNestedOneWithoutSummaryInput
   }
 
@@ -43455,7 +43578,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
   }
 
   export type PatientSummaryRecordCreateOrConnectWithoutApprovedByInput = {
@@ -43653,6 +43776,7 @@ export namespace Prisma {
     primaryProviderId?: StringFilter<"Patient"> | string
     preferredPharmacyId?: StringNullableFilter<"Patient"> | string | null
     userId?: StringNullableFilter<"Patient"> | string | null
+    chartVersion?: IntFilter<"Patient"> | number
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
   }
@@ -43939,7 +44063,7 @@ export namespace Prisma {
     currentMedications?: StringFilter<"PatientSummaryRecord"> | string
     discontinuedMedications?: StringFilter<"PatientSummaryRecord"> | string
     outstandingTasks?: StringFilter<"PatientSummaryRecord"> | string
-    fingerprint?: StringFilter<"PatientSummaryRecord"> | string
+    chartVersion?: IntFilter<"PatientSummaryRecord"> | number
   }
 
   export type ClinicMessageUpsertWithWhereUniqueWithoutProviderInput = {
@@ -44408,7 +44532,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
     approvedBy: ProviderCreateNestedOneWithoutApprovedSummariesInput
   }
 
@@ -44422,7 +44546,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
   }
 
   export type PatientSummaryRecordCreateOrConnectWithoutPatientInput = {
@@ -44942,7 +45066,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     approvedBy?: ProviderUpdateOneRequiredWithoutApprovedSummariesNestedInput
   }
 
@@ -44956,7 +45080,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type ClinicMessageUpsertWithWhereUniqueWithoutPatientInput = {
@@ -45079,6 +45203,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -45112,6 +45237,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     conditions?: PatientConditionUncheckedCreateNestedManyWithoutPatientInput
@@ -45155,6 +45281,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -45188,6 +45315,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conditions?: PatientConditionUncheckedUpdateManyWithoutPatientNestedInput
@@ -45215,6 +45343,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -45248,6 +45377,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -45291,6 +45421,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -45324,6 +45455,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -45351,6 +45483,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -45384,6 +45517,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -45427,6 +45561,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -45460,6 +45595,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -45487,6 +45623,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -45520,6 +45657,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -45665,6 +45803,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -45698,6 +45837,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -45839,6 +45979,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -45872,6 +46013,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -45966,6 +46108,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -45999,6 +46142,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -46191,6 +46335,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -46224,6 +46369,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -46553,6 +46699,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -46586,6 +46733,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -46849,6 +46997,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -46882,6 +47031,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -47017,6 +47167,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -47050,6 +47201,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -47228,6 +47380,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -47261,6 +47414,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -47530,6 +47684,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -47563,6 +47718,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -47728,6 +47884,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -47761,6 +47918,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -47894,6 +48052,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -47927,6 +48086,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -48011,6 +48171,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -48044,6 +48205,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -48138,6 +48300,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -48171,6 +48334,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -48255,6 +48419,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -48288,6 +48453,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -48382,6 +48548,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -48415,6 +48582,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -48499,6 +48667,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -48531,6 +48700,7 @@ export namespace Prisma {
     psychiatricHistory: string
     primaryProviderId: string
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -48756,6 +48926,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -48789,6 +48960,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -48914,6 +49086,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -48947,6 +49120,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -49089,6 +49263,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -49122,6 +49297,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -49369,6 +49545,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -49402,6 +49579,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -49537,6 +49715,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -49570,6 +49749,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -49787,6 +49967,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -49820,6 +50001,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -50092,6 +50274,7 @@ export namespace Prisma {
     email: string
     phone: string
     psychiatricHistory: string
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     primaryProvider: ProviderCreateNestedOneWithoutPatientsInput
@@ -50125,6 +50308,7 @@ export namespace Prisma {
     primaryProviderId: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
     allergies?: PatientAllergyUncheckedCreateNestedManyWithoutPatientInput
@@ -50221,6 +50405,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -50254,6 +50439,7 @@ export namespace Prisma {
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -50594,6 +50780,7 @@ export namespace Prisma {
     psychiatricHistory: string
     preferredPharmacyId?: string | null
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
   }
@@ -50712,7 +50899,7 @@ export namespace Prisma {
     currentMedications: string
     discontinuedMedications: string
     outstandingTasks: string
-    fingerprint: string
+    chartVersion?: number
   }
 
   export type ClinicMessageCreateManyProviderInput = {
@@ -50755,6 +50942,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     preferredPharmacy?: PharmacyUpdateOneWithoutPatientsNestedInput
@@ -50787,6 +50975,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -50817,6 +51006,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
     preferredPharmacyId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51168,7 +51358,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     patient?: PatientUpdateOneRequiredWithoutSummaryNestedInput
   }
 
@@ -51182,7 +51372,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type PatientSummaryRecordUncheckedUpdateManyWithoutApprovedByInput = {
@@ -51195,7 +51385,7 @@ export namespace Prisma {
     currentMedications?: StringFieldUpdateOperationsInput | string
     discontinuedMedications?: StringFieldUpdateOperationsInput | string
     outstandingTasks?: StringFieldUpdateOperationsInput | string
-    fingerprint?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
   }
 
   export type ClinicMessageUpdateWithoutProviderInput = {
@@ -52270,6 +52460,7 @@ export namespace Prisma {
     psychiatricHistory: string
     primaryProviderId: string
     userId?: string | null
+    chartVersion?: number
     createdAt: Date | string
     updatedAt: Date | string
   }
@@ -52318,6 +52509,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     primaryProvider?: ProviderUpdateOneRequiredWithoutPatientsNestedInput
@@ -52350,6 +52542,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allergies?: PatientAllergyUncheckedUpdateManyWithoutPatientNestedInput
@@ -52380,6 +52573,7 @@ export namespace Prisma {
     psychiatricHistory?: StringFieldUpdateOperationsInput | string
     primaryProviderId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    chartVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

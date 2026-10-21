@@ -131,6 +131,7 @@ model Patient {
     preferredPharmacy   Pharmacy?          @relation(fields: [preferredPharmacyId], references: [id], onDelete: SetNull)
     userId              String?            @unique
     user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+    chartVersion       Int                @default(0)
     createdAt          DateTime
     updatedAt          DateTime
     allergies          PatientAllergy[]
@@ -322,7 +323,7 @@ model PatientSummaryRecord {
     currentMedications      String
     discontinuedMedications String
     outstandingTasks        String
-    fingerprint             String
+    chartVersion            Int      @default(0)
 }
 
 model Task {
