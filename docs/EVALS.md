@@ -8,7 +8,8 @@ Two kinds of checks exist. `npm test` does not call a model and does not need Po
 
 - `src/server/summary-assembly.test.ts` checks that retrieved lists replace model prose, that a missing or failed retrieval cannot be approved, that a changed chart version or a changed list is rejected, and that chart access matches the owning provider, another provider, and the patient role.
 - `src/server/booking-choice.test.ts` checks the usual time, the nearest weekday slot, the earliest opening, a same-day refusal, and a new booking blocked by an existing upcoming visit.
-- `src/lib/admin-profile.test.ts` checks the dev-admin profile path, the dev-admin gate, patient insurance and visit history, an unlinked account, and psychiatrist and nurse fields. It runs under `tsx` because the profile module uses the `~/` import alias. The other two files run with `node --experimental-strip-types`.
+- `src/lib/overview-medications.test.ts` checks the formulary scan used before Approve: an on-chart name, an off-chart formulary name, the longer "Bupropion XL" name, a name glued inside another word, and an unknown token such as Poisonol.
+- `src/lib/admin-profile.test.ts` checks the dev-admin profile path, the dev-admin gate, patient insurance and visit history, an unlinked account, and psychiatrist and nurse fields. It runs under `tsx` because the profile module uses the `~/` import alias. The other three files run with `node --experimental-strip-types`.
 
 `.github/workflows/summary-checks.yml` runs `npm test` on pull requests and pushes. It has no API key and does not start Postgres.
 
@@ -21,7 +22,7 @@ Two local scripts are separate from `npm test`:
 
 `npm run eval:live` needs `OPENAI_API_KEY`, the seeded database, and the Google env vars required to import the app config. It runs three cases for patient `pat_16` and provider `prv_04`:
 
-- The summary lists match a fresh chart projection, the overview does not use a denylisted drug that is absent from the chart, and a correction keeps the lists while adding a required phrase.
+- The summary lists match a fresh chart projection. The overview is failed if it names sertraline, fluoxetine, alprazolam, or lithium and that name is absent from the chart. That denylist is only in the live eval. Approve uses the formulary scan in `src/lib/overview-medications.ts`, covered by `npm test`. A correction keeps the lists while adding a required phrase.
 - A new booking is refused with "This patient already has an upcoming appointment." and does not add a row.
 - The earliest future visit is moved to the expected open slot, not onto another scheduled visit's clinic day. The script then restores that visit.
 

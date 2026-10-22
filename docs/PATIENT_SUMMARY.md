@@ -10,7 +10,7 @@ A psychiatrist or nurse who is the patient's primary provider can prepare a char
 
 - Medication, diagnosis, and task lines come from those queries. A drug named only in the model's overview is not added to a list.
 - The last-visit line is the latest stored clinical summary, or "No completed visits recorded." when there is no completed visit. The model does not rewrite it.
-- The overview can still be the model's wording, trimmed to 1200 characters. It is a narrative, not a medication or diagnosis list. Formulary names in that paragraph are checked against the patient's active and discontinued brand and generic names. A formulary drug that is not on the chart stays in the overview, is highlighted, and blocks Approve until a new draft is prepared. A word that is not on the formulary is not flagged.
+- The overview can still be the model's wording, trimmed to 1200 characters. It is a narrative, not a medication or diagnosis list. `src/lib/overview-medications.ts` checks formulary names in that paragraph against the patient's active and discontinued brand and generic names. A formulary drug that is not on the chart stays in the overview, is highlighted, and blocks Approve until a new draft is prepared. A word that is not on the formulary is not flagged.
 - If a required query throws or the chart row is missing, the draft is not returned and the model is not called. If the completion fails or the overview is empty, the draft still uses "Review the lists below before approving this draft."
 
 ## Approval and staleness
