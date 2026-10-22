@@ -1,175 +1,114 @@
 import "server-only";
 
-import { Agent, run, setTracingDisabled, tool } from "@openai/agents";
-import { z } from "zod";
+import OpenAI from "openai";
 
 import { env } from "~/env";
 import { formatDate } from "~/lib/chart";
-import {
-  patientSummarySchema,
-  type PatientSummary,
-} from "~/lib/patient-summary";
+import type { PatientSummary } from "~/lib/patient-summary";
 import { canViewPatient } from "~/server/access";
 import { db } from "~/server/db";
 import {
   assembleSummary,
   diagnosisLines,
   medicationFacts,
-  RETRIEVAL_FAILED,
   taskLine,
-  toolPatientMatches,
   type SummaryRetrieval,
 } from "~/server/summary-assembly";
 
-setTracingDisabled(true);
+const MODEL = "gpt-4.1-mini";
 
-const patientIdSchema = z.object({
-  patientId: z.string().describe("The patient id from the request."),
-});
-
-const summarySchema = patientSummarySchema;
-
-type SummaryContext = SummaryRetrieval & {
-  patientId: string;
-  providerId: string;
-  role: string;
-};
+const overviewSchema = {
+  type: "object",
+  properties: {
+    overview: { type: "string" },
+  },
+  required: ["overview"],
+  additionalProperties: false,
+} as const;
 
 export type PatientSummaryResult =
   { ok: true; summary: PatientSummary } | { ok: false; error: string };
 
-function readContext(context: { context: unknown } | undefined) {
-  const value = context?.context;
-  if (!value || typeof value !== "object" || !("patientId" in value))
-    return null;
-  return value as SummaryContext;
-}
-
-function logToolFailure(toolName: string, error: unknown) {
+function logSummaryFailure(error: unknown) {
   const name = error instanceof Error ? error.name : "Error";
-  console.error(toolName, name);
+  console.error("patientSummary", name);
 }
 
-async function authorize(booking: SummaryContext | null, patientId: string) {
-  if (!booking || !toolPatientMatches(booking.patientId, patientId)) {
-    return { ok: false as const, error: "Not authorized for that patient." };
-  }
-  const patient = await db.patient.findUnique({
-    where: { id: booking.patientId },
-    select: { id: true, primaryProviderId: true },
-  });
-  if (!patient)
-    return { ok: false as const, error: "Not authorized for that patient." };
-  const allowed = canViewPatient({
-    role: booking.role,
-    ownPatientId: null,
-    ownProviderId: booking.providerId,
-    patient,
-  });
-  if (!allowed)
-    return { ok: false as const, error: "Not authorized for that patient." };
-  return { ok: true as const };
-}
-
-const getPatientMedications = tool({
-  name: "getPatientMedications",
-  description:
-    "Load this patient's medications already split into active, discontinued, and any other status. Do not reclassify them.",
-  parameters: patientIdSchema,
-  execute: async (input, runContext) => {
-    const summary = readContext(runContext);
-    const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary)
-      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
-
-    try {
-      const rows = await db.medication.findMany({
-        where: { patientId: summary.patientId },
+async function loadRetrieval(
+  patientId: string,
+): Promise<
+  { ok: true; retrieval: SummaryRetrieval; facts: unknown } | { ok: false }
+> {
+  try {
+    const [chart, visits, medications, tasks] = await Promise.all([
+      db.patient.findUnique({
+        where: { id: patientId },
+        select: {
+          psychiatricHistory: true,
+          conditions: {
+            orderBy: { description: "asc" },
+            select: { description: true },
+          },
+        },
+      }),
+      db.visit.findMany({
+        where: { patientId, status: "completed" },
+        orderBy: { visitDate: "desc" },
+        take: 5,
+        include: {
+          appointment: { select: { appointmentType: true } },
+          notes: { select: { noteType: true, content: true } },
+        },
+      }),
+      db.medication.findMany({
+        where: { patientId },
         orderBy: { medicationName: "asc" },
         select: { medicationName: true, dosage: true, status: true },
-      });
-      const active = rows.filter((row) => row.status === "active");
-      const discontinued = rows.filter((row) => row.status === "discontinued");
-      const other = rows.filter(
-        (row) => row.status !== "active" && row.status !== "discontinued",
-      );
-      const facts = medicationFacts(rows);
-      summary.medications = { state: "ok", value: facts };
-      return {
-        active: active.map((row) => ({
-          name: row.medicationName,
-          dosage: row.dosage,
-          status: "active" as const,
-        })),
-        discontinued: discontinued.map((row) => ({
-          name: row.medicationName,
-          dosage: row.dosage,
-          status: "discontinued" as const,
-        })),
-        other: other.map((row) => ({
+      }),
+      db.task.findMany({
+        where: { patientId, status: "open" },
+        orderBy: { dueDate: "asc" },
+        select: {
+          title: true,
+          description: true,
+          priority: true,
+          status: true,
+          dueDate: true,
+        },
+      }),
+    ]);
+    if (!chart) return { ok: false };
+
+    const diagnoses = diagnosisLines(chart);
+    const medication = medicationFacts(medications);
+    const taskLines = tasks.map((task) =>
+      taskLine({
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+        dueDateLabel: formatDate(task.dueDate),
+      }),
+    );
+    return {
+      ok: true,
+      retrieval: {
+        medications: { state: "ok", value: medication },
+        visits: {
+          state: "ok",
+          value: {
+            diagnoses,
+            latestClinicalSummary: visits[0]?.clinicalSummary ?? null,
+            visitCount: visits.length,
+          },
+        },
+        tasks: { state: "ok", value: taskLines },
+      },
+      facts: {
+        medications: medications.map((row) => ({
           name: row.medicationName,
           dosage: row.dosage,
           status: row.status,
         })),
-      };
-    } catch (error) {
-      logToolFailure("getPatientMedications", error);
-      summary.medications = { state: "failed" };
-      return { error: RETRIEVAL_FAILED };
-    }
-  },
-});
-
-const getPreviousVisits = tool({
-  name: "getPreviousVisits",
-  description:
-    "Load recent completed visits, recorded conditions, and the chart psychiatric history. The visit with latest true is the last visit.",
-  parameters: patientIdSchema,
-  execute: async (input, runContext) => {
-    const summary = readContext(runContext);
-    const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary)
-      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
-
-    try {
-      const [chart, visits] = await Promise.all([
-        db.patient.findUnique({
-          where: { id: summary.patientId },
-          select: {
-            psychiatricHistory: true,
-            conditions: {
-              orderBy: { description: "asc" },
-              select: { description: true },
-            },
-          },
-        }),
-        db.visit.findMany({
-          where: { patientId: summary.patientId, status: "completed" },
-          orderBy: { visitDate: "desc" },
-          take: 5,
-          include: {
-            appointment: { select: { appointmentType: true } },
-            notes: { select: { noteType: true, content: true } },
-          },
-        }),
-      ]);
-      if (!chart) {
-        summary.visits = { state: "failed" };
-        return { error: RETRIEVAL_FAILED };
-      }
-
-      const diagnoses = diagnosisLines(chart);
-
-      summary.visits = {
-        state: "ok",
-        value: {
-          diagnoses,
-          latestClinicalSummary: visits[0]?.clinicalSummary ?? null,
-          visitCount: visits.length,
-        },
-      };
-
-      return {
         diagnoses,
         visits: visits.map((visit, index) => ({
           latest: index === 0,
@@ -183,81 +122,72 @@ const getPreviousVisits = tool({
             content: note.content,
           })),
         })),
-      };
-    } catch (error) {
-      logToolFailure("getPreviousVisits", error);
-      summary.visits = { state: "failed" };
-      return { error: RETRIEVAL_FAILED };
-    }
-  },
-});
-
-const getOutstandingTasks = tool({
-  name: "getOutstandingTasks",
-  description: "Load unfinished follow-ups. Only open tasks are returned.",
-  parameters: patientIdSchema,
-  execute: async (input, runContext) => {
-    const summary = readContext(runContext);
-    const access = await authorize(summary, input.patientId);
-    if (!access.ok || !summary)
-      return { error: access.ok ? RETRIEVAL_FAILED : access.error };
-
-    try {
-      const rows = await db.task.findMany({
-        where: { patientId: summary.patientId, status: "open" },
-        orderBy: { dueDate: "asc" },
-        select: {
-          title: true,
-          description: true,
-          priority: true,
-          status: true,
-          dueDate: true,
-        },
-      });
-      const lines = rows.map((row) =>
-        taskLine({
-          title: row.title,
-          description: row.description,
-          priority: row.priority,
-          dueDateLabel: formatDate(row.dueDate),
-        }),
-      );
-      summary.tasks = { state: "ok", value: lines };
-      return {
-        tasks: rows.map((row) => ({
-          title: row.title,
-          description: row.description,
-          priority: row.priority,
-          status: row.status,
-          dueDate: formatDate(row.dueDate),
+        tasks: tasks.map((task) => ({
+          title: task.title,
+          description: task.description,
+          priority: task.priority,
+          status: task.status,
+          dueDate: formatDate(task.dueDate),
         })),
-      };
-    } catch (error) {
-      logToolFailure("getOutstandingTasks", error);
-      summary.tasks = { state: "failed" };
-      return { error: RETRIEVAL_FAILED };
-    }
-  },
-});
+      },
+    };
+  } catch (error) {
+    logSummaryFailure(error);
+    return { ok: false };
+  }
+}
 
-const summaryAgent = new Agent<SummaryContext, typeof summarySchema>({
-  name: "Patient summary",
-  model: "gpt-4.1-mini",
-  instructions: `Prepare a chart draft for the patient id in the request.
-Call getPatientMedications, getPreviousVisits, and getOutstandingTasks before you answer.
-Use only those results. Do not invent medications, diagnoses, visits, or tasks.
-Active and discontinued medications are already separated. Do not move a drug from one list to the other.
-The server replaces recentVisitSummary and every list from the tools. Write overview only.
-If a tool returns an error, say the information could not be retrieved.
-overview is a short review for the provider. Do not add facts that the tools did not return.`,
-  tools: [getPatientMedications, getPreviousVisits, getOutstandingTasks],
-  outputType: summarySchema,
-});
+function readOverview(content: string | null | undefined) {
+  if (!content) return "";
+  try {
+    const parsed: unknown = JSON.parse(content);
+    if (!parsed || typeof parsed !== "object" || !("overview" in parsed))
+      return "";
+    const overview = (parsed as { overview: unknown }).overview;
+    return typeof overview === "string" ? overview : "";
+  } catch {
+    return "";
+  }
+}
 
-function readOverview(output: unknown) {
-  if (!output || typeof output !== "object") return "";
-  const value = (output as Record<string, unknown>).overview;
-  return typeof value === "string" ? value : "";
+async function writeOverview(
+  facts: unknown,
+  correction?: { note: string; draft: PatientSummary },
+) {
+  const client = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+  const correctionText = correction
+    ? `The provider corrected the current draft. Apply this correction only to the wording of overview: ${correction.note}
+Current overview: ${correction.draft.overview}
+Do not add medications, diagnoses, or tasks that are not in the retrieved facts.`
+    : "Write the overview from the retrieved facts.";
+  const completion = await client.chat.completions.create({
+    model: MODEL,
+    temperature: 0,
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "summary_overview",
+        strict: true,
+        schema: overviewSchema,
+      },
+    },
+    messages: [
+      {
+        role: "system",
+        content: `Write a short review for the provider. Use only the retrieved facts in the user message.
+Return JSON with a single string field named overview.
+Do not invent medications, diagnoses, visits, or tasks.
+The server replaces every list and the last-visit line from the database.`,
+      },
+      {
+        role: "user",
+        content: `${correctionText}
+Retrieved facts:
+${JSON.stringify(facts)}`,
+      },
+    ],
+  });
+  return readOverview(completion.choices[0]?.message.content);
 }
 
 export async function summarizePatient(input: {
@@ -270,36 +200,34 @@ export async function summarizePatient(input: {
     return { ok: false, error: "A summary needs an OpenAI API key." };
   }
 
-  const context: SummaryContext = {
-    patientId: input.patientId,
-    providerId: input.providerId,
+  const patient = await db.patient.findUnique({
+    where: { id: input.patientId },
+    select: { id: true, primaryProviderId: true },
+  });
+  if (!patient) return { ok: false, error: "A summary could not be prepared." };
+  const allowed = canViewPatient({
     role: input.role,
-    medications: { state: "missing" },
-    visits: { state: "missing" },
-    tasks: { state: "missing" },
-  };
+    ownPatientId: null,
+    ownProviderId: input.providerId,
+    patient,
+  });
+  if (!allowed) return { ok: false, error: "Not authorized for that patient." };
+
+  const loaded = await loadRetrieval(input.patientId);
+  if (!loaded.ok)
+    return { ok: false, error: "A summary could not be prepared." };
 
   let overview = "";
-  const prompt = input.correction
-    ? `Prepare a summary for patient ${input.patientId}.
-The provider corrected the current draft. Apply this correction only to the wording of overview: ${input.correction.note}
-Current overview: ${input.correction.draft.overview}
-Do not add or remove medications, diagnoses, or tasks. Those lists come from the tools. Do not rewrite the last visit.`
-    : `Prepare a summary for patient ${input.patientId}.`;
   try {
-    const result = await run(summaryAgent, prompt, {
-      context,
-      maxTurns: 8,
-    });
-    overview = readOverview(result.finalOutput);
+    overview = await writeOverview(loaded.facts, input.correction);
   } catch (error) {
-    logToolFailure("patientSummary", error);
+    logSummaryFailure(error);
   }
 
   const assembled = assembleSummary({
-    patientId: context.patientId,
+    patientId: input.patientId,
     overview,
-    retrieval: context,
+    retrieval: loaded.retrieval,
   });
   if (!assembled.approvable) return { ok: false, error: assembled.error };
   return { ok: true, summary: assembled.summary };

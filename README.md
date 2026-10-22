@@ -25,7 +25,7 @@ Roles are `patient`, `psychiatrist`, and `nurse`. A new Google account chooses a
 
 ## Local use
 
-Copy `.env.example` to `.env` and fill in `AUTH_SECRET`, the Google OAuth client, and `OPENAI_API_KEY` if you want the booking and summary agents. `DATABASE_URL` in the example points at Postgres on `127.0.0.1:15432`.
+Copy `.env.example` to `.env` and fill in `AUTH_SECRET`, the Google OAuth client, and `OPENAI_API_KEY` if you want appointment proposals and chart-summary overviews. `DATABASE_URL` in the example points at Postgres on `127.0.0.1:15432`.
 
 ```bash
 docker compose up -d postgres
@@ -37,8 +37,8 @@ npm run dev
 
 The app is at `http://127.0.0.1:3000`. `GET /api/health` checks the database. `docker compose up` also builds the app container, which uses the same host port.
 
-`npm test` typechecks the project and runs the deterministic summary and scheduling cases. It does not call the model or start Postgres. `npm run eval:live` calls both agents against the seeded chart and writes a timestamped results file, log, and trace under `eval-runs/`. That folder is gitignored.
+`npm test` typechecks the project and runs the deterministic summary and scheduling cases. It does not call the model or start Postgres. `npm run eval:live` prepares a chart summary and runs the scheduling agent against the seeded chart, then writes a timestamped results file, log, and trace under `eval-runs/`. That folder is gitignored.
 
 ## Stack
 
-Next.js, Prisma, PostgreSQL 18.3, Auth.js with Google, and the OpenAI Agents SDK for the summary and scheduling agents. The local database and the app image are defined in `docker-compose.yml`.
+Next.js, Prisma, PostgreSQL 18.3, Auth.js with Google, the OpenAI client for the chart-summary overview, and the OpenAI Agents SDK for scheduling. The local database and the app image are defined in `docker-compose.yml`.

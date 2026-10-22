@@ -2,16 +2,16 @@
 
 A psychiatrist or nurse who is the patient's primary provider can prepare a chart draft from the patient chart. The draft is not a saved chart fact until that clinician approves it. Patients cannot prepare or approve a summary.
 
-The agent is `summarizePatient` in `src/server/patient-summary-agent.ts`. It has three tools: medications, previous visits, and open tasks. Tracing is off in the app. The live eval turns tracing on only for its own process.
+`summarizePatient` in `src/server/patient-summary-agent.ts` loads medications, the latest completed visits, and open tasks in code. It then makes one `gpt-4.1-mini` completion at temperature 0. That call returns JSON with a single `overview` field. The booking flow is still an agent. Summary tracing is not emitted. The live eval still records booking traces.
 
 ## What can be approved
 
-`src/server/summary-assembly.ts` decides the draft after the model run.
+`src/server/summary-assembly.ts` decides the draft after the queries and the overview call.
 
-- Medication, diagnosis, and task lines come from the tool results. A drug named only in the model's overview is not added to a list.
+- Medication, diagnosis, and task lines come from those queries. A drug named only in the model's overview is not added to a list.
 - The last-visit line is the latest stored clinical summary, or "No completed visits recorded." when there is no completed visit. The model does not rewrite it.
 - The overview can still be the model's wording, trimmed to 1200 characters. It is a narrative, not a medication or diagnosis list.
-- If a required retrieval is missing or fails, the draft is not returned for approval.
+- If a required query throws or the chart row is missing, the draft is not returned and the model is not called. If the completion fails or the overview is empty, the draft still uses "Review the lists below before approving this draft."
 
 ## Approval and staleness
 
