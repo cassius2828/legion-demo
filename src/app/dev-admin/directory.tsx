@@ -1,10 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Stethoscope, User } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { personProfilePath } from "~/lib/admin-profile";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { roleLabel } from "~/lib/profile";
 
 export type DirectoryKind = "psychiatrist" | "nurse" | "patient";
@@ -26,7 +34,12 @@ export type DirectoryProvider = {
 
 function HospitalPlus({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden
+      fill="currentColor"
+    >
       <path d="M9 2.5h6a1 1 0 0 1 1 1V8h4.5a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H16v4.5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V16H3.5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1H8V3.5a1 1 0 0 1 1-1Z" />
     </svg>
   );
@@ -42,9 +55,13 @@ function RoleMark({ kind }: { kind: DirectoryKind }) {
   return (
     <span
       title={roleLabel(kind)}
-      className="inline-flex size-7 items-center justify-center rounded-full bg-muted text-foreground"
+      className="bg-muted text-foreground inline-flex size-7 items-center justify-center rounded-full"
     >
-      {Icon ? <Icon className="size-4" aria-hidden /> : <HospitalPlus className="size-5" />}
+      {Icon ? (
+        <Icon className="size-4" aria-hidden />
+      ) : (
+        <HospitalPlus className="size-5" />
+      )}
       <span className="sr-only">{roleLabel(kind)}</span>
     </span>
   );
@@ -72,7 +89,13 @@ export function AdminDirectory({
     return people.filter((person) => {
       if (filter !== "all" && person.kind !== filter) return false;
       if (!needle) return true;
-      return [person.name, person.email, person.organization, person.clinician, person.note]
+      return [
+        person.name,
+        person.email,
+        person.organization,
+        person.clinician,
+        person.note,
+      ]
         .filter(Boolean)
         .some((value) => value!.toLowerCase().includes(needle));
     });
@@ -104,54 +127,72 @@ export function AdminDirectory({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Name, email, or provider"
-            className="h-9 rounded-lg border bg-background px-3"
+            className="bg-background h-9 rounded-lg border px-3"
           />
         </label>
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter">
-        {FILTERS.map((item) => (
-          <Button
-            key={item.id}
-            type="button"
-            size="sm"
-            variant={filter === item.id ? "default" : "outline"}
-            aria-pressed={filter === item.id}
-            onClick={() => setFilter(item.id)}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </div>
+          {FILTERS.map((item) => (
+            <Button
+              key={item.id}
+              type="button"
+              size="sm"
+              variant={filter === item.id ? "default" : "outline"}
+              aria-pressed={filter === item.id}
+              onClick={() => setFilter(item.id)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {visiblePeople.length === 0 ? (
-        <p className="mt-6 text-sm text-muted-foreground">No matching people.</p>
+        <p className="text-muted-foreground mt-6 text-sm">
+          No matching people.
+        </p>
       ) : (
         <ul className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {visiblePeople.map((person) => (
             <li key={person.id}>
-              <Card size="sm" className="h-full">
-                <CardHeader>
-                  <CardTitle>{person.name}</CardTitle>
-                  <CardAction>
-                    <RoleMark kind={person.kind} />
-                  </CardAction>
-                </CardHeader>
-                <CardContent className="text-sm">
-                  <p>{person.email}</p>
-                  {person.kind === "patient" ? (
-                    <p className="text-muted-foreground">{person.note ?? "No insurance recorded"}</p>
-                  ) : (
-                    <p className="text-muted-foreground">{person.organization ?? "No provider"}</p>
-                  )}
-                  {person.clinician ? (
-                    <p className="text-muted-foreground">Clinician {person.clinician}</p>
-                  ) : null}
-                  <p className="text-muted-foreground">
-                    {roleLabel(person.kind)}
-                    {person.kind !== "patient" && person.note ? ` · ${person.note}` : null}
-                  </p>
-                </CardContent>
-              </Card>
+              <Link
+                href={personProfilePath(person.kind, person.id)}
+                className="focus-visible:ring-ring block h-full rounded-xl focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <Card
+                  size="sm"
+                  className="hover:border-primary h-full transition-colors"
+                >
+                  <CardHeader>
+                    <CardTitle>{person.name}</CardTitle>
+                    <CardAction>
+                      <RoleMark kind={person.kind} />
+                    </CardAction>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <p>{person.email}</p>
+                    {person.kind === "patient" ? (
+                      <p className="text-muted-foreground">
+                        {person.note ?? "No insurance recorded"}
+                      </p>
+                    ) : (
+                      <p className="text-muted-foreground">
+                        {person.organization ?? "No provider"}
+                      </p>
+                    )}
+                    {person.clinician ? (
+                      <p className="text-muted-foreground">
+                        Clinician {person.clinician}
+                      </p>
+                    ) : null}
+                    <p className="text-muted-foreground">
+                      {roleLabel(person.kind)}
+                      {person.kind !== "patient" && person.note
+                        ? ` · ${person.note}`
+                        : null}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             </li>
           ))}
         </ul>
@@ -160,11 +201,13 @@ export function AdminDirectory({
       {filter === "patient" ? null : (
         <section className="mt-8">
           <h2 className="text-sm font-semibold">Providers</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             Organizations psychiatrists and nurses belong to.
           </p>
           {visibleProviders.length === 0 ? (
-            <p className="mt-3 text-sm text-muted-foreground">No matching providers.</p>
+            <p className="text-muted-foreground mt-3 text-sm">
+              No matching providers.
+            </p>
           ) : (
             <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {visibleProviders.map((provider) => {
@@ -181,10 +224,15 @@ export function AdminDirectory({
                       </CardHeader>
                       <CardContent className="text-sm">
                         {members.length === 0 ? (
-                          <p className="text-muted-foreground">No clinicians yet</p>
+                          <p className="text-muted-foreground">
+                            No clinicians yet
+                          </p>
                         ) : (
                           members.map((member) => (
-                            <p key={member.id} className="text-muted-foreground">
+                            <p
+                              key={member.id}
+                              className="text-muted-foreground"
+                            >
                               {member.name} · {roleLabel(member.kind)}
                             </p>
                           ))
