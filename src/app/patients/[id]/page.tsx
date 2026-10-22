@@ -12,6 +12,7 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { ageInYears, formatDate, fullName, providerLabel } from "~/lib/chart";
+import { allowedMedicationNames } from "~/lib/overview-medications";
 import { formatClinicWhen } from "~/lib/clinic-time";
 import type { SavedPatientSummary } from "~/lib/patient-summary";
 import { canViewPatient, viewerRecord } from "~/server/access";
@@ -113,7 +114,11 @@ function PlainChart({
       <ChartGlance patient={patient} />
       <div className="mt-5 grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-[16rem_minmax(0,1.25fr)_minmax(18rem,0.9fr)]">
         <div className="min-w-0 xl:col-start-2">
-          <SummaryPanel patientId={patient.id} saved={saved} />
+          <SummaryPanel
+            patientId={patient.id}
+            saved={saved}
+            allowedMedicationNames={allowedMedicationNames(patient.medications)}
+          />
         </div>
         <div className="min-w-0 xl:col-start-3">
           <PastVisitNotes visits={patient.visits} panel />

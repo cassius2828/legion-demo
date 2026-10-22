@@ -6,6 +6,11 @@ import type { Prisma } from "../../../../generated/prisma";
 
 import { formatDate } from "~/lib/chart";
 import {
+  allowedMedicationNames,
+  OFF_CHART_OVERVIEW_ERROR,
+  overviewMedications,
+} from "~/lib/overview-medications";
+import {
   patientSummarySchema,
   type PatientSummary,
   type SavedPatientSummary,
@@ -125,7 +130,12 @@ async function currentSummaryLists(
     database.medication.findMany({
       where: { patientId },
       orderBy: { medicationName: "asc" },
-      select: { medicationName: true, dosage: true, status: true },
+      select: {
+        medicationName: true,
+        genericName: true,
+        dosage: true,
+        status: true,
+      },
     }),
     database.task.findMany({
       where: { patientId, status: "open" },
@@ -156,6 +166,7 @@ async function currentSummaryLists(
         dueDateLabel: formatDate(task.dueDate),
       }),
     ),
+    allowedMedicationNames: allowedMedicationNames(medications),
   };
 }
 
@@ -194,6 +205,13 @@ export async function approvePatientSummary(
       current,
     });
     if (!verdict.ok) return verdict;
+    const overview = overviewMedications(
+      parsed.data.overview,
+      current.allowedMedicationNames,
+    );
+    if (overview.unmatched.length > 0) {
+      return { ok: false as const, error: OFF_CHART_OVERVIEW_ERROR };
+    }
 
     const data = {
       approvedByProviderId: access.providerId,

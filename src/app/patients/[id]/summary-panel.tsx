@@ -15,6 +15,10 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import {
+  OFF_CHART_OVERVIEW_ERROR,
+  overviewMedications,
+} from "~/lib/overview-medications";
 import type {
   PatientSummary,
   SavedPatientSummary,
@@ -23,9 +27,11 @@ import type {
 export function SummaryPanel({
   patientId,
   saved,
+  allowedMedicationNames,
 }: {
   patientId: string;
   saved: SavedPatientSummary | null;
+  allowedMedicationNames: string[];
 }) {
   const [stored, setStored] = useState(saved);
   const [draft, setDraft] = useState<{
@@ -92,6 +98,11 @@ export function SummaryPanel({
     });
   }
 
+  const overviewBlocked = draft
+    ? overviewMedications(draft.summary.overview, allowedMedicationNames)
+        .unmatched.length > 0
+    : false;
+
   const prepareButton = (
     <Button type="button" size="sm" onClick={prepare} disabled={isPending}>
       {isPending && !draft ? "Preparing summary..." : "Prepare summary"}
@@ -103,7 +114,10 @@ export function SummaryPanel({
       {error ? <p className="text-destructive">{error}</p> : null}
       {draft ? (
         <SummaryCard title="Summary draft" action={prepareButton}>
-          <SummaryBody summary={draft.summary} />
+          <SummaryBody
+            summary={draft.summary}
+            allowedMedicationNames={allowedMedicationNames}
+          />
           {correcting ? (
             <label className="mt-4 grid gap-1 text-sm">
               What should change?
@@ -117,7 +131,11 @@ export function SummaryPanel({
             </label>
           ) : null}
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button type="button" onClick={approve} disabled={isPending}>
+            <Button
+              type="button"
+              onClick={approve}
+              disabled={isPending || overviewBlocked}
+            >
               Approve
             </Button>
             {correcting ? (
@@ -152,6 +170,9 @@ export function SummaryPanel({
               Dismiss
             </Button>
           </div>
+          {overviewBlocked ? (
+            <p className="text-destructive mt-3">{OFF_CHART_OVERVIEW_ERROR}</p>
+          ) : null}
         </SummaryCard>
       ) : null}
       {stored ? (
@@ -165,7 +186,10 @@ export function SummaryPanel({
           }
           action={draft ? null : prepareButton}
         >
-          <SummaryBody summary={stored.summary} />
+          <SummaryBody
+            summary={stored.summary}
+            allowedMedicationNames={allowedMedicationNames}
+          />
         </SummaryCard>
       ) : null}
       {!draft && !stored ? (
@@ -200,10 +224,30 @@ function SummaryCard({
   );
 }
 
-function SummaryBody({ summary }: { summary: PatientSummary }) {
+function SummaryBody({
+  summary,
+  allowedMedicationNames,
+}: {
+  summary: PatientSummary;
+  allowedMedicationNames: string[];
+}) {
+  const scanned = overviewMedications(summary.overview, allowedMedicationNames);
   return (
     <div className="grid gap-4 xl:grid-cols-2">
-      <p className="leading-6 xl:col-span-2">{summary.overview}</p>
+      <p className="leading-6 xl:col-span-2">
+        {scanned.spans.map((span, index) =>
+          span.unmatched ? (
+            <mark
+              key={index}
+              className="bg-destructive/15 text-destructive rounded-sm px-0.5"
+            >
+              {span.text}
+            </mark>
+          ) : (
+            <span key={index}>{span.text}</span>
+          ),
+        )}
+      </p>
       <FactList title="Diagnoses" items={summary.diagnoses} />
       <FactList
         title="Current medications"
