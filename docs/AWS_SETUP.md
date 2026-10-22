@@ -1,7 +1,7 @@
 # Legion demo — AWS setup
 
-Last documented: October 17, 2026 (America/Los_Angeles).
-Source: the setup performed and reported in this conversation. This is not a fresh AWS inventory. Confirm current resource settings before changing them. This environment uses synthetic clinical data; deployment is not a claim of HIPAA compliance.
+Last documented: October 21, 2026 (America/Los_Angeles).
+Source: the setup performed in this project, plus the October 21 report that the certified subdomain loads and that GitHub Actions publishes the image to ECR. This is not a fresh AWS inventory. Confirm current resource settings before changing them. This environment uses synthetic clinical data; deployment is not a claim of HIPAA compliance.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ The browser connects to an internet-facing Application Load Balancer. The ALB fo
 | Application database | legion |
 | Runtime secret | legion-demo-secrets |
 | Execution role | ecsTaskExecutionRole |
-| Planned public URL | https://legion.cassiusreynolds.com |
+| Public URL | https://legion.cassiusreynolds.com |
 
 Revision 3 was used for a successful migration; always verify the latest intended revision rather than assuming revision 3 remains current. The AWS account ID and full secret ARN are intentionally omitted here; retrieve them from your own console.
 
@@ -38,7 +38,7 @@ Revision 3 was used for a successful migration; always verify the latest intende
 - ALB belongs in public subnets. App tasks run in private subnets with public IP disabled.
 - RDS is private. Its security group allows PostgreSQL 5432 from legion-app-sg.
 - legion-app-sg accepts TCP 3000 from legion-alb-sg only.
-- ALB initially allowed HTTP 80 from the operator's IP. Add HTTPS 443 for the intended audience when the certificate is issued. An IP-restricted rule prevents interview reviewers outside that IP from reaching the demo.
+- HTTPS on https://legion.cassiusreynolds.com loads the app. The ALB listener for 443 uses the issued ACM certificate. Confirm the security group still allows the audience you intend. An IP-restricted rule blocks reviewers outside that address.
 - Private application routes require an outbound path for Google/OpenAI calls. NAT was added during troubleshooting; confirm active routing in every subnet used by ECS.
 - A regional NAT gateway was suspected from its blank subnet field. Confirm its availability mode rather than treating it as a zonal gateway. Regional gateways do not need a dedicated public subnet; zonal public NAT gateways do.
 - Reported endpoints: ecr.api, ecr.dkr, logs, and S3. Endpoints are optional alternatives to NAT for their respective AWS traffic. Secrets Manager still needs reachable networking through NAT or its own interface endpoint. Interface endpoint security groups must allow HTTPS from task security groups.
@@ -54,7 +54,7 @@ Ordinary environment variables:
 | NODE_ENV | production |
 | TZ | America/Los_Angeles |
 | AUTH_TRUST_HOST | true |
-| AUTH_URL | https://legion.cassiusreynolds.com (configure when HTTPS is ready) |
+| AUTH_URL | https://legion.cassiusreynolds.com |
 
 Sensitive variables should be ECS secret references: DATABASE_URL, AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and OPENAI_API_KEY when enabled. Do not put actual values in task-definition JSON or Git.
 
@@ -99,13 +99,13 @@ If an RDS-managed password rotates, a copied DATABASE_URL does not update itself
    This entry point calls supporting seed functions. It replaces some seeded records. Do not run it automatically on every deployment.
 7. Run the ECS service with normal application startup, no migration/seed override. Require a healthy ALB target.
 
-The last inspected Dockerfile still ran migrations before npm start. Once deployment reliably runs migrations separately, change startup to CMD ["npm", "start"]. Do not silently assume that change has already shipped.
+The image command is still `npx prisma migrate deploy && npm start`. Every new task runs migrations before the server listens. A separate one-off migration task is still the safer order for a bad migration, because a failing migrate blocks the new tasks from becoming healthy.
 
 ## HTTPS and DNS
 
 In Vercel DNS, legion CNAME points to the ALB hostname (no URL scheme). ACM in us-west-1 issues the certificate for legion.cassiusreynolds.com using a separate validation CNAME. Preserve that record for renewal.
 
-The first certificate failed with a CAA error. Authorize Amazon with a root CAA record:
+The first certificate failed with a CAA error. The root CAA record that unblocked Amazon is:
 
 ```text
 Name: @
@@ -113,25 +113,27 @@ Type: CAA
 Value: 0 issue "amazon.com"
 ```
 
-Preserve existing authorities such as letsencrypt.org for the existing Vercel site. Request a new ACM certificate after fixing DNS; the failed request does not recover automatically. If it fails again, inspect the effective CAA records, CNAME chain, and authoritative DNS rather than repeatedly retrying.
+Preserve existing authorities such as letsencrypt.org for the existing Vercel site. A failed ACM request does not recover on its own; the replacement request reached Issued. The ALB HTTPS listener now serves https://legion.cassiusreynolds.com.
 
-After Issued: add ALB HTTPS 443 listener with the certificate, forward to legion-app-tg, permit intended HTTPS sources, test the subdomain, then redirect HTTP 80 to HTTPS. Configure AUTH_URL and Google callback, deploy the new task revision, and test login.
+Google sign-in on that host still fails. The OAuth client already lists `https://legion.cassiusreynolds.com/api/auth/callback/google`. See [GCP_OAUTH_SETUP.md](GCP_OAUTH_SETUP.md). A healthy page load does not prove `AUTH_URL`, `AUTH_SECRET`, and the Google client values on the running task.
 
 ## GitHub Actions
 
-The intended publishing flow uses GitHub OIDC to assume github-legion-ecr-push, logs into ECR, builds the image, and pushes a commit-SHA tag. No permanent AWS access keys are required.
+`.github/workflows/publish-ecr.yaml` runs on every push to `main`. It assumes `github-legion-ecr-push` with GitHub OIDC, logs into ECR, and pushes `interviews/legion-demo:<commit sha>` as `linux/amd64`. That publish succeeds. No permanent AWS access keys are required.
 
-Trust must match provider token.actions.githubusercontent.com, audience sts.amazonaws.com, and the actual repository/branch. For a job without a GitHub environment, the expected subject is:
+The workflow stops at the image push. It does not register a task definition or update the ECS service. The subdomain can keep running an older image until a task revision points at the new tag and the service is updated.
+
+The working trust subject is the branch claim, because the job does not set a GitHub environment. This repository was created after July 15, 2026, so GitHub Actions puts the owner id and the repository id in `sub`. The name-only form `repo:cassius2828/legion-demo:ref:refs/heads/main` does not match tokens from this repo.
 
 ```text
-repo:cassius2828/legion-demo:ref:refs/heads/main
+repo:cassius2828@124099580/legion-demo@1420203831:ref:refs/heads/main
 ```
 
-A job with environment: production uses an environment-based subject instead; align the trust policy with that claim and restrict allowed deployment branches through GitHub environment settings. Confirm repository name/case and any customized OIDC subject configuration.
+`124099580` is the cassius2828 account id. `1420203831` is the legion-demo repository id. The provider is token.actions.githubusercontent.com and the audience is sts.amazonaws.com. A job that later adds `environment: production` would send `repo:cassius2828@124099580/legion-demo@1420203831:environment:production` instead, and the role trust would need that subject.
 
-Publishing permissions: ecr:GetAuthorizationToken on *, plus upload/image actions scoped to interviews/legion-demo. Deployment additionally requires ECS describe/register/run/update permissions and restricted iam:PassRole for the ECS roles.
+Publishing permissions that are already sufficient for this workflow: ecr:GetAuthorizationToken on *, plus upload and image actions scoped to interviews/legion-demo. Updating ECS is a separate permission set: ECS describe, register, run, and update, plus restricted iam:PassRole for the ECS roles. This workflow does not use those.
 
-Desired deployment ordering: checks -> build/push -> register revision -> standalone migration -> verify exit 0 -> update service -> wait for stability -> health verification. A separate workflow's green status does not automatically gate publication/deployment. Serialize deployments without cancelling a running migration. Do not seed in CD.
+A later deploy job should wait until checks pass, push the image, register a revision, run a standalone migration and require exit 0, then update the service and wait until it is stable. Serialize deployments. Do not seed from CI. `npm test` going green does not by itself roll the service.
 
 ## Troubleshooting evidence
 
@@ -141,11 +143,12 @@ Desired deployment ordering: checks -> build/push -> register revision -> standa
 | Prisma P1013 invalid port | Malformed DATABASE_URL; encode password special characters |
 | Exit 1 | Inspect container logs; stopped status alone is not success |
 | Exit 0 + migration success | One-off migration completed |
-| Healthy target, HTTP works, HTTPS fails | App path works; inspect certificate, 443 listener, DNS, and ALB security group |
+| Healthy target, HTTP works, HTTPS fails | App path works; inspect certificate, 443 listener, DNS, and ALB security group. The certified subdomain currently loads over HTTPS |
+| Subdomain loads, Google sign-in fails | Redirect URI list can already be correct. See [GCP_OAUTH_SETUP.md](GCP_OAUTH_SETUP.md) |
 | Windows Docker credential helper error | Local credential storage issue; separate from AWS role authorization |
 
 ## Completion checks
 
-Verify HTTPS, authenticated login/logout, provider/patient access restrictions, chart read, messaging, summary generation/approval, booking, and visit completion. Confirm data survives app task replacement. Keep query bodies, tokens, and clinical content out of operational logs. Review costs for NAT, interface endpoints, ALB, RDS, and Fargate; budgets notify but do not cap spending.
+HTTPS on the certified subdomain and the ECR image publish are in place. Still confirm authenticated login/logout, then provider/patient access restrictions, chart read, messaging, summary generation/approval, booking, and visit completion on the deployed image. Confirm data survives app task replacement. Keep query bodies, tokens, and clinical content out of operational logs. Review costs for NAT, interface endpoints, ALB, RDS, and Fargate; budgets notify but do not cap spending.
 
 References: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html ; https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-caa.html ; https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws

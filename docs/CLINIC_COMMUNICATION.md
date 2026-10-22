@@ -4,7 +4,7 @@ These are records in the clinic database. They are not email, SMS, or an outside
 
 ## Messages
 
-`/messages` is open to a patient, a psychiatrist, and a nurse. A patient sees their own thread. A provider sees patients on their panel and can open `/messages/[patientId]`. A provider can read a thread only when `canViewPatient` allows that chart. Message bodies are `ClinicMessage` rows.
+`/messages` is open to a patient, a psychiatrist, and a nurse. A patient sees their own thread. A provider sees patients on their panel and can open `/messages/[patientId]`. A provider can read a thread only when `canViewPatient` allows that chart. Message bodies are `ClinicMessage` rows. The booking conflict dialog can open this thread. Cancellation reasons stay on the appointment.
 
 ## Reminders
 

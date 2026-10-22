@@ -24,6 +24,10 @@ After the visit, the clinician either books the next appointment or leaves a tas
 
 Creating a follow-up also creates two `Reminder` rows: one day before the visit and one hour before. They are not sent until a clinician delivers the ones that are due. Delivery writes a clinic message. See [CLINIC_COMMUNICATION.md](CLINIC_COMMUNICATION.md).
 
+## Chart version
+
+Signing the visit note increments `Patient.chartVersion`. Transmitting an order increments it. Closing the visit increments it when draft orders were transmitted or when a follow-up task was created. The saved summary compares its stored integer with that column. See [PATIENT_SUMMARY.md](PATIENT_SUMMARY.md).
+
 ## Seeded check
 
 `node scripts/eval-care-loop.mjs` checks the allergy, medication, and follow-up decisions without a database or a model. `node scripts/seed-clinical.mjs` loads the synthetic panel, including patient `pat_16`, which the live evals use.

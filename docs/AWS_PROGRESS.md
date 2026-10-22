@@ -1,81 +1,56 @@
 # Legion demo — AWS progress
 
-Status date: October 17, 2026 (America/Los_Angeles).
-This is a conversation-based checkpoint, not a fresh inspection. Latest user-reported blockers are authoritative here; no later success is assumed.
+Status date: October 21, 2026 (America/Los_Angeles).
+This checkpoint records what is running and what is still open. It is not a fresh console inventory.
 
 ## Current position
 
-The app runs on ECS Fargate, its ALB target is healthy, and the ALB's HTTP URL loads. RDS migrations completed successfully and the user reported completion of the seed step. Production HTTPS remains blocked at certificate issuance/CAA authorization. GitHub automation remains blocked by OIDC issues affecting reliable ECR publication/deployment.
+https://legion.cassiusreynolds.com loads over HTTPS. The ACM certificate for that name is issued, DNS points the subdomain at the ALB, and the ECS service is serving the app. RDS migrations and the synthetic seed were already completed.
 
-## Completed or reported complete
+GitHub Actions publishes `interviews/legion-demo:<commit sha>` to ECR on push to `main`. That publish is working. The workflow does not update the ECS service, so a new image sits in ECR until a task revision uses that tag.
+
+Google sign-in on the production host fails. The OAuth client already has the production callback and the localhost callback. The page load and the redirect-URI list are not the remaining problem. See [GCP_OAUTH_SETUP.md](GCP_OAUTH_SETUP.md).
+
+## Completed
 
 - [x] Local Docker PostgreSQL and application setup.
-- [x] VPC with public/private subnets across two AZs.
-- [x] Private RDS PostgreSQL instance; SQL database legion created.
-- [x] Secrets Manager configuration and ECS execution-role read permission configured.
-- [x] Application image published manually to ECR.
-- [x] ECS cluster and task definition created.
-- [x] Outbound network troubleshooting progressed beyond image initialization failures.
-- [x] ECR API/DKR, Logs, and S3 endpoints reported available; NAT routing added.
-- [x] Prisma password URL encoding issue identified and corrected sufficiently for migration success.
-- [x] Migration logs confirmed all migrations applied successfully.
-- [x] Seed task completion reported; retain seed logs/exit status as verification evidence.
-- [x] ALB/target group and ECS service configured; healthy target and working HTTP page confirmed.
-- [x] Subdomain and ACM validation CNAME additions reported in Vercel DNS.
-- [x] GitHub OIDC provider/role creation reported.
-- [x] Summary deterministic test workflow appeared on GitHub at last inspection.
+- [x] VPC with public and private subnets across two AZs.
+- [x] Private RDS PostgreSQL; SQL database legion created.
+- [x] Secrets Manager and ECS execution-role read permission.
+- [x] Application image in ECR, including the GitHub Actions publish on `main`.
+- [x] ECS cluster, task definition, and service. The ALB target is healthy.
+- [x] Outbound path for image pull and logs. NAT and the reported VPC endpoints are in place.
+- [x] Prisma migrations applied on RDS. Seed task completion was reported.
+- [x] CAA record for Amazon, replacement ACM certificate Issued, HTTPS on legion.cassiusreynolds.com.
+- [x] GitHub OIDC role `github-legion-ecr-push` assumes and pushes to ECR.
 
-## Blocker 1 — ACM / CAA / production HTTPS
+## Open — production Google sign-in
 
-Observed: certificate request failed with a Certification Authority Authorization error.
-Action provided: add root CAA value 0 issue "amazon.com", preserving existing authorities; request a new DNS-validated certificate in us-west-1.
-Current state: waiting for CAA authorization/certificate issuance to be resolved. DNS visibility and the new certificate's status have not been independently confirmed.
+The certified subdomain loads. Sign-in with Google still returns an error.
 
-Next checks:
+Already true: `http://localhost:3000/api/auth/callback/google` and `https://legion.cassiusreynolds.com/api/auth/callback/google` are on the Web client. Adding those URIs again will not change this failure.
 
-1. Confirm Vercel is the authoritative DNS provider and the Amazon CAA record is published.
-2. Confirm legion CNAME targets the ALB rather than a Vercel app; inspect effective CAA resolution if failure persists.
-3. Confirm new ACM request has the exact validation CNAME published.
-4. Require certificate status Issued; do not wait for the old Failed request to recover.
-5. Attach certificate to ALB HTTPS 443, permit intended sources, test TLS, then redirect HTTP to HTTPS.
-6. Set AUTH_URL and the Google callback, deploy configuration, and verify login.
+Next checks, in order:
 
-## Blocker 2 — GitHub Actions OIDC / ECR / deployment
+1. On the Google account chooser URL, read the `redirect_uri` value. It must be exactly `https://legion.cassiusreynolds.com/api/auth/callback/google`. `http://`, the `elb.amazonaws.com` host, or a trailing slash is a different URI even when the correct one is also registered.
+2. On the running task, `AUTH_URL` is `https://legion.cassiusreynolds.com` with no path and no trailing slash, and `AUTH_TRUST_HOST` is `true`. Replace the tasks after changing either value.
+3. `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `legion-demo-secrets` belong to that same Web client. A matching redirect list with a secret from another client fails at the token exchange. Look for `invalid_client` in CloudWatch. Do not copy the secret into notes.
+4. If Google shows "access blocked" or `access_denied` before returning to the app, the consent screen audience or the `calendar.events` scope is the block. Testing mode only allows listed test users. A sensitive Calendar scope can require verification before accounts outside the test list can consent.
+5. If the browser returns to the app with `error=OAuthCallback` and the CloudWatch line is a missing state cookie, start sign-in on `https://legion.cassiusreynolds.com` only. The ALB must pass `Host` and `X-Forwarded-Proto: https`. Auth.js marks the state cookie Secure when `AUTH_URL` is https.
+6. If the browser returns with `error=Callback` or `error=OAuthAccountNotLinked`, the token exchange succeeded and the Prisma account write failed. Read the container log for that request. Leave token values out of the note.
 
-Desired behavior: pushing main passes checks, publishes a commit-SHA image, runs migrations successfully, and updates ECS to that same image.
-Current state: user reports OIDC issues blocking correct ECR publication/deployment. Exact latest error/run URL is not available in this checkpoint. Do not infer whether the failure is token issuance, role assumption, ECR authorization, or ECS deployment.
+## Open — roll the published image
 
-Next checks:
+ECR has the commit-SHA image. The service keeps its current task definition until someone registers a revision with that tag and updates `legion-demo-app`. Do that after the Google client values on the task are confirmed, then retest sign-in on the new tasks.
 
-1. Capture failed workflow URL, commit SHA, step name, and redacted error.
-2. Confirm role-to-assume points to the created role in the correct account.
-3. Confirm job grants id-token: write and contents: read.
-4. Confirm trust provider and audience sts.amazonaws.com.
-5. Match the actual OIDC subject. Branch job: repo:cassius2828/legion-demo:ref:refs/heads/main. A job using environment: production uses repo:cassius2828/legion-demo:environment:production unless subject customization changes it. Restrict environment deployment branches appropriately.
-6. If role assumption succeeds, check ECR repository-scoped push permissions. If publication succeeds but ECS fails, check ECS permissions and iam:PassRole separately.
-7. Keep secrets in ECS ValueFrom references; do not fix deployment by adding production DB credentials to GitHub test jobs.
-8. Gate migration success, then deployment stability. Serialize deployments. No automatic seeding.
+## Still to verify on the deployed app
 
-Publishing to ECR and deploying ECS are distinct milestones. Neither a successful Docker build nor a green unit test proves the running service uses the new image.
-
-## App testing work independent of blockers
-
-- Deterministic tests should run without API credentials.
-- Database integration checks use disposable PostgreSQL, never production RDS.
-- Live model evals use synthetic data and a dedicated API key; keep them manually triggered initially.
-- Save per-case results and report passed/failed/errored/skipped separately.
-- Rebuild local app and verify authenticated summary generation, correction, approval, reload, and stale-draft handling.
-- Record unexecuted tests honestly; do not claim CI/CD or HTTPS completion while blocked.
-
-## Remaining after blockers
-
-- [ ] Confirm HTTPS and production Google OAuth login.
-- [ ] Verify core workflows on the deployed version and persistence after task replacement.
-- [ ] Finish dependable image publishing and ECS deployment automation.
-- [ ] Verify all runtime secrets are references, with no stale plaintext overrides.
-- [ ] Complete deployment/runbook documentation and cost review.
-- [ ] Later scope: autonomous reminders, realtime notifications, optional model-provider changes, production security/compliance work.
+- [ ] Production Google sign-in and sign-out.
+- [ ] The running task definition uses the intended ECR tag, with secrets as ValueFrom references.
+- [ ] Chart access, messaging, summary prepare/approve, booking, and visit completion on that deployment.
+- [ ] Data still present after a task replacement.
+- [ ] Cost review for NAT, interface endpoints, ALB, RDS, and Fargate.
 
 ## Evidence to retain
 
-Migration and seed exit codes/logs; image digest/commit tag; task-definition revision; ECS deployment health; certificate status; redacted failing OIDC step; test/eval reports. Do not include credentials, tokens, sensitive chart content, or private account information in interview exports.
+Image digest and commit tag, task-definition revision, ECS deployment health, certificate status Issued, and the production sign-in `error` query plus the redacted CloudWatch auth line. Do not keep credentials, tokens, clinical note text, or message bodies.

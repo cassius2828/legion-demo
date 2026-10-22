@@ -1,6 +1,6 @@
 # Legion demo — Google Cloud OAuth setup
 
-Last documented: October 17, 2026. GCP means Google Cloud Platform. This guide reflects the application code and conversation; project ID, client ID, consent-screen status, and production callback completion were not verified in Google Cloud.
+Last documented: October 21, 2026. This guide matches the application code. The production callback is registered. Production sign-in still fails; the exact `error` query from that attempt is not recorded here.
 
 ## Purpose and flow
 
@@ -41,7 +41,21 @@ AUTH_TRUST_HOST=true
 
 Trust forwarded host headers only behind the intended trusted proxy/load-balancer configuration. Update the ECS service to the revision containing the configuration. Changing a secret does not update already-running containers that received it at startup; launch replacement tasks.
 
-HTTPS must work on the production hostname before testing production login. The ALB's amazonaws.com hostname is not the intended production OAuth origin.
+HTTPS on https://legion.cassiusreynolds.com is up. The ALB hostname is not an OAuth origin. Sign-in has to start on the subdomain.
+
+## Production sign-in
+
+The Web client already includes both redirect URIs above. The production sign-in still fails with those URIs saved. Work through the checks in [AWS_PROGRESS.md](AWS_PROGRESS.md) under "Open — production Google sign-in". The usual splits are:
+
+| What you see | What is still wrong |
+|---|---|
+| Google `redirect_uri_mismatch`, while the https callback is listed | The `redirect_uri` on that request is a different string. Compare it with `AUTH_URL` on the running task |
+| `invalid_client` in the container log | Client id and secret on the task are not the pair for this Web client |
+| Google "access blocked" or `access_denied` | Consent audience, test-user list, or unverified `calendar.events` scope |
+| App URL `error=OAuthCallback` and a missing state cookie | Sign-in host, `AUTH_URL`, or `X-Forwarded-Proto` |
+| App URL `error=Callback` or `error=OAuthAccountNotLinked` | Google accepted the user; the Account row write failed |
+
+Changing the secret or `AUTH_URL` does nothing until the ECS tasks are replaced. The containers read those values at start.
 
 ## Verification
 
@@ -67,9 +81,8 @@ Google OAuth token columns are credentials: restrict database access and avoid t
 
 ## Open items
 
-- Confirm actual Google Cloud project/client and API enablement.
-- Confirm consent audience, test accounts, and scope verification requirements.
-- Add/confirm production callback once certificate issuance is resolved.
-- Verify production sign-in, token refresh, Calendar access, and role authorization.
+- Record the production `error` query and the redacted CloudWatch auth line, then close the checks in [AWS_PROGRESS.md](AWS_PROGRESS.md).
+- Confirm the consent audience, test users, and whether `calendar.events` still needs verification.
+- After sign-in works, verify token refresh, Calendar access, and role authorization.
 
 References: https://developers.google.com/identity/protocols/oauth2/web-server ; https://developers.google.com/calendar/api/auth

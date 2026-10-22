@@ -6,8 +6,9 @@ Two kinds of checks exist. `npm test` does not call a model and does not need Po
 
 `npm test` runs `tsc --noEmit`, then the Node test files:
 
-- `src/server/summary-assembly.test.ts` checks that retrieved lists replace model prose, that a missing or failed retrieval cannot be approved, that a changed fingerprint or a changed list is rejected, and that chart access matches the owning provider, another provider, and the patient role.
+- `src/server/summary-assembly.test.ts` checks that retrieved lists replace model prose, that a missing or failed retrieval cannot be approved, that a changed chart version or a changed list is rejected, and that chart access matches the owning provider, another provider, and the patient role.
 - `src/server/booking-choice.test.ts` checks the usual time, the nearest weekday slot, the earliest opening, a same-day refusal, and a new booking blocked by an existing upcoming visit.
+- `src/lib/admin-profile.test.ts` checks the dev-admin profile path, the dev-admin gate, patient insurance and visit history, an unlinked account, and psychiatrist and nurse fields. It runs under `tsx` because the profile module uses the `~/` import alias. The other two files run with `node --experimental-strip-types`.
 
 `.github/workflows/summary-checks.yml` runs `npm test` on pull requests and pushes. It has no API key and does not start Postgres.
 

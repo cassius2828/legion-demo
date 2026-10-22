@@ -15,11 +15,19 @@ The agent is `summarizePatient` in `src/server/patient-summary-agent.ts`. It has
 
 ## Approval and staleness
 
-`preparePatientSummary` returns the draft and a SHA-256 fingerprint of the chart rows that the summary depends on. The panel sends that fingerprint back with Approve.
+`preparePatientSummary` returns the draft and the patient's current `chartVersion`. That value is an integer on `Patient`, starting at 0. The panel sends the same integer back with Approve.
 
-`approvePatientSummary` recomputes the fingerprint and the current lists. It does not write a `PatientSummaryRecord` when the fingerprint differs, when a list or the last-visit line differs, or when any section still says retrieval failed. A matching save stores the fingerprint from that moment. Opening the chart later marks the saved summary outdated when the current fingerprint no longer matches.
+`approvePatientSummary` reads `Patient.chartVersion` again inside the save transaction. It does not write a `PatientSummaryRecord` when that integer differs from the draft, when a list or the last-visit line differs, or when any section still says retrieval failed. The mismatch message is "The chart changed. Prepare the summary again." A matching save stores `chartVersion` equal to the patient row at that moment. Version 0 is a real value.
 
-The fingerprint covers psychiatric history, conditions, the latest completed visit, medications, open tasks, and the latest prescription orders. It does not cover allergies or note bodies. An order change can mark a summary outdated even though the agent tools do not list orders.
+Opening the chart later marks the saved summary outdated when `PatientSummaryRecord.chartVersion` and `Patient.chartVersion` differ. The date stays red and the label stays "Outdated summary".
+
+`chartVersion` increments by 1 inside the same transaction as these writes:
+
+- Signing the visit note.
+- Transmitting a prescription order.
+- Closing a visit when draft orders were transmitted, or when the follow-up could not be booked and a follow-up task was created. Both of those in one close still increment once.
+
+Booking or moving a visit, a pharmacy preference, intake scores, and profile or transfer updates leave the version unchanged. Seed scripts that rewrite the signed note, medications, tasks, or transmitted orders call `bumpChartVersions` in `scripts/chart-version.mjs`.
 
 ## Who can open a chart
 
